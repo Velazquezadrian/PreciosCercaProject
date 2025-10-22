@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PreciosCerca</string>
+    <string name="buscar_producto">Buscar producto</string>
+    <string name="hint_busqueda">¿Qué producto buscas? Ej: leche, pan, arroz...</string>
+    <string name="buscar">Buscar precios</string>
+    <string name="tagline">Compará precios y ahorrá dinero</string>
+    <string name="resultados_para">Resultados para "%1$s"</string>
+    <string name="productos_encontrados">%1$d productos encontrados</string>
+    <string name="precio_desde">Desde $%1$.2f</string>
+    <string name="sin_resultados">No se encontraron productos</string>
+    <string name="error_busqueda">Error al buscar productos</string>
+    <string name="buscando">Buscando productos...</string>
+    <string name="volver">Volver</string>
+    <string name="supermercados_consultados">Supermercados consultados: %1$s</string>
+</resources>
