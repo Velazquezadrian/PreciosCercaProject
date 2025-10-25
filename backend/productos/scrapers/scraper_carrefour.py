@@ -24,7 +24,8 @@ class ScraperCarrefour(BaseScraper):
             }
             
             response = self.session.get(self.api_search_url, params=params, timeout=15)
-            if response.status_code != 200:
+            # Status 200 y 206 (partial content) son válidos para VTEX
+            if response.status_code not in [200, 206]:
                 return productos
                 
             # Parsear JSON de VTEX

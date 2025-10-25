@@ -12,9 +12,9 @@ interface PreciosCercaApi {
     
     /**
      * Buscar productos por nombre/término
-     * GET /api/products?query=leche
+     * GET /products?query=leche
      */
-    @GET("api/products")
+    @GET("products")
     fun buscarProductos(
         @Query("query") query: String
     ): Call<BusquedaApiResponse>

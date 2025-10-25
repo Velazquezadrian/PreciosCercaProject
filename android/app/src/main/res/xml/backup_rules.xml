@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Incluir configuraciones de usuario -->
+    <include domain="sharedpref" path="."/>
+    
+    <!-- Excluir datos sensibles del dispositivo -->
+    <exclude domain="sharedpref" path="device.xml"/>
+    
+    <!-- Incluir base de datos si es necesario -->
+    <!-- <include domain="database" path="precios.db"/> -->
+</full-backup-content>

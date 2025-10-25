@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Permitir respaldo en la nube de configuraciones y datos del usuario -->
+        <include domain="sharedpref" path="."/>
+        <exclude domain="sharedpref" path="device.xml"/>
+    </cloud-backup>
+    
+    <!-- Reglas para transferencias de dispositivo a dispositivo -->
+    <device-transfer>
+        <include domain="sharedpref" path="."/>
+    </device-transfer>
+</data-extraction-rules>
