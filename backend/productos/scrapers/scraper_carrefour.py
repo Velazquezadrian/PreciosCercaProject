@@ -49,12 +49,19 @@ class ScraperCarrefour(BaseScraper):
                     precio_info = sellers[0].get('commertialOffer', {})
                     precio = precio_info.get('Price', 0)
                     
+                    # Obtener imagen del producto
+                    imagen_url = None
+                    images = producto_vtex.get('items', [{}])[0].get('images', [])
+                    if images:
+                        imagen_url = images[0].get('imageUrl', '')
+                    
                     if precio > 0:
                         productos.append({
                             'nombre': nombre.strip(),
                             'precio': float(precio),
                             'supermercado': self.supermercado_nombre,
-                            'url': f"{self.base_url}/{producto_vtex.get('linkText', '')}/p"
+                            'url': f"{self.base_url}/{producto_vtex.get('linkText', '')}/p",
+                            'imagen': imagen_url
                         })
                         
                 except Exception as e:

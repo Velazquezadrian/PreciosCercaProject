@@ -31,11 +31,39 @@
             </intent-filter>
         </activity>
 
+        <!-- Activity Búsqueda (entrada para modo detallado) -->
+        <activity
+            android:name=".BusquedaActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.PreciosCerca" />
+
+        <!-- Activity Lista Modo (entrada para modo lista) -->
+        <activity
+            android:name=".ListaModoActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.PreciosCerca" />
+
         <!-- Activity Lista de Productos -->
         <activity
             android:name=".ProductListActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".BusquedaActivity"
+            android:theme="@style/Theme.PreciosCerca" />
+
+        <!-- Activity Lista de Compras -->
+        <activity
+            android:name=".ListaComprasActivity"
+            android:exported="false"
+            android:parentActivityName=".ProductListActivity"
+            android:theme="@style/Theme.PreciosCerca" />
+
+        <!-- Activity Comparación de Precios -->
+        <activity
+            android:name=".ComparacionActivity"
+            android:exported="false"
+            android:parentActivityName=".ListaComprasActivity"
             android:theme="@style/Theme.PreciosCerca" />
 
     </application>

@@ -2,6 +2,7 @@ package com.precioscerca
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -18,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.precioscerca.adapters.ProductAdapter
 import com.precioscerca.api.ApiClient
 import com.precioscerca.api.BusquedaApiResponse
@@ -39,6 +41,7 @@ class ProductListActivity : AppCompatActivity() {
     private lateinit var rvProductos: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var tvSinResultados: TextView
+    private lateinit var fabVerLista: FloatingActionButton
     
     private lateinit var productAdapter: ProductAdapter
     private var query: String = ""
@@ -246,9 +249,16 @@ class ProductListActivity : AppCompatActivity() {
         rvProductos = findViewById(R.id.rvProductos)
         progressBar = findViewById(R.id.progressBar)
         tvSinResultados = findViewById(R.id.tvSinResultados)
+        fabVerLista = findViewById(R.id.fabVerLista)
         
         // Configurar título inicial
         tvBusquedaTitulo.text = getString(R.string.resultados_para, query)
+        
+        // Configurar botón flotante
+        fabVerLista.setOnClickListener {
+            val intent = Intent(this, ListaComprasActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupRecyclerView() {

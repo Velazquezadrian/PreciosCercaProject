@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@android:color/white"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="4dp"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:elevation="2dp">
+
+    <!-- Icono del producto -->
+    <TextView
+        android:id="@+id/tvIconoProducto"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textSize="32sp"
+        android:background="#E8F5E9"
+        tools:text="🥛" />
+
+    <!-- Nombre del producto -->
+    <TextView
+        android:id="@+id/tvNombreProducto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="Leche La Serenísima Entera Fortificada 1 Litro" />
+
+    <!-- Botón agregar -->
+    <Button
+        android:id="@+id/btnAgregarLista"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="+"
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:background="#4CAF50"
+        android:gravity="center" />
+
+</LinearLayout>

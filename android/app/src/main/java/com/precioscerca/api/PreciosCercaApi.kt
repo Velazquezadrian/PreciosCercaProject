@@ -2,8 +2,7 @@ package com.precioscerca.api
 
 import com.precioscerca.models.BusquedaResponse
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * Interfaz para comunicarse con la API del backend Django
@@ -42,6 +41,43 @@ interface PreciosCercaApi {
         @Query("lng") longitud: Double
     ): Call<SucursalCercanaResponse>
     
+    // ========== LISTA DE COMPRAS ==========
+    
+    /**
+     * Obtener lista de compras
+     * GET /lista-compras
+     */
+    @GET("lista-compras")
+    fun obtenerListaCompras(): Call<ListaComprasResponse>
+    
+    /**
+     * Agregar producto a lista de compras
+     * POST /lista-compras/agregar
+     */
+    @POST("lista-compras/agregar")
+    fun agregarALista(@Body request: AgregarItemRequest): Call<AgregarItemResponse>
+    
+    /**
+     * Eliminar producto de lista de compras
+     * DELETE /lista-compras/eliminar
+     */
+    @HTTP(method = "DELETE", path = "lista-compras/eliminar", hasBody = true)
+    fun eliminarDeLista(@Body request: EliminarItemRequest): Call<EliminarItemResponse>
+    
+    /**
+     * Limpiar toda la lista de compras
+     * POST /lista-compras/limpiar
+     */
+    @POST("lista-compras/limpiar")
+    fun limpiarLista(): Call<LimpiarListaResponse>
+    
+    /**
+     * Comparar precios de la lista entre supermercados
+     * GET /lista-compras/comparar
+     */
+    @GET("lista-compras/comparar")
+    fun compararLista(): Call<ComparacionResponse>
+    
 }
 
 /**
@@ -71,6 +107,7 @@ data class ProductoResultado(
     val fecha: String,
     val relevancia: Double,
     val url: String? = null,  // URL específica del producto
+    val imagen: String? = null,  // URL de la imagen del producto
     val distancia_sucursal_km: Double? = null  // Distancia a la sucursal más cercana de este supermercado
 )
 
@@ -93,4 +130,96 @@ data class SucursalInfo(
     val ciudad: String,
     val distancia_km: Double,
     val google_maps_url: String
+)
+
+// ============================================================================
+// MODELOS DE LISTA DE COMPRAS
+// ============================================================================
+
+/**
+ * Item en la lista de compras
+ */
+data class ItemListaCompras(
+    val nombre: String,
+    val cantidad: Int,
+    val agregado_en: String
+)
+
+/**
+ * Respuesta de obtener lista de compras
+ */
+data class ListaComprasResponse(
+    val items: List<ItemListaCompras>,
+    val total_items: Int
+)
+
+/**
+ * Request para agregar item
+ */
+data class AgregarItemRequest(
+    val nombre: String,
+    val cantidad: Int = 1
+)
+
+/**
+ * Respuesta de agregar item
+ */
+data class AgregarItemResponse(
+    val status: String,
+    val producto: String,
+    val cantidad: Int
+)
+
+/**
+ * Request para eliminar item
+ */
+data class EliminarItemRequest(
+    val nombre: String
+)
+
+/**
+ * Respuesta de eliminar item
+ */
+data class EliminarItemResponse(
+    val status: String,
+    val producto: String? = null,
+    val mensaje: String? = null
+)
+
+/**
+ * Respuesta de limpiar lista
+ */
+data class LimpiarListaResponse(
+    val status: String,
+    val mensaje: String
+)
+
+/**
+ * Producto encontrado en comparación
+ */
+data class ProductoComparacion(
+    val nombre_buscado: String,
+    val nombre_encontrado: String,
+    val precio: Double
+)
+
+/**
+ * Supermercado en comparación
+ */
+data class SupermercadoComparacion(
+    val nombre: String,
+    val productos: List<ProductoComparacion>,
+    val total: Double,
+    val productos_encontrados: Int
+)
+
+/**
+ * Respuesta de comparar lista
+ */
+data class ComparacionResponse(
+    val total_productos_buscados: Int,
+    val supermercados: List<SupermercadoComparacion>,
+    val mas_barato: SupermercadoComparacion?,
+    val error: String? = null,
+    val items: List<Any>? = null
 )

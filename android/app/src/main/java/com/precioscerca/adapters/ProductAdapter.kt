@@ -9,10 +9,12 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.precioscerca.R
 import com.precioscerca.api.ApiClient
 import com.precioscerca.api.ProductoResultado
@@ -28,12 +30,16 @@ class ProductAdapter(
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val ivProducto: ImageView = itemView.findViewById(R.id.ivProducto)
         val tvNombreProducto: TextView = itemView.findViewById(R.id.tvNombreProducto)
         val tvSupermercado: TextView = itemView.findViewById(R.id.tvSupermercado)
         val tvPrecio: TextView = itemView.findViewById(R.id.tvPrecio)
-        val tvFecha: TextView = itemView.findViewById(R.id.tvFecha)
-        val btnVerWeb: TextView = itemView.findViewById(R.id.btnVerWeb)
-        val btnVerMapa: TextView = itemView.findViewById(R.id.btnVerMapa)
+        val tvBadge: TextView = itemView.findViewById(R.id.tvBadge)
+        val tvDistancia: TextView = itemView.findViewById(R.id.tvDistancia)
+        val containerDistancia: View = itemView.findViewById(R.id.containerDistancia)
+        val btnVerWeb: View = itemView.findViewById(R.id.btnVerWeb)
+        val btnVerMapa: View = itemView.findViewById(R.id.btnVerMapa)
+        val btnAgregarLista: View = itemView.findViewById(R.id.btnAgregarLista)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -44,21 +50,88 @@ class ProductAdapter(
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val producto = productos[position]
+        val context = holder.itemView.context
+        
+        // Configurar imagen del producto
+        if (!producto.imagen.isNullOrEmpty()) {
+            // Cargar imagen desde URL
+            Glide.with(context)
+                .load(producto.imagen)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .error(R.drawable.ic_launcher_foreground)
+                .centerCrop()
+                .into(holder.ivProducto)
+        } else {
+            // Usar ícono genérico del tipo de producto basado en el nombre
+            val iconoRes = obtenerIconoProducto(producto.nombre)
+            holder.ivProducto.setImageResource(iconoRes)
+            holder.ivProducto.setBackgroundColor(android.graphics.Color.parseColor("#F5F5F5"))
+        }
         
         // Configurar datos del producto
         holder.tvNombreProducto.text = producto.nombre
         holder.tvSupermercado.text = producto.supermercado
         holder.tvPrecio.text = formatearPrecio(producto.precio)
-        holder.tvFecha.text = formatearFecha(producto.fecha)
+        
+        // Mostrar distancia si está disponible
+        if (producto.distancia_sucursal_km != null) {
+            holder.containerDistancia.visibility = View.VISIBLE
+            holder.tvDistancia.text = String.format("%.1f km", producto.distancia_sucursal_km)
+        } else {
+            holder.containerDistancia.visibility = View.GONE
+        }
+        
+        // Determinar y mostrar badge
+        configurarBadge(holder, position)
         
         // Click en "Ver en web"
         holder.btnVerWeb.setOnClickListener {
-            abrirEnWeb(holder.itemView.context, producto)
+            abrirEnWeb(context, producto)
         }
         
         // Click en "Ver en mapa"
         holder.btnVerMapa.setOnClickListener {
-            abrirEnMapa(holder.itemView.context, producto)
+            abrirEnMapa(context, producto)
+        }
+        
+        // Click en "Agregar a lista"
+        holder.btnAgregarLista.setOnClickListener {
+            agregarALista(context, producto)
+        }
+    }
+    
+    private fun configurarBadge(holder: ProductViewHolder, position: Int) {
+        val producto = productos[position]
+        
+        // Verificar si es el más barato (primer producto con precio más bajo)
+        val esMasBarato = position == 0 || (position > 0 && producto.precio <= productos[0].precio + 0.01)
+        
+        // Verificar si es el más cercano (si tiene información de distancia)
+        val esMasCercano = producto.distancia_sucursal_km != null && 
+                           productos.any { it.distancia_sucursal_km != null } &&
+                           producto.distancia_sucursal_km == productos.filter { it.distancia_sucursal_km != null }
+                                                                        .minByOrNull { it.distancia_sucursal_km ?: Double.MAX_VALUE }
+                                                                        ?.distancia_sucursal_km
+        
+        when {
+            esMasBarato && esMasCercano -> {
+                holder.tvBadge.visibility = View.VISIBLE
+                holder.tvBadge.text = "⭐ MÁS BARATO Y CERCANO"
+                holder.tvBadge.setBackgroundResource(R.drawable.bg_badge_best)
+            }
+            esMasBarato -> {
+                holder.tvBadge.visibility = View.VISIBLE
+                holder.tvBadge.text = "💰 MÁS BARATO"
+                holder.tvBadge.setBackgroundResource(R.drawable.bg_badge_best)
+            }
+            esMasCercano -> {
+                holder.tvBadge.visibility = View.VISIBLE
+                holder.tvBadge.text = "📍 MÁS CERCANO"
+                holder.tvBadge.setBackgroundResource(R.drawable.bg_badge_nearest)
+            }
+            else -> {
+                holder.tvBadge.visibility = View.GONE
+            }
         }
     }
 
@@ -71,29 +144,6 @@ class ProductAdapter(
 
     private fun formatearPrecio(precio: Double): String {
         return String.format("$%.2f", precio)
-    }
-
-    private fun formatearFecha(fechaString: String): String {
-        try {
-            // Parsear fecha ISO (viene del backend)
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-            val fecha = inputFormat.parse(fechaString)
-            
-            // Formatear para mostrar
-            val now = Date()
-            val diffInHours = (now.time - (fecha?.time ?: 0)) / (1000 * 60 * 60)
-            
-            return when {
-                diffInHours < 1 -> "Hace menos de 1h"
-                diffInHours < 24 -> "Hace ${diffInHours}h"
-                else -> {
-                    val outputFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
-                    outputFormat.format(fecha ?: now)
-                }
-            }
-        } catch (e: Exception) {
-            return "Hoy"
-        }
     }
 
     private fun abrirEnWeb(context: android.content.Context, producto: ProductoResultado) {
@@ -218,5 +268,42 @@ class ProductAdapter(
                 Toast.makeText(context, "Error conectando al servidor: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
+    }
+    
+    private fun agregarALista(context: Context, producto: ProductoResultado) {
+        val request = com.precioscerca.api.AgregarItemRequest(
+            nombre = producto.nombre,
+            cantidad = 1
+        )
+        
+        ApiClient.api.agregarALista(request).enqueue(object : Callback<com.precioscerca.api.AgregarItemResponse> {
+            override fun onResponse(
+                call: Call<com.precioscerca.api.AgregarItemResponse>,
+                response: Response<com.precioscerca.api.AgregarItemResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val resultado = response.body()
+                    if (resultado?.status == "agregado") {
+                        Toast.makeText(context, "✅ Agregado a la lista", Toast.LENGTH_SHORT).show()
+                    } else if (resultado?.status == "actualizado") {
+                        Toast.makeText(context, "✅ Cantidad actualizada (x${resultado.cantidad})", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "Error agregando a lista", Toast.LENGTH_SHORT).show()
+                }
+            }
+            
+            override fun onFailure(call: Call<com.precioscerca.api.AgregarItemResponse>, t: Throwable) {
+                Toast.makeText(context, "Error de conexión", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    
+    private fun obtenerIconoProducto(nombreProducto: String): Int {
+        val nombre = nombreProducto.lowercase()
+        
+        // Por ahora todos usan el mismo ícono
+        // En el futuro se pueden agregar íconos específicos por categoría
+        return R.drawable.ic_launcher_foreground
     }
 }

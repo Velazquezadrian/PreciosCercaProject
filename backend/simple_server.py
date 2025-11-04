@@ -26,6 +26,8 @@ print("🚀 Inicializando PreciosCerca Server...")
 try:
     from productos.scrapers.scraper_carrefour import ScraperCarrefour
     from productos.scrapers.scraper_dia import ScraperDia
+    from productos.scrapers.scraper_lagallega import ScraperLaGallega
+    from productos.scrapers.scraper_lareina import ScraperLaReina
     from productos.scrapers.sucursales_data import (
         encontrar_sucursal_mas_cercana, 
         obtener_sucursales,
@@ -34,9 +36,13 @@ try:
         detectar_ciudad_usuario,
         obtener_supermercados_por_ciudad
     )
+    from lista_compras import lista_compras_global, comparar_precios_lista
+    print("✅ La Gallega scraper cargado correctamente")
+    print("✅ La Reina scraper cargado correctamente")
     print("✅ Carrefour scraper cargado correctamente")
     print("✅ Día % scraper cargado correctamente")
     print("✅ Datos de sucursales cargados correctamente")
+    print("✅ Sistema de lista de compras cargado")
 except Exception as e:
     print(f"❌ Error cargando scrapers: {e}")
     sys.exit(1)
@@ -44,14 +50,14 @@ except Exception as e:
 app = Flask(__name__)
 
 # Inicializar scrapers disponibles
-# Por ahora solo La Gallega funcional
 scrapers = {
-    'lagallega': ScraperCarrefour(),  # Temporalmente usando Carrefour scraper para La Gallega
-    # 'carrefour': ScraperCarrefour(),
-    # 'dia': ScraperDia()
+    'carrefour': ScraperCarrefour(),
+    'dia': ScraperDia(),
+    'lareina': ScraperLaReina(),
+    # 'lagallega': ScraperLaGallega(),  # Requiere Selenium para JavaScript - EN DESARROLLO
 }
 
-print(f"✅ {len(scrapers)} scraper(s) inicializado(s) - Solo La Gallega")
+print(f"✅ {len(scrapers)} scraper(s) inicializado(s) - Carrefour, Día y La Reina con soporte completo para palabras compuestas")
 
 @app.route('/products', methods=['GET'])
 def buscar_productos():
@@ -79,16 +85,32 @@ def buscar_productos():
         supermercados_consultados = []
         productos_por_supermercado = {}
         
-        # Buscar en La Gallega (usando scraper de Carrefour temporalmente)
-        print("  🔍 Buscando en La Gallega...")
-        lagallega_productos = scrapers['lagallega'].buscar_productos(query)
-        # Cambiar el nombre del supermercado en los resultados
-        for prod in lagallega_productos:
-            prod['supermercado'] = 'La Gallega'
-        todos_los_productos.extend(lagallega_productos)
-        supermercados_consultados.append('La Gallega')
-        productos_por_supermercado['La Gallega'] = len(lagallega_productos)
-        print(f"  ✅ La Gallega: {len(lagallega_productos)} productos")
+        # Buscar en Carrefour
+        if 'carrefour' in scrapers:
+            print("  🔍 Buscando en Carrefour...")
+            carrefour_productos = scrapers['carrefour'].buscar_productos(query)
+            todos_los_productos.extend(carrefour_productos)
+            supermercados_consultados.append('Carrefour')
+            productos_por_supermercado['Carrefour'] = len(carrefour_productos)
+            print(f"  ✅ Carrefour: {len(carrefour_productos)} productos")
+        
+        # Buscar en Día
+        if 'dia' in scrapers:
+            print("  🔍 Buscando en Día %...")
+            dia_productos = scrapers['dia'].buscar_productos(query)
+            todos_los_productos.extend(dia_productos)
+            supermercados_consultados.append('Día %')
+            productos_por_supermercado['Día %'] = len(dia_productos)
+            print(f"  ✅ Día %: {len(dia_productos)} productos")
+        
+        # Buscar en La Reina
+        if 'lareina' in scrapers:
+            print("  🔍 Buscando en La Reina...")
+            lareina_productos = scrapers['lareina'].buscar_productos(query)
+            todos_los_productos.extend(lareina_productos)
+            supermercados_consultados.append('La Reina')
+            productos_por_supermercado['La Reina'] = len(lareina_productos)
+            print(f"  ✅ La Reina: {len(lareina_productos)} productos")
         
         # Ordenar por precio (más barato primero)
         todos_los_productos.sort(key=lambda x: x['precio'])
@@ -100,9 +122,10 @@ def buscar_productos():
                 'nombre': producto['nombre'],
                 'precio': producto['precio'],
                 'supermercado': producto['supermercado'],
-                'fecha': '2025-10-30',
+                'fecha': '2025-11-03',
                 'relevancia': 1.0,
-                'url': producto.get('url', '')  # Agregar URL del producto
+                'url': producto.get('url', ''),
+                'imagen': producto.get('imagen', '')  # Agregar imagen
             })
         
         print(f"✅ {len(resultados)} productos encontrados")
@@ -404,6 +427,130 @@ def listar_sucursales():
             'error': str(e)
         }), 500
 
+
+# ============================================================================
+# ENDPOINTS DE LISTA DE COMPRAS
+# ============================================================================
+
+@app.route('/lista-compras', methods=['GET'])
+def obtener_lista_compras():
+    """Obtiene todos los items de la lista de compras"""
+    try:
+        items = lista_compras_global.obtener_items()
+        return jsonify({
+            'items': items,
+            'total_items': lista_compras_global.cantidad_items()
+        })
+    except Exception as e:
+        print(f"❌ Error obteniendo lista de compras: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/lista-compras/agregar', methods=['POST'])
+def agregar_a_lista():
+    """
+    Agrega un producto a la lista de compras
+    Body JSON: {"nombre": "Leche", "cantidad": 1}
+    """
+    try:
+        data = request.get_json()
+        nombre = data.get('nombre')
+        cantidad = data.get('cantidad', 1)
+        
+        if not nombre:
+            return jsonify({'error': 'Nombre de producto requerido'}), 400
+        
+        resultado = lista_compras_global.agregar_producto(nombre, cantidad)
+        return jsonify(resultado)
+        
+    except Exception as e:
+        print(f"❌ Error agregando a lista: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/lista-compras/eliminar', methods=['DELETE'])
+def eliminar_de_lista():
+    """
+    Elimina un producto de la lista de compras
+    Body JSON: {"nombre": "Leche"}
+    """
+    try:
+        data = request.get_json()
+        nombre = data.get('nombre')
+        
+        if not nombre:
+            return jsonify({'error': 'Nombre de producto requerido'}), 400
+        
+        resultado = lista_compras_global.eliminar_producto(nombre)
+        return jsonify(resultado)
+        
+    except Exception as e:
+        print(f"❌ Error eliminando de lista: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/lista-compras/limpiar', methods=['POST'])
+def limpiar_lista():
+    """Limpia todos los items de la lista de compras"""
+    try:
+        lista_compras_global.limpiar()
+        return jsonify({
+            'status': 'ok',
+            'mensaje': 'Lista de compras limpiada'
+        })
+    except Exception as e:
+        print(f"❌ Error limpiando lista: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/lista-compras/comparar', methods=['GET'])
+def comparar_lista():
+    """
+    Compara precios de la lista de compras entre supermercados
+    Retorna en qué supermercado es más barato comprar todo
+    """
+    try:
+        # Obtener items de la lista
+        items = lista_compras_global.obtener_items()
+        
+        if not items:
+            return jsonify({
+                'error': 'Lista de compras vacía',
+                'items': []
+            }), 400
+        
+        # Buscar cada producto en todos los supermercados
+        nombres_productos = [item['nombre'] for item in items]
+        todos_los_productos = []
+        
+        print(f"🛒 Comparando lista de {len(nombres_productos)} productos...")
+        
+        for nombre_producto in nombres_productos:
+            print(f"  🔍 Buscando: {nombre_producto}")
+            
+            # Buscar en La Gallega
+            lagallega_productos = scrapers['lagallega'].buscar_productos(nombre_producto)
+            for prod in lagallega_productos:
+                prod['supermercado'] = 'La Gallega'
+            todos_los_productos.extend(lagallega_productos)
+        
+        # Comparar precios por supermercado
+        comparacion = comparar_precios_lista(nombres_productos, todos_los_productos)
+        
+        print(f"✅ Comparación completa")
+        print(f"  📊 Supermercados analizados: {len(comparacion['supermercados'])}")
+        if comparacion['mas_barato']:
+            print(f"  💰 Más barato: {comparacion['mas_barato']['nombre']} (${comparacion['mas_barato']['total']:.2f})")
+        
+        return jsonify(comparacion)
+        
+    except Exception as e:
+        print(f"❌ Error comparando lista: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     print("\n" + "="*60)
     print("🏪 PRECIOSCERCA SERVER - LA GALLEGA ROSARIO")
@@ -413,6 +560,8 @@ if __name__ == '__main__':
     print("📱 Compatible con app Android PreciosCerca")
     print("🔍 Endpoint: /products?query=PRODUCTO")
     print("📍 Endpoint cercanos: /products-cercanos?query=PRODUCTO&lat=LAT&lng=LNG&radio=KM")
+    print("🛒 Lista de compras: /lista-compras (GET/POST/DELETE)")
+    print("💰 Comparar precios: /lista-compras/comparar")
     print("="*60)
     
     app.run(host='0.0.0.0', port=8000, debug=False)

@@ -67,12 +67,19 @@ class ScraperDia(BaseScraper):
                         precio_centavos = sellers[0].get('commertialOffer', {}).get('Price', 0)
                         precio = float(precio_centavos)
                         
+                        # Obtener imagen del producto
+                        imagen_url = None
+                        images = items[0].get('images', [])
+                        if images:
+                            imagen_url = images[0].get('imageUrl', '')
+                        
                         if nombre and precio > 0:
                             productos.append({
                                 'nombre': nombre,
                                 'precio': precio,
                                 'supermercado': self.supermercado_nombre,
-                                'url': item.get('link', self.base_url)
+                                'url': item.get('link', self.base_url),
+                                'imagen': imagen_url
                             })
                             
                     except (KeyError, IndexError, ValueError) as e:

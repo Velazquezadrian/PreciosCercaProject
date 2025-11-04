@@ -5,13 +5,12 @@
     <item
         android:id="@+id/action_radio"
         android:title="Radio de búsqueda"
-        android:icon="@android:drawable/ic_menu_mylocation"
         app:showAsAction="ifRoom|withText" />
     
     <item
         android:id="@+id/action_toggle_busqueda"
         android:title="Tipo de búsqueda"
-        android:icon="@android:drawable/ic_menu_mapmode"
         app:showAsAction="never" />
     
 </menu>
+

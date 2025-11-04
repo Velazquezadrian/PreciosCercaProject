@@ -1,4 +1,342 @@
-# 🛒 PreciosCerca - Comparador de Precios de Supermercados# 🛒 PreciosCerca - Comparador de Precios de Supermercados# 🛒 PreciosCerca - Comparador de Precios Android# 🛒 PreciosCerca - Comparador de Precios de Supermercados
+# 🛒 PreciosCerca - Comparador de Precios de Supermercados
+
+**Aplicación completa para comparar precios entre supermercados argentinos en tiempo real**
+
+[![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](backend/)
+[![Flask](https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=white)](backend/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?style=flat&logo=kotlin&logoColor=white)](android/)
+[![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white)](android/)
+
+---
+
+## ✨ Estado Actual - ¡FUNCIONANDO!
+
+### ✅ Completado y operativo
+
+- **� App Android** - APK compilada y funcional (6.45MB)
+- **�🛒 3 Supermercados activos:**
+  - **Carrefour** - 50+ productos por búsqueda (API VTEX oficial) ✅
+  - **Día %** - 50+ productos por búsqueda (API REST oficial) ✅
+  - **La Reina** - Scraper HTML mejorado ✅
+- **🔍 Búsqueda con palabras compuestas** - "dulce de leche", "aceite de oliva", etc.
+- **🖼️ Imágenes de productos** - Carga con Glide desde URLs de supermercados
+- **🖥️ Servidor Flask** - API REST estable en puerto 8000
+- **🛒 Lista de compras** - Agregar/eliminar productos con comparación de precios
+
+### 📊 Resultados actuales
+
+- **150+ productos** por búsqueda (50 de cada supermercado)
+- **3 supermercados** consultados simultáneamente
+- **Comparación en tiempo real** con ordenamiento automático por precio
+- **Soporte completo** para búsquedas con múltiples palabras
+
+### 🔄 En desarrollo
+
+- **La Gallega** - Scraper con Selenium (requiere navegación dinámica de JavaScript)
+
+---
+
+## 🚀 Instalación Rápida
+
+### 📱 Usar la App (5 minutos)
+
+1. **Instalar APK:**
+   ```
+   Ubicación: android/app/build/outputs/apk/debug/app-debug.apk
+   Tamaño: 6.45MB
+   Requisitos: Android 7.0+
+   ```
+
+2. **Iniciar servidor backend:**
+   ```bash
+   cd C:\PreciosCercaProject
+   .venv\Scripts\python.exe backend\simple_server.py
+   ```
+
+3. **Configurar IP en la app:**
+   - Emulador Android: `http://10.0.2.2:8000`
+   - Dispositivo físico: `http://TU-IP-LOCAL:8000`
+
+4. **¡Listo!** Busca productos y compara precios entre **Carrefour**, **Día %** y **La Reina**
+
+---
+
+## 🏗️ Arquitectura del Proyecto
+
+```
+PreciosCercaProject/
+├── 📱 android/                      # Aplicación Android
+│   ├── app/src/main/
+│   │   ├── java/com/precioscerca/
+│   │   │   ├── MainActivity.kt       # Pantalla principal con búsqueda aleatoria
+│   │   │   ├── ProductListActivity.kt # Resultados de búsqueda
+│   │   │   ├── ListaComprasActivity.kt # Lista de compras
+│   │   │   ├── api/PreciosCercaApi.kt  # Cliente Retrofit
+│   │   │   └── adapters/ProductAdapter.kt # RecyclerView con imágenes
+│   │   └── res/
+│   │       ├── layout/
+│   │       │   ├── activity_main.xml
+│   │       │   ├── activity_product_list.xml
+│   │       │   └── item_producto.xml  # Card con imagen 80x80dp
+│   │       └── menu/
+│   └── build.gradle                 # Dependencias: Glide 4.16.0, Retrofit, etc.
+│
+├── 🐍 backend/                      # Flask API + Web Scrapers
+│   ├── simple_server.py             # ✅ Servidor principal (puerto 8000)
+│   ├── lista_compras.py             # Sistema de lista de compras
+│   ├── productos/scrapers/
+│   │   ├── base_scraper.py          # Clase base para scrapers
+│   │   ├── scraper_carrefour.py     # ✅ API VTEX de Carrefour
+│   │   ├── scraper_dia.py           # ✅ API REST de Día
+│   │   ├── scraper_lareina.py       # ✅ HTML parsing mejorado
+│   │   ├── scraper_lagallega.py     # 🔄 En desarrollo
+│   │   ├── scraper_lagallega_selenium.py # 🔄 Versión con Selenium
+│   │   └── sucursales_data.py       # Datos de sucursales (GPS)
+│   ├── test_palabras_compuestas.py  # Tests para búsquedas complejas
+│   └── requirements.txt             # Flask, requests, BeautifulSoup, Selenium
+│
+├── 📚 docs/
+│   ├── PRIVACY_POLICY.md
+│   ├── INSTALLATION.md
+│   ├── TESTING_GUIDE.md
+│   └── PLAY_STORE_METADATA.md
+│
+└── README.md                        # Este archivo
+```
+
+---
+
+## 📊 API REST Funcionando
+
+### 🌐 Endpoints disponibles
+
+- **`GET /products?query=leche`** - Buscar productos en todos los supermercados ✅
+- **`GET /health`** - Estado del servidor ✅
+- **`GET /`** - Información de la API ✅
+- **`GET /lista-compras`** - Obtener lista de compras ✅
+- **`POST /lista-compras/agregar`** - Agregar producto a lista ✅
+- **`DELETE /lista-compras/eliminar`** - Eliminar producto de lista ✅
+- **`GET /lista-compras/comparar`** - Comparar precios de lista completa ✅
+
+### 📱 Respuesta de ejemplo
+
+```json
+{
+  "query": "dulce de leche",
+  "total_encontrados": 15,
+  "supermercados_consultados": ["Carrefour", "Día %", "La Reina"],
+  "productos_por_supermercado": {
+    "Carrefour": 8,
+    "Día %": 5,
+    "La Reina": 2
+  },
+  "resultados": [
+    {
+      "nombre": "Dulce De Leche Colonial Repostero 1kg",
+      "precio": 2450.50,
+      "supermercado": "Carrefour",
+      "fecha": "2025-11-04",
+      "relevancia": 1.0,
+      "url": "https://www.carrefour.com.ar/...",
+      "imagen": "https://carrefourar.vtexassets.com/..."
+    },
+    {
+      "nombre": "Dulce de leche La Serenisima 400g",
+      "precio": 1890.00,
+      "supermercado": "Día %",
+      "fecha": "2025-11-04",
+      "relevancia": 1.0,
+      "url": "https://diaonline.supermercadosdia.com.ar/...",
+      "imagen": "https://diaonlinear.vtexassets.com/..."
+    }
+  ]
+}
+```
+
+---
+
+## 🎯 Características Principales
+
+### ✨ Para usuarios
+
+- � **Búsqueda inteligente** con palabras compuestas
+- 💰 **Comparación de precios** en tiempo real entre 3 supermercados
+- 🖼️ **Imágenes de productos** cargadas directamente de los supermercados
+- �🛒 **Lista de compras** con comparación automática de precios
+- 📊 **Ordenamiento automático** por precio (más barato primero)
+- 🏷️ **Badges especiales** - "MÁS BARATO", "MÁS CERCANO"
+- 🌐 **Links directos** a productos en sitios web de supermercados
+
+### 🔧 Para desarrolladores
+
+- 🚀 **API REST** bien documentada con Flask
+- 🕷️ **Web scraping** optimizado (APIs oficiales + HTML parsing)
+- 📦 **Arquitectura modular** - Fácil agregar nuevos supermercados
+- 🎨 **Material Design 3** en la app Android
+- 🔄 **Retrofit** para llamadas HTTP eficientes
+- 🖼️ **Glide** para carga optimizada de imágenes
+- 📝 **Código limpio** y bien documentado
+
+---
+
+## 🛠️ Para Desarrolladores
+
+### 🔧 Setup completo
+
+```bash
+# 1. Clonar repositorio
+git clone https://github.com/Velazquezadrian/PreciosCercaProject.git
+cd PreciosCercaProject
+
+# 2. Backend - Crear entorno virtual
+cd backend
+python -m venv ..\\.venv
+..\\.venv\\Scripts\\activate
+pip install -r requirements.txt
+
+# 3. Ejecutar servidor
+python simple_server.py  # Puerto 8000
+
+# 4. Android - Abrir Android Studio
+# Importar proyecto desde carpeta 'android/'
+# Sync Gradle automáticamente
+# Build & Run
+```
+
+### 🧪 Testing
+
+```bash
+# Probar API
+curl "http://localhost:8000/products?query=leche"
+
+# Probar búsquedas con palabras compuestas
+cd backend
+python test_palabras_compuestas.py
+
+# Ver estado del servidor
+curl "http://localhost:8000/health"
+```
+
+### 📱 Configurar app Android
+
+1. **Abrir Android Studio**
+2. **Importar proyecto**: carpeta `android/`
+3. **Sync Gradle** (automático)
+4. **Configurar IP del backend** en `app/src/main/java/com/precioscerca/api/ApiClient.kt`:
+   - Emulador: `http://10.0.2.2:8000/`
+   - Dispositivo físico: `http://TU-IP-LOCAL:8000/`
+5. **Build & Run** 📲
+
+---
+
+## 📱 Uso de la Aplicación
+
+### 🔍 Búsqueda de productos
+
+1. Abrir la app **PreciosCerca**
+2. Ver productos aleatorios en la pantalla principal
+3. Escribir término de búsqueda (ej: "leche", "dulce de leche", "aceite de oliva")
+4. Ver resultados ordenados por **precio**
+5. Presionar **"Agregar a lista"** para guardar productos
+6. Ver lista completa con el botón flotante 🛒
+
+### 💡 Ejemplos de búsqueda
+
+- `leche` → 150+ productos lácteos
+- `dulce de leche` → Productos específicos con todas las palabras
+- `aceite de oliva` → Búsqueda con palabras compuestas
+- `pan lactal` → Pan de molde comparado
+- `coca cola` → Bebidas gaseosas
+
+---
+
+## 🎯 Roadmap
+
+### ✅ Completado recientemente
+
+- [x] ✅ Agregar supermercado **Día %** (50 productos)
+- [x] ✅ Agregar supermercado **La Reina**
+- [x] ✅ Búsqueda con **palabras compuestas**
+- [x] ✅ **Imágenes de productos** con Glide
+- [x] ✅ **Lista de compras** funcional
+- [x] ✅ Servidor Flask estable con 3 scrapers
+
+### 📋 Próximo (1-2 semanas)
+
+- [ ] 🔄 Completar scraper de **La Gallega** con Selenium
+- [ ] 📍 Búsqueda por **proximidad GPS** (sucursales cercanas)
+- [ ] 💾 **Cache de resultados** para búsquedas frecuentes
+- [ ] 🎨 Mejorar UI con filtros y ordenamiento
+
+### 🚀 Mediano plazo (1-2 meses)
+
+- [ ] Agregar más supermercados (Disco, Jumbo, Coto)
+- [ ] Escaneo de códigos de barras
+- [ ] Histórico de precios
+- [ ] Notificaciones de ofertas
+
+### 🌟 Largo plazo (3-6 meses)
+
+- [ ] App iOS
+- [ ] Machine Learning para predicción de precios
+- [ ] API pública
+- [ ] Play Store release
+
+---
+
+## 🎯 Comparación con Competencia
+
+| Característica | [Pricely.ar](https://pricely.ar) | PreciosCerca | Estado |
+|----------------|------------|--------------|---------|
+| App Android | ✅ | ✅ | **Logrado** |
+| Datos reales | ✅ | ✅ | **Logrado** |
+| Supermercados | 10+ | **3 activos** | **En expansión** |
+| Búsqueda compleja | ❓ | ✅ | **Ventaja** |
+| Imágenes | ✅ | ✅ | **Logrado** |
+| Lista compras | ✅ | ✅ | **Logrado** |
+| Código abierto | ❌ | ✅ | **Ventaja** |
+| Gratis | ✅ | ✅ | **Logrado** |
+
+---
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! 🎉
+
+1. **Fork** el proyecto
+2. Crear **feature branch**: `git checkout -b feature/nueva-caracteristica`
+3. **Commit** cambios: `git commit -m 'Agregar nueva característica'`
+4. **Push** a la branch: `git push origin feature/nueva-caracteristica`
+5. Abrir **Pull Request**
+
+### 🐛 Reportar bugs
+
+- Usar [GitHub Issues](https://github.com/Velazquezadrian/PreciosCercaProject/issues)
+- Incluir pasos para reproducir el problema
+- Especificar versión de Android
+
+---
+
+## 📄 Licencia
+
+MIT License - Proyecto open source para la comunidad argentina.
+
+Ver archivo `LICENSE` para más detalles.
+
+---
+
+## 👨‍💻 Contacto
+
+- **GitHub**: [@Velazquezadrian](https://github.com/Velazquezadrian)
+- **Proyecto**: [PreciosCercaProject](https://github.com/Velazquezadrian/PreciosCercaProject)
+
+---
+
+**⭐ Si te gusta el proyecto, dale una estrella en GitHub!**
+
+**💰 Desarrollado con ❤️ para ayudar a los argentinos a ahorrar dinero**
+
+**🛒 ¡3 supermercados funcionando, más en camino!**
 
 
 

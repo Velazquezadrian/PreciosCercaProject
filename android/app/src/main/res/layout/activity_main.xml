@@ -1,147 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
-    <!-- Logo/Título con icono -->
+    <!-- Header con logo y título -->
     <LinearLayout
-        android:id="@+id/layoutTitulo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_logo"
-            android:layout_marginEnd="12dp"
-            android:contentDescription="Logo PreciosCerca" />
+        android:orientation="vertical"
+        android:background="@color/primary"
+        android:padding="20dp"
+        android:elevation="4dp">
 
         <TextView
-            android:id="@+id/tvTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="32sp"
+            android:text="PreciosCerca"
+            android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="@color/primary" />
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compará precios y ahorrá"
+            android:textSize="14sp"
+            android:textColor="#CCFFFFFF"
+            android:layout_marginTop="4dp" />
 
     </LinearLayout>
 
-    <!-- Subtítulo -->
-        <TextView
-            android:id="@+id/tvSubtitulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tagline"
-            android:textSize="16sp"
-            android:textColor="@color/gray_dark"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/layoutTitulo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />    <!-- Campo de búsqueda -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilBusqueda"
-        android:layout_width="0dp"
+    <!-- Barra de búsqueda -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:hint="@string/hint_busqueda"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/tvSubtitulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnBuscar"
-        app:layout_constraintHorizontal_weight="1"
-        android:layout_marginEnd="8dp">
+        android:orientation="horizontal"
+        android:background="@android:color/white"
+        android:padding="16dp"
+        android:elevation="2dp"
+        android:gravity="center_vertical">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/etBusqueda"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="¿Qué producto buscás?"
             android:inputType="text"
-            android:imeOptions="actionSearch" />
+            android:imeOptions="actionSearch"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp"
+            android:layout_marginEnd="8dp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btnBuscar"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="Buscar"
+            android:textColor="@android:color/white"
+            android:background="@color/primary"
+            android:paddingHorizontal="20dp" />
 
-    <!-- Botón buscar -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBuscar"
+    </LinearLayout>
+
+    <!-- Título de productos destacados -->
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/buscar"
-        android:layout_marginStart="8dp"
-        app:layout_constraintTop_toTopOf="@id/tilBusqueda"
-        app:layout_constraintBottom_toBottomOf="@id/tilBusqueda"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:text="Productos destacados"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#424242"
+        android:padding="16dp" />
 
-    <!-- Indicador de carga -->
+    <!-- ProgressBar para carga -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tilBusqueda"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        android:layout_gravity="center"
+        android:layout_marginTop="48dp"
+        android:visibility="gone" />
 
-    <!-- Texto de estado -->
-    <TextView
-        android:id="@+id/tvEstado"
+    <!-- Lista de productos aleatorios -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerProductos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        tools:listitem="@layout/item_producto" />
+
+    <!-- Botón flotante para ver lista de compras -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabVerLista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/buscando"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/progressBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_shopping_cart"
+        android:contentDescription="Ver mi lista de compras"
+        app:tint="@android:color/white"
+        app:backgroundTint="@color/primary" />
 
-    <!-- Información de supermercados -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardInfo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/tilBusqueda"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Supermercados disponibles:"
-                android:textStyle="bold"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="• La Reina Online\n• Carrefour\n• La Gallega"
-                android:layout_marginTop="8dp"
-                android:textSize="14sp"
-                android:textColor="@color/gray_dark" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
