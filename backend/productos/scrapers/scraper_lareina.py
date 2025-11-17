@@ -5,100 +5,126 @@ import re
 
 class ScraperLaReina(BaseScraper):
     def __init__(self):
-        # Inicializar con URL base y nombre del supermercado
         super().__init__(
             base_url="https://www.lareinaonline.com.ar",
             supermercado_nombre="La Reina"
         )
+        self.categorias = self._obtener_categorias()
+    
+    def _obtener_categorias(self) -> List[str]:
+        """Extrae todas las categorías disponibles desde la página principal"""
+        try:
+            soup = self.hacer_request(self.base_url)
+            if not soup:
+                return []
+            
+            # Buscar todos los links a productosnl.asp
+            links = soup.find_all('a', href=re.compile(r'productosnl\.asp\?nl='))
+            categorias = []
+            
+            for link in links:
+                href = link.get('href', '')
+                # Extraer código de categoría: productosnl.asp?nl=01010100&TM=cx
+                match = re.search(r'nl=(\d{8})', href)
+                if match:
+                    categorias.append(match.group(1))
+            
+            return list(set(categorias))  # Eliminar duplicados
+        except:
+            # Si falla, usar categorías hardcodeadas básicas
+            return ['01010100', '01020100', '01030100', '01040100']
         
     def buscar_productos(self, query: str) -> List[Dict]:
         productos = []
-
-        soup = self.hacer_request(self.base_url)
-        if not soup:
-            return productos
+        productos_vistos = set()
         
-        # Dividir query en palabras para búsqueda más flexible
-        # Ejemplo: "dulce de leche" -> buscar productos que contengan todas las palabras importantes
+        # Palabras importantes del query (filtrar stopwords)
         palabras = query.lower().split()
-        # Filtrar palabras comunes que no aportan valor a la búsqueda
-        palabras_importantes = [p for p in palabras if p not in ['de', 'del', 'la', 'el', 'los', 'las', 'un', 'una']]
-        
-        # Si después de filtrar no quedan palabras, usar todas
+        palabras_importantes = [p for p in palabras if p not in ['de', 'del', 'la', 'el', 'los', 'las', 'un', 'una', 'en']]
         if not palabras_importantes:
             palabras_importantes = palabras
         
-        # Buscar imágenes de productos
-        productos_html = soup.find_all("img", {'src': re.compile(r'/Fotos/Articulos/')})
-
-        productos_vistos = set()  # Para evitar duplicados
-
-        for img in productos_html:
-            try:
-                # Encontrar contenedor padre del producto
-                contenedor = img.find_parent()
-                if not contenedor:
-                    continue
-
-                # Extraer todo el texto del contenedor
-                texto = contenedor.get_text()
-
-                # Filtrar solo productos que contengan TODAS las palabras importantes de la búsqueda
-                texto_lower = texto.lower()
-                if not all(palabra in texto_lower for palabra in palabras_importantes):
-                    continue
-
-                # Buscar precio en el texto
-                precio_match = re.search(r'\$([\d.,]+)', texto)
-                if not precio_match:
-                    continue
-
-                precio_texto = precio_match.group()
-                precio = self.limpiar_precio(precio_texto)
-
-                # Extraer nombre del producto
-                nombre = self.extraer_nombre_producto(texto, precio_texto)
+        # Buscar en máximo 30 categorías para evitar timeouts
+        max_categorias = min(30, len(self.categorias))
+        categorias_a_buscar = self.categorias[:max_categorias]
+        
+        # Buscar en múltiples categorías
+        for i, categoria in enumerate(categorias_a_buscar):
+            # Stop early si ya tenemos suficientes productos
+            if len(productos) >= 50:
+                break
                 
-                # Extraer URL de la imagen
-                imagen_url = None
-                img_src = img.get('src', '')
-                if img_src:
-                    # Si es una URL relativa, hacerla absoluta
-                    if img_src.startswith('/'):
-                        imagen_url = f"{self.base_url}{img_src}"
-                    else:
-                        imagen_url = img_src
-
-                if nombre and precio:
-                    # Evitar duplicados usando el nombre como clave
-                    producto_key = f"{nombre}_{precio}"
-                    if producto_key not in productos_vistos:
-                        productos_vistos.add(producto_key)
-                        productos.append({
-                            'nombre': nombre.strip(),
-                            'precio': precio,
-                            'supermercado': self.supermercado_nombre,
-                            'url': self.base_url,
-                            'imagen': imagen_url
-                        })
+            url_categoria = f"{self.base_url}/productosnl.asp?nl={categoria}&TM=cx"
+            
+            try:
+                soup = self.hacer_request(url_categoria)
+                if not soup:
+                    continue
+                
+                # Buscar productos en <li class="cuadProd">
+                productos_html = soup.find_all('li', {'class': 'cuadProd'})
+                
+                for producto_li in productos_html:
+                    try:
+                        texto_completo = producto_li.get_text()
+                        texto_lower = texto_completo.lower()
+                        
+                        # Filtrar por query (debe contener todas las palabras importantes)
+                        if not all(palabra in texto_lower for palabra in palabras_importantes):
+                            continue
+                        
+                        # Buscar precio
+                        precio_match = re.search(r'\$[\d.,]+', texto_completo)
+                        if not precio_match:
+                            continue
+                        
+                        precio_texto = precio_match.group()
+                        precio = self.limpiar_precio(precio_texto)
+                        
+                        # Extraer nombre (todo el texto antes del precio)
+                        nombre = texto_completo.split(precio_texto)[0].strip()
+                        nombre = re.sub(r'\s+', ' ', nombre)  # Limpiar espacios múltiples
+                        
+                        # Buscar imagen
+                        img = producto_li.find('img', {'src': re.compile(r'.*Articulos.*', re.I)})
+                        imagen_url = None
+                        if img:
+                            img_src = img.get('src', '')
+                            if img_src:
+                                if img_src.startswith('http'):
+                                    imagen_url = img_src
+                                elif img_src.startswith('/'):
+                                    imagen_url = f"{self.base_url}{img_src}"
+                                else:
+                                    imagen_url = f"{self.base_url}/{img_src}"
+                        
+                        if nombre and precio:
+                            producto_key = f"{nombre}_{precio}"
+                            if producto_key not in productos_vistos:
+                                productos_vistos.add(producto_key)
+                                productos.append({
+                                    'nombre': nombre.title(),
+                                    'precio': precio,
+                                    'supermercado': self.supermercado_nombre,
+                                    'url': url_categoria,
+                                    'imagen': imagen_url
+                                })
+                                
+                                # Limitar a 50 productos
+                                if len(productos) >= 50:
+                                    return productos
+                    
+                    except Exception as e:
+                        continue
             
             except Exception as e:
-                print(f"Error al procesar un producto: {e}")
+                # Si una categoría falla, continuar con la siguiente
+                print(f"Error en categoría {categoria}: {e}")
                 continue
-                
+        
         return productos
     
     def limpiar_precio(self, precio_texto: str) -> float:
-        # Convertir "$1.236,00" a 1236.00
+        # Convertir "$2.779,00" a 2779.00
         precio_limpio = precio_texto.replace('$', '').replace('.', '').replace(',', '.')
         return float(precio_limpio)
-    
-    def extraer_nombre_producto(self, texto: str, precio_texto: str) -> str:
-        # Extraer nombre antes del precio
-        partes = texto.split(precio_texto)
-        if len(partes) > 0:
-            nombre = partes[0].strip()
-            # Limpiar texto extra como OFERTA, DTO, etc.
-            nombre = re.sub(r'OFERTA|DTO \d+%|AGREGAR', '', nombre).strip()
-            return nombre
-        return ""

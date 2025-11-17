@@ -19,7 +19,7 @@ class BaseScraper(ABC):
     def hacer_request(self, url: str) -> BeautifulSoup:
         # Realizar petición HTTP y parsear HTML
         try:
-            response = self.session.get(url, timeout=10)
+            response = self.session.get(url, timeout=5)  # Timeout reducido a 5s
             response.raise_for_status()  # Lanzar excepción si status != 200
             return BeautifulSoup(response.content, 'html.parser')  # Usar parser por defecto
         except Exception as e:

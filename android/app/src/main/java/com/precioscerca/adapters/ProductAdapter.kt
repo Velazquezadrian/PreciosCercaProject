@@ -58,7 +58,7 @@ class ProductAdapter(
                 .load(producto.imagen)
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_foreground)
-                .centerCrop()
+                .fitCenter()
                 .into(holder.ivProducto)
         } else {
             // Usar ícono genérico del tipo de producto basado en el nombre
