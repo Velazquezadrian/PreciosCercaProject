@@ -25,9 +25,14 @@ class ScraperDia(BaseScraper):
         productos = []
         
         try:
+            # Si la búsqueda tiene múltiples palabras, usar solo la primera
+            # ya que la API de Día no acepta búsquedas con espacios
+            palabras = query.strip().split()
+            query_api = palabras[0] if palabras else query
+            
             # Parámetros de búsqueda
             params = {
-                'ft': query,  # Full text search
+                'ft': query_api,  # Full text search
                 '_from': 0,
                 '_to': 49  # Traer hasta 50 productos
             }

@@ -16,20 +16,30 @@ class ScraperCarrefour(BaseScraper):
         productos = []
         
         try:
+            # Si la búsqueda tiene múltiples palabras, usar solo la primera
+            # ya que la API de Carrefour no acepta búsquedas con espacios
+            palabras = query.strip().split()
+            query_api = palabras[0] if palabras else query
+            
             # Buscar usando VTEX API
             params = {
-                'ft': query,  # Full text search
+                'ft': query_api,  # Full text search
                 '_from': 0,
                 '_to': 49     # Primeros 50 resultados
             }
             
+            print(f"[Carrefour] Buscando: '{query}' (usando en API: '{query_api}')")
             response = self.session.get(self.api_search_url, params=params, timeout=15)
+            print(f"[Carrefour] Status: {response.status_code}")
+            
             # Status 200 y 206 (partial content) son válidos para VTEX
             if response.status_code not in [200, 206]:
+                print(f"[Carrefour] Error status code: {response.status_code}")
                 return productos
                 
             # Parsear JSON de VTEX
             productos_json = response.json()
+            print(f"[Carrefour] Productos encontrados en API: {len(productos_json)}")
             
             for producto_vtex in productos_json:
                 try:
@@ -70,5 +80,6 @@ class ScraperCarrefour(BaseScraper):
                     
         except Exception as e:
             print(f"Error en búsqueda Carrefour: {e}")
-            
+        
+        print(f"[Carrefour] Total productos válidos: {len(productos)}")
         return productos

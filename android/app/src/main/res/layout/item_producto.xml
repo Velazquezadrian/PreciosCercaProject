@@ -177,56 +177,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivProducto" />
 
-        <!-- Botones de acción mejorados -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <!-- Botón de Agregar a Lista - Grande y Visual -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAgregarLista"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="12dp"
-            android:gravity="end"
+            app:fabSize="mini"
+            app:srcCompat="@android:drawable/ic_input_add"
+            app:tint="@android:color/white"
+            app:backgroundTint="@color/accent"
+            app:elevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAgregarLista"
-                style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lista"
-                android:textSize="13sp"
-                android:textColor="@color/accent"
-                app:icon="@android:drawable/ic_input_add"
-                app:iconTint="@color/accent"
-                app:iconGravity="start"
-                android:layout_marginEnd="4dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnVerMapa"
-                style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mapa"
-                android:textSize="13sp"
-                android:textColor="@color/primary"
-                app:icon="@android:drawable/ic_dialog_map"
-                app:iconTint="@color/primary"
-                app:iconGravity="start"
-                android:layout_marginEnd="4dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnVerWeb"
-                style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Web"
-                android:textSize="13sp"
-                android:textColor="@color/primary"
-                app:icon="@android:drawable/ic_menu_view"
-                app:iconTint="@color/primary"
-                app:iconGravity="start" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            android:contentDescription="Agregar a lista de compras" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

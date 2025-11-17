@@ -11,11 +11,12 @@ interface PreciosCercaApi {
     
     /**
      * Buscar productos por nombre/término
-     * GET /products?query=leche
+     * GET /products?query=leche&supermercado=carrefour
      */
     @GET("products")
     fun buscarProductos(
-        @Query("query") query: String
+        @Query("query") query: String,
+        @Query("supermercado") supermercado: String? = null
     ): Call<BusquedaApiResponse>
     
     /**
@@ -142,6 +143,9 @@ data class SucursalInfo(
 data class ItemListaCompras(
     val nombre: String,
     val cantidad: Int,
+    val precio: Double = 0.0,
+    val supermercado: String = "",
+    val imagen: String = "",
     val agregado_en: String
 )
 
@@ -158,7 +162,10 @@ data class ListaComprasResponse(
  */
 data class AgregarItemRequest(
     val nombre: String,
-    val cantidad: Int = 1
+    val cantidad: Int = 1,
+    val precio: Double = 0.0,
+    val supermercado: String = "",
+    val imagen: String = ""
 )
 
 /**

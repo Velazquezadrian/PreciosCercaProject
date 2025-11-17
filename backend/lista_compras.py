@@ -6,15 +6,22 @@ from datetime import datetime
 
 class ItemListaCompras:
     """Representa un item en la lista de compras"""
-    def __init__(self, nombre: str, cantidad: int = 1):
+    def __init__(self, nombre: str, cantidad: int = 1, precio: float = 0.0, 
+                 supermercado: str = "", imagen: str = ""):
         self.nombre = nombre
         self.cantidad = cantidad
+        self.precio = precio
+        self.supermercado = supermercado
+        self.imagen = imagen
         self.agregado_en = datetime.now().isoformat()
     
     def to_dict(self) -> Dict[str, Any]:
         return {
             'nombre': self.nombre,
             'cantidad': self.cantidad,
+            'precio': self.precio,
+            'supermercado': self.supermercado,
+            'imagen': self.imagen,
             'agregado_en': self.agregado_en
         }
 
@@ -25,7 +32,8 @@ class ListaCompras:
     def __init__(self):
         self.items: List[ItemListaCompras] = []
     
-    def agregar_producto(self, nombre: str, cantidad: int = 1) -> Dict[str, Any]:
+    def agregar_producto(self, nombre: str, cantidad: int = 1, precio: float = 0.0,
+                        supermercado: str = "", imagen: str = "") -> Dict[str, Any]:
         """Agrega un producto a la lista o incrementa su cantidad si ya existe"""
         # Buscar si el producto ya está en la lista
         for item in self.items:
@@ -38,7 +46,7 @@ class ListaCompras:
                 }
         
         # Si no existe, agregarlo
-        nuevo_item = ItemListaCompras(nombre, cantidad)
+        nuevo_item = ItemListaCompras(nombre, cantidad, precio, supermercado, imagen)
         self.items.append(nuevo_item)
         return {
             'status': 'agregado',

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PreciosCerca</string>
+    <string name="app_name">Mi Lista de Precios</string>
     <string name="buscar_producto">Buscar producto</string>
-    <string name="hint_busqueda">¿Qué producto buscas? Ej: leche, pan, arroz...</string>
-    <string name="buscar">Buscar precios</string>
-    <string name="tagline">Compará precios y ahorrá dinero</string>
+    <string name="hint_busqueda">Ejemplo: leche, pan, salsa golf...</string>
+    <string name="buscar">Buscar</string>
+    <string name="tagline">Comprá más inteligente</string>
     <string name="resultados_para">Resultados para "%1$s"</string>
     <string name="productos_encontrados">%1$d productos encontrados</string>
     <string name="precio_desde">Desde $%1$.2f</string>

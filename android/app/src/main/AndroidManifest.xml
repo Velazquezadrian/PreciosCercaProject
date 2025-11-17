@@ -20,7 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <!-- Activity Principal -->
+        <!-- ========== FLUJO PRINCIPAL: Lista de Compras por Supermercado ========== -->
+        
+        <!-- [INICIO] Pantalla de bienvenida con botón "Empezar Lista" -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,40 +33,44 @@
             </intent-filter>
         </activity>
 
-        <!-- Activity Búsqueda (entrada para modo detallado) -->
+        <!-- [SELECCIÓN] Elegir supermercado (Carrefour/Día/La Reina) -->
+        <activity
+            android:name=".SeleccionSuperActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.PreciosCerca" />
+
+        <!-- [BÚSQUEDA] Buscar productos en el supermercado seleccionado -->
         <activity
             android:name=".BusquedaActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".SeleccionSuperActivity"
             android:theme="@style/Theme.PreciosCerca" />
 
-        <!-- Activity Lista Modo (entrada para modo lista) -->
+        <!-- [MI LISTA] Ver lista de productos agregados -->
         <activity
-            android:name=".ListaModoActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.PreciosCerca" />
-
-        <!-- Activity Lista de Productos -->
-        <activity
-            android:name=".ProductListActivity"
+            android:name=".MiListaActivity"
             android:exported="false"
             android:parentActivityName=".BusquedaActivity"
             android:theme="@style/Theme.PreciosCerca" />
 
-        <!-- Activity Lista de Compras -->
+        <!-- [LISTA TERMINADA] Marcar productos como comprados y compartir -->
         <activity
-            android:name=".ListaComprasActivity"
+            android:name=".ListaTerminadaActivity"
             android:exported="false"
-            android:parentActivityName=".ProductListActivity"
+            android:parentActivityName=".MiListaActivity"
             android:theme="@style/Theme.PreciosCerca" />
 
-        <!-- Activity Comparación de Precios -->
-        <activity
-            android:name=".ComparacionActivity"
+        <!-- FileProvider para compartir archivos -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
-            android:parentActivityName=".ListaComprasActivity"
-            android:theme="@style/Theme.PreciosCerca" />
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

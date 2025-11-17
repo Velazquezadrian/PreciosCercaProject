@@ -26,25 +26,24 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ProductAdapter(
-    private var productos: List<ProductoResultado> = emptyList()
+    private var productos: List<ProductoResultado> = emptyList(),
+    private var modoLista: Boolean = true, // true = LISTA (mostrar +), false = CONSULTA (ocultar +)
+    private var onProductoAgregado: ((precio: Double) -> Unit)? = null // Callback para actualizar total
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivProducto: ImageView = itemView.findViewById(R.id.ivProducto)
         val tvNombreProducto: TextView = itemView.findViewById(R.id.tvNombreProducto)
-        val tvSupermercado: TextView = itemView.findViewById(R.id.tvSupermercado)
+        val tvSupermercado: TextView? = itemView.findViewById(R.id.tvSupermercado)
         val tvPrecio: TextView = itemView.findViewById(R.id.tvPrecio)
-        val tvBadge: TextView = itemView.findViewById(R.id.tvBadge)
-        val tvDistancia: TextView = itemView.findViewById(R.id.tvDistancia)
-        val containerDistancia: View = itemView.findViewById(R.id.containerDistancia)
-        val btnVerWeb: View = itemView.findViewById(R.id.btnVerWeb)
-        val btnVerMapa: View = itemView.findViewById(R.id.btnVerMapa)
+        val tvBadge: TextView? = itemView.findViewById(R.id.tvBadge)
+        val tvDistancia: TextView? = itemView.findViewById(R.id.tvDistancia)
+        val containerDistancia: View? = itemView.findViewById(R.id.containerDistancia)
         val btnAgregarLista: View = itemView.findViewById(R.id.btnAgregarLista)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_producto, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_producto_grid, parent, false)
         return ProductViewHolder(view)
     }
 
@@ -70,37 +69,25 @@ class ProductAdapter(
         
         // Configurar datos del producto
         holder.tvNombreProducto.text = producto.nombre
-        holder.tvSupermercado.text = producto.supermercado
+        holder.tvSupermercado?.text = producto.supermercado
         holder.tvPrecio.text = formatearPrecio(producto.precio)
         
-        // Mostrar distancia si está disponible
-        if (producto.distancia_sucursal_km != null) {
-            holder.containerDistancia.visibility = View.VISIBLE
-            holder.tvDistancia.text = String.format("%.1f km", producto.distancia_sucursal_km)
+        // Mostrar/ocultar botón según el modo
+        if (modoLista) {
+            holder.btnAgregarLista.visibility = View.VISIBLE
+            // Click en botón de "Agregar a lista"
+            holder.btnAgregarLista.setOnClickListener {
+                agregarALista(context, producto)
+            }
         } else {
-            holder.containerDistancia.visibility = View.GONE
-        }
-        
-        // Determinar y mostrar badge
-        configurarBadge(holder, position)
-        
-        // Click en "Ver en web"
-        holder.btnVerWeb.setOnClickListener {
-            abrirEnWeb(context, producto)
-        }
-        
-        // Click en "Ver en mapa"
-        holder.btnVerMapa.setOnClickListener {
-            abrirEnMapa(context, producto)
-        }
-        
-        // Click en "Agregar a lista"
-        holder.btnAgregarLista.setOnClickListener {
-            agregarALista(context, producto)
+            holder.btnAgregarLista.visibility = View.GONE // Ocultar en modo consulta
         }
     }
     
     private fun configurarBadge(holder: ProductViewHolder, position: Int) {
+        // Solo mostrar badges en vista de lista
+        if (holder.tvBadge == null) return
+        
         val producto = productos[position]
         
         // Verificar si es el más barato (primer producto con precio más bajo)
@@ -115,22 +102,22 @@ class ProductAdapter(
         
         when {
             esMasBarato && esMasCercano -> {
-                holder.tvBadge.visibility = View.VISIBLE
-                holder.tvBadge.text = "⭐ MÁS BARATO Y CERCANO"
-                holder.tvBadge.setBackgroundResource(R.drawable.bg_badge_best)
+                holder.tvBadge?.visibility = View.VISIBLE
+                holder.tvBadge?.text = "⭐ MÁS BARATO Y CERCANO"
+                holder.tvBadge?.setBackgroundResource(R.drawable.bg_badge_best)
             }
             esMasBarato -> {
-                holder.tvBadge.visibility = View.VISIBLE
-                holder.tvBadge.text = "💰 MÁS BARATO"
-                holder.tvBadge.setBackgroundResource(R.drawable.bg_badge_best)
+                holder.tvBadge?.visibility = View.VISIBLE
+                holder.tvBadge?.text = "💰 MÁS BARATO"
+                holder.tvBadge?.setBackgroundResource(R.drawable.bg_badge_best)
             }
             esMasCercano -> {
-                holder.tvBadge.visibility = View.VISIBLE
-                holder.tvBadge.text = "📍 MÁS CERCANO"
-                holder.tvBadge.setBackgroundResource(R.drawable.bg_badge_nearest)
+                holder.tvBadge?.visibility = View.VISIBLE
+                holder.tvBadge?.text = "📍 MÁS CERCANO"
+                holder.tvBadge?.setBackgroundResource(R.drawable.bg_badge_nearest)
             }
             else -> {
-                holder.tvBadge.visibility = View.GONE
+                holder.tvBadge?.visibility = View.GONE
             }
         }
     }
@@ -273,7 +260,10 @@ class ProductAdapter(
     private fun agregarALista(context: Context, producto: ProductoResultado) {
         val request = com.precioscerca.api.AgregarItemRequest(
             nombre = producto.nombre,
-            cantidad = 1
+            cantidad = 1,
+            precio = producto.precio,
+            supermercado = producto.supermercado,
+            imagen = producto.imagen ?: ""
         )
         
         ApiClient.api.agregarALista(request).enqueue(object : Callback<com.precioscerca.api.AgregarItemResponse> {
@@ -285,8 +275,12 @@ class ProductAdapter(
                     val resultado = response.body()
                     if (resultado?.status == "agregado") {
                         Toast.makeText(context, "✅ Agregado a la lista", Toast.LENGTH_SHORT).show()
+                        // Notificar al Activity para actualizar el total
+                        onProductoAgregado?.invoke(producto.precio)
                     } else if (resultado?.status == "actualizado") {
                         Toast.makeText(context, "✅ Cantidad actualizada (x${resultado.cantidad})", Toast.LENGTH_SHORT).show()
+                        // Notificar al Activity para actualizar el total
+                        onProductoAgregado?.invoke(producto.precio)
                     }
                 } else {
                     Toast.makeText(context, "Error agregando a lista", Toast.LENGTH_SHORT).show()

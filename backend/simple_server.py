@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 """
-PreciosCerca - Servidor Principal
-================================
+PreciosCerca - Servidor Principal (Flask)
+=========================================
 
-Servidor Flask que proporciona una API REST para buscar productos y precios
-en supermercados argentinos usando web scraping.
+Servidor Flask que proporciona una API REST para la app de lista de compras.
+Soporta búsqueda de productos con filtro por supermercado.
 
-Actualmente soporta:
+Endpoints principales:
+- GET /products?query=X&supermercado=Y - Buscar productos (filtro opcional)
+- POST /lista - Agregar producto a lista
+- GET /lista - Ver lista completa
+- DELETE /lista/<id> - Eliminar de lista
+
+Supermercados activos:
 - Carrefour (API VTEX) ✅
 - Día % (API REST) ✅
+- La Reina (HTML Scraping) ✅
 
 Autor: PreciosCerca Team
-Fecha: Octubre 2025
+Fecha: Noviembre 2025
 """
 
 from flask import Flask, jsonify, request
@@ -26,23 +33,11 @@ print("🚀 Inicializando PreciosCerca Server...")
 try:
     from productos.scrapers.scraper_carrefour import ScraperCarrefour
     from productos.scrapers.scraper_dia import ScraperDia
-    from productos.scrapers.scraper_lagallega import ScraperLaGallega
     from productos.scrapers.scraper_lareina import ScraperLaReina
-    from productos.scrapers.sucursales_data import (
-        encontrar_sucursal_mas_cercana, 
-        obtener_sucursales,
-        obtener_supermercados_cercanos,
-        filtrar_sucursales_por_radio,
-        detectar_ciudad_usuario,
-        obtener_supermercados_por_ciudad
-    )
-    from lista_compras import lista_compras_global, comparar_precios_lista
-    print("✅ La Gallega scraper cargado correctamente")
-    print("✅ La Reina scraper cargado correctamente")
-    print("✅ Carrefour scraper cargado correctamente")
-    print("✅ Día % scraper cargado correctamente")
-    print("✅ Datos de sucursales cargados correctamente")
-    print("✅ Sistema de lista de compras cargado")
+    from lista_compras import lista_compras_global
+    from productos.services import buscar_productos_similares
+    print("✅ Scrapers cargados: Carrefour, Día %, La Reina")
+    print("✅ Sistema de lista de compras inicializado")
 except Exception as e:
     print(f"❌ Error cargando scrapers: {e}")
     sys.exit(1)
@@ -53,21 +48,27 @@ app = Flask(__name__)
 scrapers = {
     'carrefour': ScraperCarrefour(),
     'dia': ScraperDia(),
-    'lareina': ScraperLaReina(),
-    # 'lagallega': ScraperLaGallega(),  # Requiere Selenium para JavaScript - EN DESARROLLO
+    'lareina': ScraperLaReina()
 }
 
-print(f"✅ {len(scrapers)} scraper(s) inicializado(s) - Carrefour, Día y La Reina con soporte completo para palabras compuestas")
+print(f"✅ {len(scrapers)} scrapers activos con búsqueda multi-palabra")
 
+# ========== ENDPOINT PRINCIPAL: BUSCAR PRODUCTOS ==========
 @app.route('/products', methods=['GET'])
 def buscar_productos():
     """
-    Endpoint principal para buscar productos.
+    Endpoint principal para buscar productos con filtro opcional por supermercado.
     
-    Parámetros:
-    - query: término de búsqueda (ej: "leche", "pan", "jabón")
+    Parámetros GET:
+    - query (obligatorio): término de búsqueda (ej: "leche", "pan", "dulce de leche")
+    - supermercado (opcional): filtrar por "carrefour", "dia" o "lareina"
     
-    Retorna JSON con estructura compatible con app Android:
+    Ejemplos:
+    - /products?query=leche&supermercado=carrefour  (solo Carrefour)
+    - /products?query=pan&supermercado=dia          (solo Día)
+    - /products?query=aceite                        (todos los supers)
+    
+    Retorna JSON con productos ordenados por precio:
     {
         "query": "leche",
         "total_encontrados": 50,
@@ -77,36 +78,61 @@ def buscar_productos():
     }
     """
     query = request.args.get('query', request.args.get('q', 'leche'))
+    filtro_super = request.args.get('supermercado', '').lower()
     
-    print(f"🔍 Búsqueda: '{query}'")
+    if filtro_super:
+        print(f"🔍 Búsqueda: '{query}' en {filtro_super.upper()}")
+    else:
+        print(f"🔍 Búsqueda: '{query}' en todos los supermercados")
     
     try:
         todos_los_productos = []
         supermercados_consultados = []
         productos_por_supermercado = {}
         
+        # Determinar qué scrapers usar
+        scrapers_a_usar = {}
+        if filtro_super:
+            # Buscar solo en el supermercado especificado
+            if filtro_super in scrapers:
+                scrapers_a_usar[filtro_super] = scrapers[filtro_super]
+            else:
+                return jsonify({
+                    'error': f'Supermercado "{filtro_super}" no disponible',
+                    'supermercados_disponibles': list(scrapers.keys())
+                }), 400
+        else:
+            # Buscar en todos
+            scrapers_a_usar = scrapers
+        
         # Buscar en Carrefour
-        if 'carrefour' in scrapers:
+        if 'carrefour' in scrapers_a_usar:
             print("  🔍 Buscando en Carrefour...")
-            carrefour_productos = scrapers['carrefour'].buscar_productos(query)
+            carrefour_productos = scrapers_a_usar['carrefour'].buscar_productos(query)
+            # Aplicar filtro para búsquedas de múltiples palabras
+            carrefour_productos = buscar_productos_similares(query, carrefour_productos)
             todos_los_productos.extend(carrefour_productos)
             supermercados_consultados.append('Carrefour')
             productos_por_supermercado['Carrefour'] = len(carrefour_productos)
             print(f"  ✅ Carrefour: {len(carrefour_productos)} productos")
         
         # Buscar en Día
-        if 'dia' in scrapers:
+        if 'dia' in scrapers_a_usar:
             print("  🔍 Buscando en Día %...")
-            dia_productos = scrapers['dia'].buscar_productos(query)
+            dia_productos = scrapers_a_usar['dia'].buscar_productos(query)
+            # Aplicar filtro para búsquedas de múltiples palabras
+            dia_productos = buscar_productos_similares(query, dia_productos)
             todos_los_productos.extend(dia_productos)
             supermercados_consultados.append('Día %')
             productos_por_supermercado['Día %'] = len(dia_productos)
             print(f"  ✅ Día %: {len(dia_productos)} productos")
         
         # Buscar en La Reina
-        if 'lareina' in scrapers:
+        if 'lareina' in scrapers_a_usar:
             print("  🔍 Buscando en La Reina...")
-            lareina_productos = scrapers['lareina'].buscar_productos(query)
+            lareina_productos = scrapers_a_usar['lareina'].buscar_productos(query)
+            # Aplicar filtro para búsquedas de múltiples palabras
+            lareina_productos = buscar_productos_similares(query, lareina_productos)
             todos_los_productos.extend(lareina_productos)
             supermercados_consultados.append('La Reina')
             productos_por_supermercado['La Reina'] = len(lareina_productos)
@@ -154,18 +180,12 @@ def buscar_productos():
 
 @app.route('/products-cercanos', methods=['GET'])
 def buscar_productos_cercanos():
-    """
-    Busca productos solo en supermercados con sucursales cercanas.
-    Solo muestra productos de supermercados que tengan al menos una sucursal dentro del radio.
-    Los productos se ordenan primero por supermercado (más cercano primero) y luego por precio.
+    """Busca productos en supermercados con sucursales cercanas al usuario (GPS).
     
-    Parámetros:
-    - query: término de búsqueda (ej: "leche")
-    - lat: latitud del usuario
-    - lng: longitud del usuario
-    - radio: radio de búsqueda en km (opcional, default: 50)
+    NOTA: Este endpoint está en desarrollo. Actualmente solo funciona con La Gallega.
+    Los scrapers de Carrefour, Día % y La Reina no tienen datos de sucursales implementados.
     
-    Retorna productos solo de supermercados que tengan sucursales cerca.
+    Parámetros: query, lat, lng, radio (km)
     """
     query = request.args.get('query', 'leche')
     lat = request.args.get('lat', type=float)
@@ -345,87 +365,19 @@ def info():
 
 @app.route('/sucursal-cercana', methods=['GET'])
 def sucursal_cercana():
-    """
-    Encuentra la sucursal más cercana a la ubicación del usuario.
-    
-    Parámetros:
-    - supermercado: nombre del supermercado (ej: "Carrefour", "Día %")
-    - lat: latitud del usuario
-    - lng: longitud del usuario
-    
-    Retorna JSON con información de la sucursal más cercana.
-    """
-    try:
-        supermercado = request.args.get('supermercado', '')
-        lat = float(request.args.get('lat', 0))
-        lng = float(request.args.get('lng', 0))
-        
-        if not supermercado or lat == 0 or lng == 0:
-            return jsonify({
-                'error': 'Parámetros incompletos. Se requiere: supermercado, lat, lng'
-            }), 400
-        
-        sucursal = encontrar_sucursal_mas_cercana(supermercado, lat, lng)
-        
-        if not sucursal:
-            return jsonify({
-                'error': f'No se encontraron sucursales para {supermercado}'
-            }), 404
-        
-        # Agregar URL de Google Maps usando la DIRECCIÓN en lugar de coordenadas GPS
-        # Esto asegura que Google Maps busque la dirección exacta en lugar de coordenadas aproximadas
-        direccion_busqueda = f"{sucursal['nombre']}, {sucursal['direccion']}"
-        direccion_codificada = direccion_busqueda.replace(' ', '+')
-        sucursal['google_maps_url'] = f"https://www.google.com/maps/search/?api=1&query={direccion_codificada}"
-        
-        return jsonify({
-            'supermercado': supermercado,
-            'sucursal': sucursal
-        })
-        
-    except ValueError:
-        return jsonify({
-            'error': 'Latitud y longitud deben ser números válidos'
-        }), 400
-    except Exception as e:
-        print(f"❌ Error buscando sucursal: {e}")
-        return jsonify({
-            'error': str(e)
-        }), 500
+    """Busca sucursal más cercana (EN DESARROLLO - solo La Gallega)"""
+    return jsonify({
+        'error': 'Función en desarrollo',
+        'mensaje': 'Búsqueda de sucursales estará disponible próximamente'
+    }), 501
 
 @app.route('/sucursales', methods=['GET'])
 def listar_sucursales():
-    """
-    Lista todas las sucursales de un supermercado.
-    
-    Parámetros:
-    - supermercado: nombre del supermercado (opcional, si no se envía devuelve todas)
-    
-    Retorna JSON con lista de sucursales.
-    """
-    try:
-        supermercado = request.args.get('supermercado', '')
-        
-        if supermercado:
-            sucursales = obtener_sucursales(supermercado)
-            return jsonify({
-                'supermercado': supermercado,
-                'total': len(sucursales),
-                'sucursales': sucursales
-            })
-        else:
-            # Devolver todas las sucursales de todos los supermercados
-            from productos.scrapers.sucursales_data import SUCURSALES
-            return jsonify({
-                'supermercados': list(SUCURSALES.keys()),
-                'sucursales': SUCURSALES
-            })
-            
-    except Exception as e:
-        print(f"❌ Error listando sucursales: {e}")
-        return jsonify({
-            'error': str(e)
-        }), 500
+    """Lista sucursales (EN DESARROLLO - solo La Gallega)"""
+    return jsonify({
+        'error': 'Función en desarrollo',
+        'mensaje': 'Listado de sucursales estará disponible próximamente'
+    }), 501
 
 
 # ============================================================================
@@ -450,17 +402,22 @@ def obtener_lista_compras():
 def agregar_a_lista():
     """
     Agrega un producto a la lista de compras
-    Body JSON: {"nombre": "Leche", "cantidad": 1}
+    Body JSON: {"nombre": "Leche", "cantidad": 1, "precio": 150.50, "supermercado": "Carrefour", "imagen": "url"}
     """
     try:
         data = request.get_json()
         nombre = data.get('nombre')
         cantidad = data.get('cantidad', 1)
+        precio = data.get('precio', 0.0)
+        supermercado = data.get('supermercado', '')
+        imagen = data.get('imagen', '')
         
         if not nombre:
             return jsonify({'error': 'Nombre de producto requerido'}), 400
         
-        resultado = lista_compras_global.agregar_producto(nombre, cantidad)
+        resultado = lista_compras_global.agregar_producto(
+            nombre, cantidad, precio, supermercado, imagen
+        )
         return jsonify(resultado)
         
     except Exception as e:
@@ -505,63 +462,22 @@ def limpiar_lista():
 
 @app.route('/lista-compras/comparar', methods=['GET'])
 def comparar_lista():
-    """
-    Compara precios de la lista de compras entre supermercados
-    Retorna en qué supermercado es más barato comprar todo
-    """
-    try:
-        # Obtener items de la lista
-        items = lista_compras_global.obtener_items()
-        
-        if not items:
-            return jsonify({
-                'error': 'Lista de compras vacía',
-                'items': []
-            }), 400
-        
-        # Buscar cada producto en todos los supermercados
-        nombres_productos = [item['nombre'] for item in items]
-        todos_los_productos = []
-        
-        print(f"🛒 Comparando lista de {len(nombres_productos)} productos...")
-        
-        for nombre_producto in nombres_productos:
-            print(f"  🔍 Buscando: {nombre_producto}")
-            
-            # Buscar en La Gallega
-            lagallega_productos = scrapers['lagallega'].buscar_productos(nombre_producto)
-            for prod in lagallega_productos:
-                prod['supermercado'] = 'La Gallega'
-            todos_los_productos.extend(lagallega_productos)
-        
-        # Comparar precios por supermercado
-        comparacion = comparar_precios_lista(nombres_productos, todos_los_productos)
-        
-        print(f"✅ Comparación completa")
-        print(f"  📊 Supermercados analizados: {len(comparacion['supermercados'])}")
-        if comparacion['mas_barato']:
-            print(f"  💰 Más barato: {comparacion['mas_barato']['nombre']} (${comparacion['mas_barato']['total']:.2f})")
-        
-        return jsonify(comparacion)
-        
-    except Exception as e:
-        print(f"❌ Error comparando lista: {e}")
-        import traceback
-        traceback.print_exc()
-        return jsonify({'error': str(e)}), 500
+    """Compara precios de la lista entre supermercados (EN DESARROLLO)"""
+    return jsonify({
+        'error': 'Función en desarrollo',
+        'mensaje': 'La comparación automática estará disponible próximamente'
+    }), 501
 
 
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print("🏪 PRECIOSCERCA SERVER - LA GALLEGA ROSARIO")
+    print("💰 MI LISTA DE PRECIOS - API SERVER")
     print("="*60)
     print("📍 URL: http://localhost:8000")
-    print("🛒 Supermercados disponibles: La Gallega (Rosario)")
-    print("📱 Compatible con app Android PreciosCerca")
-    print("🔍 Endpoint: /products?query=PRODUCTO")
-    print("📍 Endpoint cercanos: /products-cercanos?query=PRODUCTO&lat=LAT&lng=LNG&radio=KM")
-    print("🛒 Lista de compras: /lista-compras (GET/POST/DELETE)")
-    print("💰 Comparar precios: /lista-compras/comparar")
+    print("🛒 Supermercados: Carrefour, Día %, La Reina")
+    print("📱 Compatible con app Android Mi Lista de Precios")
+    print("🔍 Buscar: /products?query=PRODUCTO&supermercado=SUPER")
+    print("🛒 Lista: /lista-compras (GET/POST/DELETE)")
     print("="*60)
     
     app.run(host='0.0.0.0', port=8000, debug=False)
