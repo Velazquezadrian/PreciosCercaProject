@@ -17,10 +17,11 @@
   - **Mi Lista de Compra** - Armá tu lista con productos de un supermercado específico
   - **Buscar Producto** - Consultá precios sin guardar nada
 
-- 🏪 **3 Supermercados activos:**
-  - Carrefour (API oficial VTEX)
-  - Día % (API oficial REST)
-  - La Reina (Web scraping)
+- 🏪 **4 Supermercados activos:**
+  - Carrefour (API oficial VTEX) - 50 productos
+  - Día % (API oficial REST) - 50 productos
+  - La Reina (Web scraping - 212 categorías) - 50 productos
+  - La Gallega (Web scraping - 136 categorías) - 50 productos
 
 - 🔍 **Búsqueda inteligente:**
   - Soporta palabras compuestas ("dulce de leche", "aceite de oliva")
@@ -106,9 +107,10 @@ PreciosCercaProject/
 │   │   ├── services.py              # Filtro de búsqueda multi-palabra
 │   │   └── scrapers/
 │   │       ├── base_scraper.py      # Clase abstracta base
-│   │       ├── scraper_carrefour.py # ✅ API VTEX oficial
-│   │       ├── scraper_dia.py       # ✅ API REST oficial
-│   │       └── scraper_lareina.py   # ✅ HTML parsing
+│   │       ├── scraper_carrefour.py # ✅ API VTEX oficial (50 productos)
+│   │       ├── scraper_dia.py       # ✅ API REST oficial (50 productos)
+│   │       ├── scraper_lareina.py   # ✅ HTML parsing (212 categorías)
+│   │       └── scraper_lagallega.py # ✅ HTML parsing (136 categorías)
 │   ├── requirements.txt             # Flask, requests, BeautifulSoup
 │   └── test_palabras_compuestas.py  # Tests de búsqueda
 │
@@ -198,9 +200,10 @@ GET /            # Info de la API
 ┌─────────────────────┐
 │ SeleccionSuper...   │  [ELEGIR SUPERMERCADO]
 │                     │
-│  🛒 Carrefour       │  - 3 cards con colores de marca
+│  🛒 Carrefour       │  - 4 cards con colores de marca
 │  🛒 Día %           │  - Pasa MODO + SUPERMERCADO a BusquedaActivity
-│  🛒 La Reina        │
+│  🛒 La Reina        │  - Azul, Rojo, Verde, Naranja
+│  🛒 La Gallega      │
 └──────────┬──────────┘
            │
            v
@@ -321,7 +324,9 @@ scrapers = {
 ### ✅ Completado
 
 - [x] Búsqueda con palabras compuestas
-- [x] 3 supermercados activos (Carrefour, Día, La Reina)
+- [x] 4 supermercados activos (Carrefour, Día, La Reina, La Gallega)
+- [x] Mapeo completo de 348 categorías (212 La Reina + 136 La Gallega)
+- [x] Optimización de scrapers (50 productos consistentes)
 - [x] Lista de compras con imágenes
 - [x] Total en tiempo real
 - [x] "Terminar Lista" con checklist
@@ -359,7 +364,7 @@ scrapers = {
 |----------------|------------|---------------------|---------|
 | App Android | ✅ | ✅ | **Logrado** |
 | Datos reales | ✅ | ✅ | **Logrado** |
-| Supermercados | 10+ | 3 activos | En expansión |
+| Supermercados | 10+ | 4 activos | En expansión |
 | Búsqueda compleja | ❓ | ✅ | **Ventaja** |
 | Lista de compras | ✅ | ✅ | **Logrado** |
 | Compartir lista | ❌ | ✅ | **Ventaja** |
@@ -405,4 +410,4 @@ Ver archivo `LICENSE` para más detalles.
 
 **💰 Desarrollado con ❤️ para ayudar a los argentinos a ahorrar dinero**
 
-**🛒 3 supermercados funcionando, más en camino!**
+**🛒 4 supermercados funcionando, más en camino!**
