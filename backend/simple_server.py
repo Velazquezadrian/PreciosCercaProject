@@ -151,8 +151,8 @@ def buscar_productos():
             productos_por_supermercado['La Gallega'] = len(lagallega_productos)
             print(f"  ✅ La Gallega: {len(lagallega_productos)} productos")
         
-        # Ordenar por precio (más barato primero)
-        todos_los_productos.sort(key=lambda x: x['precio'])
+        # NO ordenar por precio aquí - services.py ya ordenó por relevancia+precio
+        # Esto mantiene la priorización de productos con todas las palabras de búsqueda
         
         # Convertir al formato que espera la app Android
         resultados = []

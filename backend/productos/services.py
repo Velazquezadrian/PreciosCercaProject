@@ -44,10 +44,13 @@ class NormalizadorProductos:
         return todos_productos
     
     def buscar_productos_similares(self, productos: List[Dict], query: str) -> List[Dict]:
-        # Filtrar productos que coincidan mejor con la búsqueda
+        """
+        Filtrar y ordenar productos según búsqueda del usuario.
+        Prioriza productos con más coincidencias, luego ordena alfabéticamente.
+        """
         query_lower = query.lower().strip()
         palabras_query = query_lower.split()
-        productos_relevantes = []
+        productos_con_coincidencia = []
         
         print(f"[Filtro] Query: '{query}' | Palabras a buscar: {palabras_query}")
         print(f"[Filtro] Total productos a filtrar: {len(productos)}")
@@ -55,50 +58,51 @@ class NormalizadorProductos:
         for producto in productos:
             nombre_original = producto['nombre'].lower()
             
-            # Calcular relevancia basada en coincidencias
-            relevancia = 0
-            palabras_encontradas = 0
+            # Contar palabras encontradas
+            palabras_encontradas = sum(1 for palabra in palabras_query if palabra in nombre_original)
             
-            # Verificar si TODAS las palabras de la query están en el producto
-            for palabra in palabras_query:
-                if palabra in nombre_original:
-                    palabras_encontradas += 1
-                    relevancia += 5
-            
-            # Bonus si la frase completa está en el nombre
-            if query_lower in nombre_original:
-                relevancia += 15
-            
-            # Solo incluir productos que tengan TODAS las palabras de la búsqueda
-            if palabras_encontradas == len(palabras_query):
-                producto_con_relevancia = producto.copy()
-                producto_con_relevancia['relevancia'] = relevancia
-                producto_con_relevancia['nombre_normalizado'] = nombre_original
-                productos_relevantes.append(producto_con_relevancia)
+            # Solo incluir si tiene al menos una palabra
+            if palabras_encontradas > 0:
+                producto_con_meta = producto.copy()
+                producto_con_meta['coincidencias'] = palabras_encontradas
+                producto_con_meta['nombre_normalizado'] = nombre_original
+                productos_con_coincidencia.append(producto_con_meta)
         
-        print(f"[Filtro] Productos después del filtro: {len(productos_relevantes)}")
+        print(f"[Filtro] Productos con coincidencias: {len(productos_con_coincidencia)}")
         
-        # Ordenar por relevancia y después por precio
-        productos_relevantes.sort(key=lambda x: (-x['relevancia'], x['precio']))
+        # Ordenar: primero por coincidencias (más=mejor), luego alfabéticamente
+        productos_con_coincidencia.sort(
+            key=lambda x: (-x['coincidencias'], x['nombre'].lower())
+        )
         
-        return productos_relevantes
+        return productos_con_coincidencia
 
 
 # Función standalone para usar desde simple_server.py
 def buscar_productos_similares(query: str, productos: List[Dict]) -> List[Dict]:
     """
-    Filtra productos para que solo incluya aquellos que contienen TODAS las palabras de la búsqueda.
+    Filtra y ordena productos según coincidencia con búsqueda del usuario.
+    
+    LÓGICA DE PRIORIZACIÓN:
+    1. Productos con TODAS las palabras buscadas → orden alfabético
+    2. Productos con ALGUNAS palabras → orden alfabético (pero después del grupo 1)
+    
+    Ejemplo: "pan rayado"
+    - 1º: "Pan rayado Carrefour" (tiene "pan" + "rayado")
+    - 2º: "Pan rallado Don Satur" (tiene "pan" + "rayado/rallado")
+    - 3º: "Pan francés" (solo tiene "pan")
+    - 4º: "Pan lactal" (solo tiene "pan")
     
     Args:
-        query: Término de búsqueda (puede ser múltiples palabras)
+        query: Término de búsqueda del usuario
         productos: Lista de productos a filtrar
     
     Returns:
-        Lista filtrada de productos que contienen todas las palabras
+        Lista filtrada y ordenada: primero por coincidencia completa, luego alfabético
     """
     query_lower = query.lower().strip()
     palabras_query = query_lower.split()
-    productos_relevantes = []
+    productos_con_coincidencia = []
     
     print(f"[Filtro] Query: '{query}' | Palabras a buscar: {palabras_query}")
     print(f"[Filtro] Total productos a filtrar: {len(productos)}")
@@ -106,29 +110,33 @@ def buscar_productos_similares(query: str, productos: List[Dict]) -> List[Dict]:
     for producto in productos:
         nombre_original = producto['nombre'].lower()
         
-        # Calcular relevancia basada en coincidencias
-        relevancia = 0
+        # Contar cuántas palabras de la búsqueda están en el producto
         palabras_encontradas = 0
-        
-        # Verificar si TODAS las palabras de la query están en el producto
         for palabra in palabras_query:
             if palabra in nombre_original:
                 palabras_encontradas += 1
-                relevancia += 5
         
-        # Bonus si la frase completa está en el nombre
-        if query_lower in nombre_original:
-            relevancia += 15
-        
-        # Solo incluir productos que tengan TODAS las palabras de la búsqueda
-        if palabras_encontradas == len(palabras_query):
-            producto_con_relevancia = producto.copy()
-            producto_con_relevancia['relevancia'] = relevancia
-            productos_relevantes.append(producto_con_relevancia)
+        # Solo incluir si tiene AL MENOS UNA palabra de la búsqueda
+        if palabras_encontradas > 0:
+            producto_con_meta = producto.copy()
+            # Guardar cuántas palabras coinciden (para ordenar después)
+            producto_con_meta['coincidencias'] = palabras_encontradas
+            producto_con_meta['tiene_todas'] = (palabras_encontradas == len(palabras_query))
+            productos_con_coincidencia.append(producto_con_meta)
     
-    print(f"[Filtro] Productos después del filtro: {len(productos_relevantes)}")
+    print(f"[Filtro] Productos con coincidencias: {len(productos_con_coincidencia)}")
     
-    # Ordenar por relevancia y después por precio
-    productos_relevantes.sort(key=lambda x: (-x['relevancia'], x['precio']))
+    # ORDENAR:
+    # 1º por número de coincidencias (más coincidencias = más arriba)
+    # 2º alfabéticamente por nombre
+    productos_con_coincidencia.sort(
+        key=lambda x: (-x['coincidencias'], x['nombre'].lower())
+    )
     
-    return productos_relevantes
+    if productos_con_coincidencia:
+        print(f"[Filtro] Top 5 productos más relevantes:")
+        for i, p in enumerate(productos_con_coincidencia[:5], 1):
+            match_info = f"({p['coincidencias']}/{len(palabras_query)} palabras)"
+            print(f"  {i}. {p['nombre'][:50]} {match_info}")
+    
+    return productos_con_coincidencia

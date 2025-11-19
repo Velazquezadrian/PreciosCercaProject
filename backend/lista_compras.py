@@ -70,8 +70,10 @@ class ListaCompras:
         }
     
     def obtener_items(self) -> List[Dict[str, Any]]:
-        """Devuelve todos los items de la lista"""
-        return [item.to_dict() for item in self.items]
+        """Devuelve todos los items de la lista ordenados alfabéticamente"""
+        # Ordenar items alfabéticamente por nombre
+        items_ordenados = sorted(self.items, key=lambda x: x.nombre.lower())
+        return [item.to_dict() for item in items_ordenados]
     
     def limpiar(self):
         """Limpia toda la lista de compras"""
