@@ -18,14 +18,16 @@
   - **Buscar Producto** - Consultá precios sin guardar nada
 
 - 🏪 **4 Supermercados activos:**
-  - Carrefour (API oficial VTEX) - 50 productos
-  - Día % (API oficial REST) - 50 productos
-  - La Reina (Web scraping - 212 categorías) - 50 productos
-  - La Gallega (Web scraping - 136 categorías) - 50 productos
+  - Carrefour (API VTEX - 148 categorías) - 50 productos
+  - Día % (API REST - 122 categorías) - 50 productos
+  - La Reina (HTML scraping - 212 categorías) - 50 productos
+  - La Gallega (HTML scraping - 136 categorías) - 50 productos
+  - **TOTAL: 618 categorías mapeadas**
 
 - 🔍 **Búsqueda inteligente:**
   - Soporta palabras compuestas ("dulce de leche", "aceite de oliva")
-  - 50+ productos por supermercado por búsqueda
+  - Búsqueda exhaustiva por categorías (no solo texto libre)
+  - 50+ productos por supermercado garantizados
   - Filtrado automático por relevancia
 
 - 💰 **Lista de compras completa:**

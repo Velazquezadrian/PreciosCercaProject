@@ -1,0 +1,1117 @@
+[
+  {
+    "id": 1,
+    "name": "Almacén",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/almacen",
+    "children": [
+      {
+        "id": 2,
+        "name": "Aceites y Aderezos",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/aceites-y-aderezos",
+        "children": [],
+        "Title": "Aceites y Aderezos",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 16,
+        "name": "Conservas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/conservas",
+        "children": [],
+        "Title": "Conservas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 21,
+        "name": "Picadas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/picadas",
+        "children": [],
+        "Title": "Picadas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 25,
+        "name": "Arroz y Legumbres",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/arroz-y-legumbres",
+        "children": [],
+        "Title": "Arroz y Legumbres",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 36,
+        "name": "Repostería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/reposteria",
+        "children": [],
+        "Title": "Repostería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 42,
+        "name": "Harinas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/harinas",
+        "children": [],
+        "Title": "Harinas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 48,
+        "name": "Comidas listas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/comidas-listas",
+        "children": [],
+        "Title": "Comidas listas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 81,
+        "name": "Golosinas y Alfajores",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/golosinas-y-alfajores",
+        "children": [],
+        "Title": "Golosinas y Alfajores",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 110,
+        "name": "Panadería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/panaderia",
+        "children": [],
+        "Title": "Panadería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10132,
+        "name": "Pastas Secas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/almacen/pastas-secas",
+        "children": [],
+        "Title": "Pastas Secas",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Almacén",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 53,
+    "name": "Bebés y Niños",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos",
+    "children": [
+      {
+        "id": 54,
+        "name": "Alimentación para bebés",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos/alimentacion-para-bebes",
+        "children": [],
+        "Title": "Alimentación para bebés",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 57,
+        "name": "Juegos y Juguetes",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos/juegos-y-juguetes",
+        "children": [],
+        "Title": "Juegos y Juguetes",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 63,
+        "name": "Cuidado del Bebé",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos/cuidado-del-bebe",
+        "children": [],
+        "Title": "Cuidado del Bebé",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 68,
+        "name": "Pañales",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos/panales",
+        "children": [],
+        "Title": "Pañales",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 367,
+        "name": "Bebés",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos/bebes",
+        "children": [],
+        "Title": "Bebés",
+        "MetaTagDescription": "Bebés"
+      },
+      {
+        "id": 10081,
+        "name": "Cochecitos y Sillitas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos/cochecitos-y-sillitas",
+        "children": [],
+        "Title": "Cochecitos y Sillitas",
+        "MetaTagDescription": "Cochecitos y Sillitas"
+      },
+      {
+        "id": 10086,
+        "name": "Cambiadores y Pelelas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebes-y-ninos/cambiadores-y-pelelas",
+        "children": [],
+        "Title": "Cambiadores y Pelelas",
+        "MetaTagDescription": "Cambiadores y Pelelas"
+      }
+    ],
+    "Title": "Bebés y Niños",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 71,
+    "name": "Mascotas",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/mascotas",
+    "children": [
+      {
+        "id": 72,
+        "name": "Gatos",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/mascotas/gatos",
+        "children": [],
+        "Title": "Gatos",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 76,
+        "name": "Perros",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/mascotas/perros",
+        "children": [],
+        "Title": "Perros",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Mascotas",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 80,
+    "name": "Desayuno",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/desayuno",
+    "children": [
+      {
+        "id": 89,
+        "name": "Para untar",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/desayuno/para-untar",
+        "children": [],
+        "Title": "Para untar",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 95,
+        "name": "Infusiones y Endulzantes",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/desayuno/infusiones-y-endulzantes",
+        "children": [],
+        "Title": "Infusiones y Endulzantes",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 103,
+        "name": "Galletitas y Cereales",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/desayuno/galletitas-y-cereales",
+        "children": [],
+        "Title": "Galletitas y Cereales",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Desayuno",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 121,
+    "name": "Frescos",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/frescos",
+    "children": [
+      {
+        "id": 122,
+        "name": "Fiambrería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/frescos/fiambreria",
+        "children": [],
+        "Title": "Fiambrería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 132,
+        "name": "Leches",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/frescos/leches",
+        "children": [],
+        "Title": "Leches",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 139,
+        "name": "Carnicería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/frescos/carniceria",
+        "children": [],
+        "Title": "Carnicería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 148,
+        "name": "Lácteos",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/frescos/lacteos",
+        "children": [],
+        "Title": "Lácteos",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 154,
+        "name": "Pastas Frescas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/frescos/pastas-frescas",
+        "children": [],
+        "Title": "Pastas Frescas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 159,
+        "name": "Frutas y Verduras",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/frescos/frutas-y-verduras",
+        "children": [],
+        "Title": "Frutas y Verduras",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10121,
+        "name": "Listos para disfrutar",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/frescos/listos-para-disfrutar",
+        "children": [],
+        "Title": "Listos para disfrutar",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Frescos",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 164,
+    "name": "Bebidas",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/bebidas",
+    "children": [
+      {
+        "id": 165,
+        "name": "Aguas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/aguas",
+        "children": [],
+        "Title": "Aguas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 169,
+        "name": "Aperitivos",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/aperitivos",
+        "children": [],
+        "Title": "Aperitivos",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 172,
+        "name": "Jugos e Isotónicas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/jugos-e-isotonicas",
+        "children": [],
+        "Title": "Jugos e Isotónicas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 178,
+        "name": "Bebidas blancas y Licores",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/bebidas-blancas-y-licores",
+        "children": [],
+        "Title": "Bebidas blancas y Licores",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 182,
+        "name": "Cervezas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/cervezas",
+        "children": [],
+        "Title": "Cervezas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 185,
+        "name": "Gaseosas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/gaseosas",
+        "children": [],
+        "Title": "Gaseosas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 193,
+        "name": "Bodega",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/bodega",
+        "children": [],
+        "Title": "Bodega",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 199,
+        "name": "Envases",
+        "hasChildren": false,
+        "url": "https://diaonline.supermercadosdia.com.ar/bebidas/envases",
+        "children": [],
+        "Title": "Envases",
+        "MetaTagDescription": "Envases"
+      }
+    ],
+    "Title": "Bebidas",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 200,
+    "name": "Congelados",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/congelados",
+    "children": [
+      {
+        "id": 146,
+        "name": "Rebozados",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/rebozados",
+        "children": [],
+        "Title": "Rebozados",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 201,
+        "name": "Pizzas y Empanadas",
+        "hasChildren": false,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/pizzas-y-empanadas",
+        "children": [],
+        "Title": "Pizzas y Empanadas",
+        "MetaTagDescription": "Pizzas y Empanadas"
+      },
+      {
+        "id": 207,
+        "name": "Hamburguesas y Medallones",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/hamburguesas-y-medallones",
+        "children": [],
+        "Title": "Hamburguesas y Medallones",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 209,
+        "name": "Postres congelados",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/postres-congelados",
+        "children": [],
+        "Title": "Postres congelados",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 212,
+        "name": "Hielo",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/hielo",
+        "children": [],
+        "Title": "Hielo",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 213,
+        "name": "Panes congelados",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/panes-congelados",
+        "children": [],
+        "Title": "Panes congelados",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 214,
+        "name": "Papas Congeladas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/papas-congeladas",
+        "children": [],
+        "Title": "Papas Congeladas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 215,
+        "name": "Vegetales congelados",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/vegetales-congelados",
+        "children": [],
+        "Title": "Vegetales congelados",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10110,
+        "name": "Pescadería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/pescaderia",
+        "children": [],
+        "Title": "Pescadería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10123,
+        "name": "Comidas congeladas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/comidas-congeladas",
+        "children": [],
+        "Title": "Comidas congeladas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10146,
+        "name": "Frutas y Verduras congeladas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/congelados/frutas-y-verduras-congeladas",
+        "children": [],
+        "Title": "Frutas y Verduras congeladas",
+        "MetaTagDescription": "Frutas y Verduras congeladas"
+      }
+    ],
+    "Title": "Congelados",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 216,
+    "name": "Perfumería",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/perfumeria",
+    "children": [
+      {
+        "id": 217,
+        "name": "Cuidado del pelo",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/perfumeria/cuidado-del-pelo",
+        "children": [],
+        "Title": "Cuidado del pelo",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 223,
+        "name": "Cuidado Bucal",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/perfumeria/cuidado-bucal",
+        "children": [],
+        "Title": "Cuidado Bucal",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 228,
+        "name": "Farmacia",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/perfumeria/farmacia",
+        "children": [],
+        "Title": "Farmacia",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 233,
+        "name": "Cuidado Personal",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/perfumeria/cuidado-personal",
+        "children": [],
+        "Title": "Cuidado Personal",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 244,
+        "name": "Jabones",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/perfumeria/jabones",
+        "children": [],
+        "Title": "Jabones",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 248,
+        "name": "Protección femenina",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/perfumeria/proteccion-femenina",
+        "children": [],
+        "Title": "Protección femenina",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 252,
+        "name": "Máquinas de afeitar",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/perfumeria/maquinas-de-afeitar",
+        "children": [],
+        "Title": "Máquinas de afeitar",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Perfumería",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 256,
+    "name": "Hogar y Deco",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco",
+    "children": [
+      {
+        "id": 265,
+        "name": "Librería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco/libreria",
+        "children": [],
+        "Title": "Librería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 270,
+        "name": "Ferretería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco/ferreteria",
+        "children": [],
+        "Title": "Ferretería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 276,
+        "name": "Dormitorio",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco/dormitorio",
+        "children": [],
+        "Title": "Dormitorio",
+        "MetaTagDescription": "Dormitorio"
+      },
+      {
+        "id": 280,
+        "name": "Baño",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco/bano",
+        "children": [],
+        "Title": "Baño",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 385,
+        "name": "Muebles de exterior",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco/muebles-de-exterior",
+        "children": [],
+        "Title": "Muebles de exterior",
+        "MetaTagDescription": "Muebles de exterior"
+      },
+      {
+        "id": 396,
+        "name": "Living y Comedor",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco/living-y-comedor",
+        "children": [],
+        "Title": "Living y Comedor",
+        "MetaTagDescription": "Living y Comedor"
+      },
+      {
+        "id": 10058,
+        "name": "Deco Hogar",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/hogar-y-deco/deco-hogar",
+        "children": [],
+        "Title": "Deco Hogar",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Hogar y Deco",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 282,
+    "name": "Limpieza",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/limpieza",
+    "children": [
+      {
+        "id": 283,
+        "name": "Accesorios de limpieza",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/accesorios-de-limpieza",
+        "children": [],
+        "Title": "Accesorios de limpieza",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 293,
+        "name": "Limpieza de cocina",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/limpieza-de-cocina",
+        "children": [],
+        "Title": "Limpieza de cocina",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 297,
+        "name": "Papelería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/papeleria",
+        "children": [],
+        "Title": "Papelería",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 304,
+        "name": "Desodorantes de ambiente",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/desodorantes-de-ambiente",
+        "children": [],
+        "Title": "Desodorantes de ambiente",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 308,
+        "name": "Insecticidas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/insecticidas",
+        "children": [],
+        "Title": "Insecticidas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 312,
+        "name": "Limpiadores",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/limpiadores",
+        "children": [],
+        "Title": "Limpiadores",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 321,
+        "name": "Cuidado de la ropa",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/cuidado-de-la-ropa",
+        "children": [],
+        "Title": "Cuidado de la ropa",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 329,
+        "name": "Fósforos y Velas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/fosforos-y-velas",
+        "children": [],
+        "Title": "Fósforos y Velas",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10136,
+        "name": "Bolsas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/limpieza/bolsas",
+        "children": [],
+        "Title": "Bolsas",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Limpieza",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 334,
+    "name": "Indumentaria y Calzado",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/indumentaria-y-calzado",
+    "children": [
+      {
+        "id": 335,
+        "name": "Hombre",
+        "hasChildren": false,
+        "url": "https://diaonline.supermercadosdia.com.ar/indumentaria-y-calzado/hombre",
+        "children": [],
+        "Title": "Hombre",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 336,
+        "name": "Mujer",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/indumentaria-y-calzado/mujer",
+        "children": [],
+        "Title": "Mujer",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 337,
+        "name": "Niñas y Niños",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/indumentaria-y-calzado/ninas-y-ninos",
+        "children": [],
+        "Title": "Niñas y Niños",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10017,
+        "name": "Indumentaria",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/indumentaria-y-calzado/indumentaria",
+        "children": [],
+        "Title": "Indumentaria",
+        "MetaTagDescription": "Indumentaria"
+      },
+      {
+        "id": 10020,
+        "name": "Calzado",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/indumentaria-y-calzado/calzado",
+        "children": [],
+        "Title": "Calzado",
+        "MetaTagDescription": "Calzado"
+      }
+    ],
+    "Title": "Indumentaria y Calzado",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 441,
+    "name": "Electro Hogar",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar",
+    "children": [
+      {
+        "id": 257,
+        "name": "Cocina",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/cocina",
+        "children": [],
+        "Title": "Cocina",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 375,
+        "name": "Electros de cocina",
+        "hasChildren": false,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/electros-de-cocina",
+        "children": [],
+        "Title": "Electros de cocina",
+        "MetaTagDescription": "Electros de cocina"
+      },
+      {
+        "id": 442,
+        "name": "Climatización",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/climatizacion",
+        "children": [],
+        "Title": "Climatización",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 444,
+        "name": "Lavado y Secado",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/lavado-y-secado",
+        "children": [],
+        "Title": "Lavado y Secado",
+        "MetaTagDescription": "Lavado y Secado"
+      },
+      {
+        "id": 448,
+        "name": "Cocinas y Hornos",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/cocinas-y-hornos",
+        "children": [],
+        "Title": "Cocinas y Hornos",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 450,
+        "name": "Pequeños Electrodomésticos",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/pequenos-electrodomesticos",
+        "children": [],
+        "Title": "Pequeños Electrodomésticos",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 461,
+        "name": "Cuidado Personal",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/cuidado-personal",
+        "children": [],
+        "Title": "Cuidado Personal",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 462,
+        "name": "Heladeras y Freezers",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/heladeras-y-freezers",
+        "children": [],
+        "Title": "Heladeras y Freezers",
+        "MetaTagDescription": "Heladeras y Freezers"
+      },
+      {
+        "id": 10030,
+        "name": "Campanas y Purificadores",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/electro-hogar/campanas-y-purificadores",
+        "children": [],
+        "Title": "Campanas y Purificadores",
+        "MetaTagDescription": "Campanas y Purificadores"
+      }
+    ],
+    "Title": "Electro Hogar",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 338,
+    "name": "Aire libre",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/aire-libre",
+    "children": [
+      {
+        "id": 377,
+        "name": "Hidrolavadoras",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/aire-libre/hidrolavadoras",
+        "children": [],
+        "Title": "Hidrolavadoras",
+        "MetaTagDescription": "Hidrolavadoras"
+      },
+      {
+        "id": 378,
+        "name": "Piletas",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/aire-libre/piletas",
+        "children": [],
+        "Title": "Piletas",
+        "MetaTagDescription": "Piletas"
+      },
+      {
+        "id": 10045,
+        "name": "Camping",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/aire-libre/camping",
+        "children": [],
+        "Title": "Camping",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10064,
+        "name": "Ferretería",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/aire-libre/ferreteria",
+        "children": [],
+        "Title": "Ferretería",
+        "MetaTagDescription": "Ferretería"
+      },
+      {
+        "id": 10133,
+        "name": "Vivero",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/aire-libre/vivero",
+        "children": [],
+        "Title": "Vivero",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Aire libre",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 339,
+    "name": "Tecnología",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/tecnologia",
+    "children": [
+      {
+        "id": 340,
+        "name": "Televisores",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/televisores",
+        "children": [],
+        "Title": "Televisores",
+        "MetaTagDescription": "Televisores"
+      },
+      {
+        "id": 350,
+        "name": "Telefonía",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/telefonia",
+        "children": [],
+        "Title": "Telefonía",
+        "MetaTagDescription": "Telefonía"
+      },
+      {
+        "id": 354,
+        "name": "Informática",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/informatica",
+        "children": [],
+        "Title": "Informática",
+        "MetaTagDescription": "Informática"
+      },
+      {
+        "id": 359,
+        "name": "Cámaras",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/camaras",
+        "children": [],
+        "Title": "Cámaras",
+        "MetaTagDescription": "Cámaras"
+      },
+      {
+        "id": 362,
+        "name": "Consolas y Videojuegos",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/consolas-y-videojuegos",
+        "children": [],
+        "Title": "Consolas y Videojuegos",
+        "MetaTagDescription": "Consolas y Videojuegos"
+      },
+      {
+        "id": 366,
+        "name": "Impresoras",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/impresoras",
+        "children": [],
+        "Title": "Impresoras",
+        "MetaTagDescription": "Impresoras"
+      }
+    ],
+    "Title": "Tecnología",
+    "MetaTagDescription": "Tecnología"
+  },
+  {
+    "id": 431,
+    "name": "Colchones y Sommiers",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/colchones-y-sommiers",
+    "children": [
+      {
+        "id": 432,
+        "name": "Colchones de Espuma",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/colchones-y-sommiers/colchones-de-espuma",
+        "children": [],
+        "Title": "Colchones de Espuma",
+        "MetaTagDescription": "Colchones de Espuma"
+      },
+      {
+        "id": 436,
+        "name": "Colchones de Resortes",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/colchones-y-sommiers/colchones-de-resortes",
+        "children": [],
+        "Title": "Colchones de Resortes",
+        "MetaTagDescription": "Colchones de Resortes"
+      },
+      {
+        "id": 438,
+        "name": "Conjuntos de Espuma",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/colchones-y-sommiers/conjuntos-de-espuma",
+        "children": [],
+        "Title": "Conjuntos de Espuma",
+        "MetaTagDescription": "Conjuntos de Espuma"
+      },
+      {
+        "id": 439,
+        "name": "Conjuntos de Resortes",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/colchones-y-sommiers/conjuntos-de-resortes",
+        "children": [],
+        "Title": "Conjuntos de Resortes",
+        "MetaTagDescription": "Conjuntos de Resortes"
+      },
+      {
+        "id": 440,
+        "name": "Bases",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/colchones-y-sommiers/bases",
+        "children": [],
+        "Title": "Bases",
+        "MetaTagDescription": "Bases"
+      }
+    ],
+    "Title": "Colchones y Sommiers",
+    "MetaTagDescription": "Colchones y Sommiers"
+  },
+  {
+    "id": 10098,
+    "name": "Tecnología",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/tecnologia",
+    "children": [
+      {
+        "id": 344,
+        "name": "Audio",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/audio",
+        "children": [],
+        "Title": "Audio",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10099,
+        "name": "Televisores",
+        "hasChildren": true,
+        "url": "https://diaonline.supermercadosdia.com.ar/tecnologia/televisores",
+        "children": [],
+        "Title": "Televisores",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Tecnología",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 10113,
+    "name": "Combos",
+    "hasChildren": true,
+    "url": "https://diaonline.supermercadosdia.com.ar/combos",
+    "children": [
+      {
+        "id": 10119,
+        "name": "Combos Frescos",
+        "hasChildren": false,
+        "url": "https://diaonline.supermercadosdia.com.ar/combos/combos-frescos",
+        "children": [],
+        "Title": "Combos Frescos",
+        "MetaTagDescription": ""
+      },
+      {
+        "id": 10128,
+        "name": "Combos Almacén",
+        "hasChildren": false,
+        "url": "https://diaonline.supermercadosdia.com.ar/combos/combos-almacen",
+        "children": [],
+        "Title": "Combos Almacén| Dia Online",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Combos",
+    "MetaTagDescription": ""
+  }
+]

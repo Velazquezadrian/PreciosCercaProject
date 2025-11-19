@@ -1,0 +1,1351 @@
+[
+  {
+    "id": 1,
+    "name": "Test Category",
+    "hasChildren": false,
+    "url": "https://www.carrefour.com.ar/test-category",
+    "children": [],
+    "Title": "Category_Page_Title",
+    "MetaTagDescription": "Brief description of the category. It is advisable not to exceed 150 characters so that the search engines can show it correctly in the search results;"
+  },
+  {
+    "id": 3,
+    "name": "Electro y tecnología",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/electro-y-tecnologia",
+    "children": [
+      {
+        "id": 4,
+        "name": "TV y soportes",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/tv-y-soportes",
+        "children": [],
+        "Title": "TV y soportes",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y descuentos en smart tv, soportes para tv, controles remoto, cables hdmi y mucho más."
+      },
+      {
+        "id": 7,
+        "name": "Celulares",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/celulares",
+        "children": [],
+        "Title": "Celulares",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y descuentos en celulares libres, accesorios para celulares, teléfonos fijos e inalámbricos y más."
+      },
+      {
+        "id": 11,
+        "name": "Heladeras y freezers",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/heladeras-y-freezers",
+        "children": [],
+        "Title": "Heladeras, freezers y cavas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en heladeras no frost, heladras cíclicas, heladeras inverter, freezers, cavas y más."
+      },
+      {
+        "id": 15,
+        "name": "Lavado",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/lavado",
+        "children": [],
+        "Title": "Lavarropas y secarropas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en lavarropas automáticos, lavarropas inverter, secarropas, lavasecarropas y mucho más."
+      },
+      {
+        "id": 20,
+        "name": "Termotanques y calefones",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/termotanques-y-calefones",
+        "children": [],
+        "Title": "Termotanques y calefones",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en termotanques eléctricos, termotanques a gas, calefones y mucho más."
+      },
+      {
+        "id": 25,
+        "name": "Cocinas y hornos",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/cocinas-y-hornos",
+        "children": [],
+        "Title": "Cocinas y hornos",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en cocinas, anafes, hornos, microondas y mucho más."
+      },
+      {
+        "id": 31,
+        "name": "Pequeños electrodomésticos",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/pequenos-electrodomesticos",
+        "children": [],
+        "Title": "Pequeños electrodomésticos",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en cafeteras, licuadoras, exprimidoras, jarras eléctricas y mucho más."
+      },
+      {
+        "id": 42,
+        "name": "Cuidado personal y salud",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/cuidado-personal-y-salud",
+        "children": [],
+        "Title": "Cuidado personal y salud",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en planchitas para el pelo, depiladoras, afeitadoras, balanzas  y mucho más."
+      },
+      {
+        "id": 48,
+        "name": "Informática y gaming",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/informatica-y-gaming",
+        "children": [],
+        "Title": "Informática y gaming",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en notebooks, PCs, monitores, teclados, consolas, accesorios, joysticks e impresoras."
+      },
+      {
+        "id": 56,
+        "name": "Audio",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/audio",
+        "children": [],
+        "Title": "Audio",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en parlantes, auriculares, estéreos, radios y mucho más."
+      },
+      {
+        "id": 62,
+        "name": "Climatización",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/climatizacion",
+        "children": [],
+        "Title": "Climatización",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en estufas, calefactores, aires acondicionados, ventiladores y climatizadores."
+      },
+      {
+        "id": 600,
+        "name": "Electro limpieza",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/electro-limpieza",
+        "children": [],
+        "Title": "Electro limpieza",
+        "MetaTagDescription": "Electro limpieza"
+      },
+      {
+        "id": 650,
+        "name": "Instalaciones",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/electro-y-tecnologia/instalaciones",
+        "children": [],
+        "Title": "Instalaciones",
+        "MetaTagDescription": "Instalaciones"
+      }
+    ],
+    "Title": "Electro y tecnología",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y descuentos en televisores, celulares, heladeras, computadoras, lavarropas, cocinas y más."
+  },
+  {
+    "id": 71,
+    "name": "Hogar",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/hogar",
+    "children": [
+      {
+        "id": 72,
+        "name": "Muebles",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/hogar/muebles",
+        "children": [],
+        "Title": "Muebles",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en sillas, mesas, sillones, camas, colchones y mucho más."
+      },
+      {
+        "id": 88,
+        "name": "Ferretería y construcción",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/hogar/ferreteria-y-construccion",
+        "children": [],
+        "Title": "Ferretería y construcción",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en pinturas, herramientas, lámparas, linternas y mucho más."
+      },
+      {
+        "id": 138,
+        "name": "Indumentaria",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/hogar/indumentaria",
+        "children": [],
+        "Title": "Indumentaria",
+        "MetaTagDescription": "Conseguí en Carrefour online delantal, almohadas, corpiños, calzas, bodys de bebé y mucho más. Comprá online con las mejores ofertas y promociones!"
+      },
+      {
+        "id": 148,
+        "name": "Cocina y comedor",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/hogar/cocina-y-comedor",
+        "children": [],
+        "Title": "Cocina y comedor",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en vasos descartables, termo de acero inoxidable, colador, rallador y mucho más."
+      },
+      {
+        "id": 157,
+        "name": "Deco y organización",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/hogar/deco-y-organizacion",
+        "children": [],
+        "Title": "Deco y organización",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en velas aromáticas, gaveteros, tender, sahumerios, organizadores y mucho más."
+      },
+      {
+        "id": 498,
+        "name": "Dormitorio",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/hogar/dormitorio",
+        "children": [],
+        "Title": "Dormitorio",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en almohadas, sábanas, frazadas y mucho más."
+      },
+      {
+        "id": 499,
+        "name": "Baño",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/hogar/bano",
+        "children": [],
+        "Title": "Baño",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en toallas, toallones, cortiñas, accesorios para el baño y mucho más."
+      }
+    ],
+    "Title": "Hogar",
+    "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en delantales, almohadas, corpiños, calzas, body de bebé y mucho más."
+  },
+  {
+    "id": 161,
+    "name": "Almacén",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/almacen",
+    "children": [
+      {
+        "id": 162,
+        "name": "Aceites y vinagres",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/aceites-y-vinagres",
+        "children": [],
+        "Title": "Aceites y Vinagres",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en aceite de oliva, aceite de girasol, aceite de coco, aceto y mucho más."
+      },
+      {
+        "id": 168,
+        "name": "Pastas secas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/pastas-secas",
+        "children": [],
+        "Title": "Pastas secas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en fideos largos, fideos para guiso, fideos para sopa, pastas secas importadas y más."
+      },
+      {
+        "id": 172,
+        "name": "Arroz y legumbres",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/arroz-y-legumbres",
+        "children": [],
+        "Title": "Arroz y legumbres",
+        "MetaTagDescription": "Conseguí en Carrefour online mejores ofertas y promociones en arroz blanco, arroz para sushi, arroz yamaní, lentejas, garbanzos y mucho más."
+      },
+      {
+        "id": 176,
+        "name": "Harinas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/harinas",
+        "children": [],
+        "Title": "Harinas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones harina blanca, harina integral, premezclas dulces y saladas, polenta, avena y mucho más"
+      },
+      {
+        "id": 183,
+        "name": "Enlatados y Conservas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/enlatados-y-conservas",
+        "children": [],
+        "Title": "Enlatados y conservas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en conservas de pescado, aceitunas y encurtidos, conservas, salsas de tomate y más."
+      },
+      {
+        "id": 190,
+        "name": "Sal, aderezos y saborizadores",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/sal-aderezos-y-saborizadores",
+        "children": [],
+        "Title": "Sal, aderezos y saborizadores",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en aderezos, condimientos, salsas, sazonadores, especias y mucho más."
+      },
+      {
+        "id": 195,
+        "name": "Caldos, sopas y puré",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/caldos-sopas-y-pure",
+        "children": [],
+        "Title": "Caldos, sopas y purés",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en calditos, sopas instantáneas, puré instantáneo y mucho más."
+      },
+      {
+        "id": 199,
+        "name": "Repostería y postres",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/reposteria-y-postres",
+        "children": [],
+        "Title": "Repostería y postres",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en premezclas para bizcochuelo y brownies, coberturas, rellenos, complementos y más."
+      },
+      {
+        "id": 214,
+        "name": "Snacks",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/almacen/snacks",
+        "children": [],
+        "Title": "Snacks",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en papitas, nachos, nueces, maíz japonés, pochoclo, garrapiñada, almendras, y mucho más"
+      },
+      {
+        "id": 658,
+        "name": "Comidas instantáneas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/almacen/comidas-instantaneas",
+        "children": [],
+        "Title": "Comidas instantáneas",
+        "MetaTagDescription": "Comidas instantáneas"
+      }
+    ],
+    "Title": "Almacén",
+    "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones harina blanca, harina integral, premezclas dulces y saladas, polenta, avena y mucho más"
+  },
+  {
+    "id": 222,
+    "name": "Desayuno y merienda",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/desayuno-y-merienda",
+    "children": [
+      {
+        "id": 208,
+        "name": "Golosinas y chocolates",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/golosinas-y-chocolates",
+        "children": [],
+        "Title": "Golosinas y chocolates",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en alfajores, tableta de chocolates, caramelos masticables, chicles y mucho más."
+      },
+      {
+        "id": 223,
+        "name": "Galletitas bizcochitos y tostadas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas",
+        "children": [],
+        "Title": "Galletitas, bizcochitos y tostadas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en galletitas de limón, scons, bizcochos de grasa, tostaditas de arroz y mucho más."
+      },
+      {
+        "id": 229,
+        "name": "Budines y magdalenas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/budines-y-magdalenas",
+        "children": [],
+        "Title": "Budines y magdalenas",
+        "MetaTagDescription": "Comprá en Carrefour online las mejores ofertas y promociones en muffins, magdalenas, budines y mucho más."
+      },
+      {
+        "id": 232,
+        "name": "Yerba",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/yerba",
+        "children": [],
+        "Title": "Yerba",
+        "MetaTagDescription": "Comprá en Carrefour online las mejores ofertas y promociones en yerba mate con palo, yerba mate sin palo, yerba mate con hierbas y mucho más."
+      },
+      {
+        "id": 233,
+        "name": "Café",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/cafe",
+        "children": [],
+        "Title": "Café",
+        "MetaTagDescription": "Comprá en Carrefour online las mejores ofertas y promociones en café molido, café instantaneo, café en grano, cápsulas de café, café en saquitos y más"
+      },
+      {
+        "id": 238,
+        "name": "Infusiones",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/infusiones",
+        "children": [],
+        "Title": "Infusiones",
+        "MetaTagDescription": "Comprá en Carrefour online las mejores ofertas y promociones en mate cocido, té en saquitos, cacao en polvo y mucho más."
+      },
+      {
+        "id": 242,
+        "name": "Azúcar y endulzantes",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/azucar-y-endulzantes",
+        "children": [],
+        "Title": "Azúcar y endulzantes",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en azucar, edulcorantes, endulzantes y mucho más!"
+      },
+      {
+        "id": 246,
+        "name": "Mermeladas y otros dulces",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/mermeladas-y-otros-dulces",
+        "children": [],
+        "Title": "Mermeladas y otros dulces",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en mieles, mermeladas de naranja, dulces frutales, cremas de avellanas y mucho más!"
+      },
+      {
+        "id": 250,
+        "name": "Cereales y barritas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/desayuno-y-merienda/cereales-y-barritas",
+        "children": [],
+        "Title": "Cereales y barritas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en cereales, barritas de cereal, granolas, copos de trigo, copos de avena y mucho más!"
+      }
+    ],
+    "Title": "Desayuno y merienda",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y descuentos en café, yerba, té, galletitas, tostadas, azúcar, dulce de leche, miel, mermelada y más."
+  },
+  {
+    "id": 255,
+    "name": "Bebidas",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/bebidas",
+    "children": [
+      {
+        "id": 256,
+        "name": "Cervezas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/bebidas/cervezas",
+        "children": [],
+        "Title": "Cervezas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en cerveza rubia, cerveza artesanal, cerveza negra, cerveza roja y mucho más."
+      },
+      {
+        "id": 257,
+        "name": "Vinos",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/bebidas/vinos",
+        "children": [],
+        "Title": "Vinos",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en vino tinto, vino blanco, vino rosado, moscato, mistela y mucho más."
+      },
+      {
+        "id": 262,
+        "name": "Fernet y aperitivos",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/bebidas/fernet-y-aperitivos",
+        "children": [],
+        "Title": "Fernet y aperitivos",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en fernet, aperitivos con alcohol, aperitivos sin alcohol y mucho más."
+      },
+      {
+        "id": 266,
+        "name": "Bebidas blancas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/bebidas/bebidas-blancas",
+        "children": [],
+        "Title": "Bebidas blancas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en bebidas blancas, whisky, vodka, ron, gin, licores y mucho más."
+      },
+      {
+        "id": 273,
+        "name": "Espumantes y sidras",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/bebidas/espumantes-y-sidras",
+        "children": [],
+        "Title": "Espumantes y sidras",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en espumantes extra brut, brut, demi sec, rose, sidra, frizze y mucho más."
+      },
+      {
+        "id": 277,
+        "name": "Gaseosas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/bebidas/gaseosas",
+        "children": [],
+        "Title": "Gaseosas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en gaseosa cola, gaseosa de naranja, gaseosa de pomelo, gaseosas de lima limón y más."
+      },
+      {
+        "id": 283,
+        "name": "Aguas",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/bebidas/aguas",
+        "children": [],
+        "Title": "Aguas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en agua mineral, agua sin gas, agua con gas, agua de mesa, agua saborizada y mucho más."
+      },
+      {
+        "id": 286,
+        "name": "Jugos",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/bebidas/jugos",
+        "children": [],
+        "Title": "Jugos",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en jugos en polvo, jugos listos, jugos concentrados y mucho más."
+      },
+      {
+        "id": 290,
+        "name": "Bebidas energizantes",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/bebidas/bebidas-energizantes",
+        "children": [],
+        "Title": "Bebidas energizantes",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en bebidas energizantes."
+      },
+      {
+        "id": 291,
+        "name": "Bebidas isotónicas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/bebidas/bebidas-isotonicas",
+        "children": [],
+        "Title": "Bebidas isotónicas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en bebidas isotónicas, bebida deportiva, bebida rehidratante y mucho más."
+      },
+      {
+        "id": 525,
+        "name": "Envases",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/bebidas/envases",
+        "children": [],
+        "Title": "Envases",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Bebidas",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y descuentos en vinos, cervezas, fernet, gaseosas, aguas minerales, aguas saborizadas, jugos y más."
+  },
+  {
+    "id": 292,
+    "name": "Lácteos y productos frescos",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos",
+    "children": [
+      {
+        "id": 293,
+        "name": "Leches",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches",
+        "children": [],
+        "Title": "Leches",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en leche larga vida, leche fresca, leche vegetal y mucho más."
+      },
+      {
+        "id": 299,
+        "name": "Yogures",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/yogures",
+        "children": [],
+        "Title": "Yogures",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en yogur natural, yogur descremado, yogur entero, yogur deslactosado y mucho más."
+      },
+      {
+        "id": 302,
+        "name": "Mantecas, margarinas y levaduras",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/mantecas-margarinas-y-levaduras",
+        "children": [],
+        "Title": "Mantecas, margarinas y levaduras",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en manteca, margarina, levadura fresca, levadura seca y mucho más."
+      },
+      {
+        "id": 303,
+        "name": "Dulce de leche",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/dulce-de-leche",
+        "children": [],
+        "Title": "Dulce de leche",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en dulce de leche y mucho más."
+      },
+      {
+        "id": 304,
+        "name": "Cremas de leche",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/cremas-de-leche",
+        "children": [],
+        "Title": "Cremas de leche",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en crema de leche, crema chantilly y mucho más."
+      },
+      {
+        "id": 305,
+        "name": "Postres",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/postres",
+        "children": [],
+        "Title": "Postres",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en postres, gelatina, flan, arroz con leche y mucho más."
+      },
+      {
+        "id": 306,
+        "name": "Huevos",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/huevos",
+        "children": [],
+        "Title": "Huevos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en huevos blancos, huevos color, huevos orgánicos y mucho más."
+      },
+      {
+        "id": 307,
+        "name": "Tapas y pastas frescas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/tapas-y-pastas-frescas",
+        "children": [],
+        "Title": "Tapas y pastas frescas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en tapas para empanadas, tapas para pascualina, pastas frescas y mucho más."
+      },
+      {
+        "id": 308,
+        "name": "Dulce de membrillo y otros dulces",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/dulce-de-membrillo-y-otros-dulces",
+        "children": [],
+        "Title": "Dulce de membrillo y otros dulces",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en dulce de membrillo, dulce de batata y mucho más."
+      },
+      {
+        "id": 309,
+        "name": "Salchichas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/salchichas",
+        "children": [],
+        "Title": "Salchichas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en salchichas, salchichas alemanas y mucho más."
+      },
+      {
+        "id": 310,
+        "name": "Quesos",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos",
+        "children": [],
+        "Title": "Quesos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en queso cremoso, queso rallado, queso feteado y mucho más."
+      },
+      {
+        "id": 318,
+        "name": "Fiambres",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/lacteos-y-productos-frescos/fiambres",
+        "children": [],
+        "Title": "Fiambres",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en fiambre, jamón cocido, jamón crudo, salame y mucho más."
+      }
+    ],
+    "Title": "Lácteos y productos frescos",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y descuentos en leche, manteca, yogur, quesos, huevos, fiambres, salchichas y mucho más."
+  },
+  {
+    "id": 321,
+    "name": "Carnes y pescados",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/carnes-y-pescados",
+    "children": [
+      {
+        "id": 322,
+        "name": "Carne vacuna",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/carnes-y-pescados/carne-vacuna",
+        "children": [],
+        "Title": "Carne vacuna",
+        "MetaTagDescription": "Comprá en Carrefour online las mejores ofertas y promociones en bife de chorizo, peceto de ternera, carne picada, matambre de ternera y más."
+      },
+      {
+        "id": 323,
+        "name": "Pollo y granja",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/carnes-y-pescados/pollo-y-granja",
+        "children": [],
+        "Title": "Pollo y granja",
+        "MetaTagDescription": "Comprá en Carrefour online las mejores ofertas y promociones en suprema de pollo, muslos de pollo, pechuga de pollo y mucho más."
+      },
+      {
+        "id": 324,
+        "name": "Carne de cerdo",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/carnes-y-pescados/carne-de-cerdo",
+        "children": [],
+        "Title": "Carne de cerdo",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en chuleta de cerdo, pernil de cerdo, bondiola de cerdo, panceta ahumada y mucho más."
+      },
+      {
+        "id": 326,
+        "name": "Achuras y embutidos",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/carnes-y-pescados/achuras-y-embutidos",
+        "children": [],
+        "Title": "Achuras y embutidos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en chorizo de cerdo, chorizo de pollo, higado, riñón, mondogo y mucho más."
+      },
+      {
+        "id": 327,
+        "name": "Pescados y mariscos",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/carnes-y-pescados/pescados-y-mariscos",
+        "children": [],
+        "Title": "Pescados y mariscos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en filet de merluza, langostinos pelados, camarones congelados, calamar congelado y mucho más."
+      },
+      {
+        "id": 329,
+        "name": "Carbón y encendido",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/carnes-y-pescados/carbon-y-encendido",
+        "children": [],
+        "Title": "Carbón y encendido",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en carbón vegetal, carbón de leña, briquetas de carbón, astilla ahumadora y mucho más."
+      }
+    ],
+    "Title": "Carnes y pescados",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en carnes, milanesas de pollo, asado, milanesas de carne, pechuga de pollo y más."
+  },
+  {
+    "id": 330,
+    "name": "Frutas y verduras",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/frutas-y-verduras",
+    "children": [
+      {
+        "id": 331,
+        "name": "Frutas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/frutas-y-verduras/frutas",
+        "children": [],
+        "Title": "Frutas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en manzana roja, naranja, pera, limón y mucho más."
+      },
+      {
+        "id": 332,
+        "name": "Verduras",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/frutas-y-verduras/verduras",
+        "children": [],
+        "Title": "Verduras",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en tomate perita, cebolla, brócoli, berenjena, zapallito, batata y mucho más."
+      },
+      {
+        "id": 333,
+        "name": "Verduras cortadas y ensaladas preparadas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/frutas-y-verduras/verduras-cortadas-y-ensaladas-preparadas",
+        "children": [],
+        "Title": "Verduras cortadas y ensaladas preparadas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en vegetales cortados, hortalizas cortadas, ensalada verde, cebolla cortada, zanahoria rallada y mucho más."
+      },
+      {
+        "id": 334,
+        "name": "Frutos secos",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/frutas-y-verduras/frutos-secos",
+        "children": [],
+        "Title": "Frutos secos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en maní japonés, pistachos, almendras peladas, maní pelado y mucho más."
+      }
+    ],
+    "Title": "Frutas y verduras",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y descuentos en frutas de estación, verduras frescas o cortadas, frutos secos, hortalizas y más."
+  },
+  {
+    "id": 336,
+    "name": "Panadería",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/panaderia",
+    "children": [
+      {
+        "id": 206,
+        "name": "Bizcochuelos y piononos",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/panaderia/bizcochuelos-y-piononos",
+        "children": [],
+        "Title": "Bizcochuelos y piononos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en bizcochuelo de vainilla, bizcochuelo de chocolate, pionono y mucho más."
+      },
+      {
+        "id": 337,
+        "name": "Elaboración Carrefour",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/panaderia/elaboracion-carrefour",
+        "children": [],
+        "Title": "Elaboración Carrefour",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en pan casero, medialunas, chips, bagels y mucho más."
+      },
+      {
+        "id": 340,
+        "name": "Panificados",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/panaderia/panificados",
+        "children": [],
+        "Title": "Panificados",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en pan lacteado, pan de salvado, pan de hamburguesas, pan de panchos, tortillas y más."
+      },
+      {
+        "id": 344,
+        "name": "Pan rallado y rebozadores",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/panaderia/pan-rallado-y-rebozadores",
+        "children": [],
+        "Title": "Pan rallado y rebozadores",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en pan rallado sin TACC, pan rallado con semillas, rebozador sin TACC y mucho más."
+      },
+      {
+        "id": 345,
+        "name": "Pizzas y prepizzas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/panaderia/pizzas-y-prepizzas",
+        "children": [],
+        "Title": "Pizzas y prepizzas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en pizza de jamón y morrón, prepizza de tomate, pizzetas de tomate y mucho más."
+      },
+      {
+        "id": 346,
+        "name": "Sandwiches, Empanadas y Tartas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/panaderia/sandwiches-empanadas-y-tartas",
+        "children": [],
+        "Title": "Sandwiches, Empanadas y Tartas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en empanadas, tarta de jamón y queso, tarta integral, sandwich de miga y más."
+      }
+    ],
+    "Title": "Panadería",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en pan blanco, facturas, sandwiches, empanadas, pizzas, prepizzas, pan rallado y más."
+  },
+  {
+    "id": 347,
+    "name": "Congelados",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/congelados",
+    "children": [
+      {
+        "id": 348,
+        "name": "Hamburguesas y medallones",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/congelados/hamburguesas-y-medallones",
+        "children": [],
+        "Title": "Hamburguesas y medallones",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en hamburguesas de carne, medallón de pollo o cerdo, medallón de verdura y más."
+      },
+      {
+        "id": 349,
+        "name": "Nuggets y rebozados",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/congelados/nuggets-y-rebozados",
+        "children": [],
+        "Title": "Nuggets y rebozados",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en nuggets de pollo, bocaditos de pollo, croquetas de pollo y mucho más."
+      },
+      {
+        "id": 350,
+        "name": "Papas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/congelados/papas",
+        "children": [],
+        "Title": "Papas",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en papas bastón, papas fritas tradicionales, bastones de mozzarella y mucho más."
+      },
+      {
+        "id": 352,
+        "name": "Frutas y vegetales congelados",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/congelados/frutas-y-vegetales-congelados",
+        "children": [],
+        "Title": "Frutas y vegetales congelados",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en brócoli congelado, acelga congelada, espinaca congelada y más"
+      },
+      {
+        "id": 356,
+        "name": "Comidas y panificados",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/congelados/comidas-y-panificados",
+        "children": [],
+        "Title": "Comidas y panificados",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en waffles, croissant de manteca, tarta de pollo congelada y mucho más."
+      },
+      {
+        "id": 358,
+        "name": "Helados y postres",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/congelados/helados-y-postres",
+        "children": [],
+        "Title": "Helados y postres",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en helado de palito, helado sin azúcar, torta congelada, frambuesa con chocolate y más."
+      }
+    ],
+    "Title": "Congelados",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en hamburguesas, pollo congelado, papas fritas, milanesas, empanadas, helados y más."
+  },
+  {
+    "id": 359,
+    "name": "Limpieza",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/limpieza",
+    "children": [
+      {
+        "id": 360,
+        "name": "Limpieza de la ropa",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/limpieza/limpieza-de-la-ropa",
+        "children": [],
+        "Title": "Limpieza de la ropa",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en jabón líquido, jabón en polvo para ropa, suavizante, detergente, quitamanchas y más."
+      },
+      {
+        "id": 367,
+        "name": "Limpieza de pisos y muebles",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/limpieza/limpieza-de-pisos-y-muebles",
+        "children": [],
+        "Title": "Limpieza de pisos y muebles",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en limpiador de pisos, desinfectante, lustramuebles, limpiavidrios y más."
+      },
+      {
+        "id": 376,
+        "name": "Insecticidas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/limpieza/insecticidas",
+        "children": [],
+        "Title": "Insecticidas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en insecticida mata moscas, repelente de mosquitos, tabletas para mosquitos y más."
+      },
+      {
+        "id": 377,
+        "name": "Limpieza de cocina",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/limpieza/limpieza-de-cocina",
+        "children": [],
+        "Title": "Limpieza de cocina",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en detergente, limpiador, fósforos, velas, palillos y más."
+      },
+      {
+        "id": 384,
+        "name": "Lavandinas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/limpieza/lavandinas",
+        "children": [],
+        "Title": "Lavandinas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en lavandina 1 litro, lavandina 2 litros, lavandina 5 litros y mucho más."
+      },
+      {
+        "id": 385,
+        "name": "Rollos de cocina y servilletas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/limpieza/rollos-de-cocina-y-servilletas",
+        "children": [],
+        "Title": "Rollos de cocina y servilletas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en servilletas de papel, rollos de cocina doble hoja, rollos de cocina decorados y más."
+      },
+      {
+        "id": 386,
+        "name": "Papeles higiénicos",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/limpieza/papeles-higienicos",
+        "children": [],
+        "Title": "Papeles higiénicos",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en papel higiénico hoja simple, papel higiénico doble hoja y más."
+      },
+      {
+        "id": 387,
+        "name": "Limpieza de baño",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/limpieza/limpieza-de-bano",
+        "children": [],
+        "Title": "Limpieza de baño",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en limpiador de inodoro, gel para inodoro, pastilla para inodoro, repuestos y más."
+      },
+      {
+        "id": 390,
+        "name": "Desodorantes de ambiente",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/limpieza/desodorantes-de-ambiente",
+        "children": [],
+        "Title": "Desodorantes de ambiente",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en desinfectante de ambiente, desodorante de ambiente, difusores, antihumedad y más."
+      },
+      {
+        "id": 394,
+        "name": "Artículos de limpieza",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/limpieza/articulos-de-limpieza",
+        "children": [],
+        "Title": "Artículos de limpieza",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en bolsas de residuos, guantes, esponjas, trapos, mopas, escobas y más."
+      }
+    ],
+    "Title": "Limpieza",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en rollos de cocina, papel higiénico, jabón líquido para ropa, lavandina y más."
+  },
+  {
+    "id": 402,
+    "name": "Perfumería",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/perfumeria",
+    "children": [
+      {
+        "id": 403,
+        "name": "Cuidado del cabello",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/cuidado-del-cabello",
+        "children": [],
+        "Title": "Cuidado del cabello",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en shampoo, acondicionador, tratamientos capilares y mucho más."
+      },
+      {
+        "id": 412,
+        "name": "Cuidado dental",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/cuidado-dental",
+        "children": [],
+        "Title": "Cuidado dental",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en cepillo de dientes, pasta dental, enjuague bucal y mucho más."
+      },
+      {
+        "id": 418,
+        "name": "Jabones",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/jabones",
+        "children": [],
+        "Title": "Jabones",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en jabón líquido corporal, jabón de tocador, jabón para manos y mucho más."
+      },
+      {
+        "id": 422,
+        "name": "Protección femenina",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/proteccion-femenina",
+        "children": [],
+        "Title": "Protección femenina",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en toallitas femeninas, protectores diarios, tampones y mucho más."
+      },
+      {
+        "id": 427,
+        "name": "Cuidado de la piel",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/cuidado-de-la-piel",
+        "children": [],
+        "Title": "Cuidado de la piel",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en crema para el cuerpo, crema para manos, crema facial y mucho más."
+      },
+      {
+        "id": 435,
+        "name": "Antitranspirantes y desodorantes",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/antitranspirantes-y-desodorantes",
+        "children": [],
+        "Title": "Antitranspirantes y desodorantes",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en antitranspirantes en aerosol, desodorantes roll on y mucho más."
+      },
+      {
+        "id": 438,
+        "name": "Cuidado corporal",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/cuidado-corporal",
+        "children": [],
+        "Title": "Cuidado corporal",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en productos de depilación, máquinas de afeitar, perfumes y mucho más."
+      },
+      {
+        "id": 443,
+        "name": "Repelentes",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/perfumeria/repelentes",
+        "children": [],
+        "Title": "Repelentes",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en repelente para mosquitos en aerosol, repelente en crema y más."
+      },
+      {
+        "id": 444,
+        "name": "Algodones e hisopos",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/perfumeria/algodones-e-hisopos",
+        "children": [],
+        "Title": "Algodones e hisopos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en algodón, hisopos, discos de algodón y mucho más."
+      },
+      {
+        "id": 445,
+        "name": "Farmacia y ortopedia",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/farmacia-y-ortopedia",
+        "children": [],
+        "Title": "Farmacia y preservativos",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en alcohol etílico, alcohol en gel, preservativos y mucho más."
+      },
+      {
+        "id": 514,
+        "name": "Perfumes y maquillaje",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/perfumeria/perfumes-y-maquillaje",
+        "children": [],
+        "Title": "Perfumes y maquillaje",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Perfumería",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en shampoo, acondicionadores, pastas dentales, jabones, cremas corporales y más."
+  },
+  {
+    "id": 451,
+    "name": "Mundo Bebé",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/mundo-bebe",
+    "children": [
+      {
+        "id": 452,
+        "name": "Pañales",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/panales",
+        "children": [],
+        "Title": "Pañales",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en pañales para recién nacido, pañales para el agua y mucho más."
+      },
+      {
+        "id": 453,
+        "name": "Toallitas húmedas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/toallitas-humedas",
+        "children": [],
+        "Title": "Toallitas húmedas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en toallitas húmedas para bebé y mucho más."
+      },
+      {
+        "id": 458,
+        "name": "Higiene para bebés",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/higiene-para-bebes",
+        "children": [],
+        "Title": "Higiene para bebés",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en óleo calcáreo, colonia para bebé, aceite para bebé, pomada, talco y mucho más."
+      },
+      {
+        "id": 462,
+        "name": "Alimento para bebé",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/alimento-para-bebe",
+        "children": [],
+        "Title": "Alimento para bebé",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones leche en polvo, leche fluida para bebé, cereales, papillas, puré de manzana y más."
+      },
+      {
+        "id": 466,
+        "name": "Cuidado maternal",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/cuidado-maternal",
+        "children": [],
+        "Title": "Cuidado maternal",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en apósitos, protectores mamarios, crema de caléndula y mucho más."
+      },
+      {
+        "id": 467,
+        "name": "Chupetes, mamaderas y accesorios",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/chupetes-mamaderas-y-accesorios",
+        "children": [],
+        "Title": "Chupetes, mamaderas y accesorios",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en chupetes, mamaderas, vasos, platos, cubiertos, sillas de bebé, tetinas y más."
+      },
+      {
+        "id": 468,
+        "name": "Pelelas y bañeras",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/pelelas-y-baneras",
+        "children": [],
+        "Title": "Pelelas y bañeras",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en pelelas, bañeras para bebé, asientos para inodoro y mucho más."
+      },
+      {
+        "id": 469,
+        "name": "Cochecitos y butacas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/cochecitos-y-butacas",
+        "children": [],
+        "Title": "Cochecitos y butacas",
+        "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en cochecitos, butacas para bebé y mucho más."
+      },
+      {
+        "id": 470,
+        "name": "Cunas y muebles",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mundo-bebe/cunas-y-muebles",
+        "children": [],
+        "Title": "Cunas y muebles",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en cunas, muebles para bebé y mucho más."
+      }
+    ],
+    "Title": "Mundo Bebé",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en pañales, toallitas húmedas, chupetes, mamaderas, pelelas, shampoo para bebé y más."
+  },
+  {
+    "id": 471,
+    "name": "Mascotas",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/mascotas",
+    "children": [
+      {
+        "id": 472,
+        "name": "Alimentos para perros",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/mascotas/alimentos-para-perros",
+        "children": [],
+        "Title": "Alimentos para perros - Comprá online en Carrefour.com.ar",
+        "MetaTagDescription": "Conseguí en Carrefour online alimento balanceado para perros, snacks para perros, bocaditos para perro y mucho más. Comprá online con las mejores ofertas y promociones!"
+      },
+      {
+        "id": 473,
+        "name": "Accesorios para mascotas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mascotas/accesorios-para-mascotas",
+        "children": [],
+        "Title": "Accesorios Para Mascotas",
+        "MetaTagDescription": "Encontra los mejores accesorios para mascotas en Carrefour.  Correas, comederos, piedras para gatos, shampoos ¡y mucho mas! Compra con un clic y retira gratis tu accesorio para mascota ideal"
+      },
+      {
+        "id": 474,
+        "name": "Alimentos para gatos",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/mascotas/alimentos-para-gatos",
+        "children": [],
+        "Title": "Alimentos para gatos - Comprá online en Carrefour.com.ar",
+        "MetaTagDescription": "Conseguí en Carrefour online alimentos húmedo para gatos, alimento balanceado para gatos y mucho más. Comprá online con las mejores ofertas y promociones!"
+      },
+      {
+        "id": 475,
+        "name": "Higiene para mascotas",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/mascotas/higiene-para-mascotas",
+        "children": [],
+        "Title": "Higiene Para Mascotas",
+        "MetaTagDescription": "Si queres mantener a tu mascota limpia ¡Entra en Carrefour! Encontra shampoo, peines, espuma de limpieza seca, colonias y mucho mas en nuestra seleccion de Higiene para Mascotas"
+      }
+    ],
+    "Title": "Mascotas",
+    "MetaTagDescription": "Conseguí en Carrefour Online las mejores ofertas y promociones en alimento para perros, alimento para gatos, piedras sanitarias, juguetes y más."
+  },
+  {
+    "id": 564,
+    "name": "Gift Cards",
+    "hasChildren": false,
+    "url": "https://www.carrefour.com.ar/gift-cards",
+    "children": [],
+    "Title": "Gift Cards",
+    "MetaTagDescription": ""
+  },
+  {
+    "id": 605,
+    "name": "Juguetería y Librería",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/jugueteria-y-libreria",
+    "children": [
+      {
+        "id": 606,
+        "name": "Juguetería",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/jugueteria-y-libreria/jugueteria",
+        "children": [],
+        "Title": "Juguetería",
+        "MetaTagDescription": "Juguetería"
+      },
+      {
+        "id": 607,
+        "name": "Librería",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/jugueteria-y-libreria/libreria",
+        "children": [],
+        "Title": "Librería",
+        "MetaTagDescription": "Librería"
+      },
+      {
+        "id": 608,
+        "name": "Libros",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/jugueteria-y-libreria/libros",
+        "children": [],
+        "Title": "Libros",
+        "MetaTagDescription": "Libros"
+      }
+    ],
+    "Title": "Juguetería y Librería",
+    "MetaTagDescription": "Juguetería y Librería"
+  },
+  {
+    "id": 635,
+    "name": "Automotor",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/automotor",
+    "children": [
+      {
+        "id": 636,
+        "name": "Herramientas vehiculares",
+        "hasChildren": false,
+        "url": "https://www.carrefour.com.ar/automotor/herramientas-vehiculares",
+        "children": [],
+        "Title": "Herramientas vehiculares",
+        "MetaTagDescription": "Conseguí en Carrefour online las mejores ofertas y promociones en cubierta para autos, criquet, cubrecinturones y mucho más."
+      },
+      {
+        "id": 637,
+        "name": "Todo para la moto",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/automotor/todo-para-la-moto",
+        "children": [],
+        "Title": "Todo para la moto",
+        "MetaTagDescription": "Todo para la moto"
+      },
+      {
+        "id": 640,
+        "name": "Todo para el auto",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/automotor/todo-para-el-auto",
+        "children": [],
+        "Title": "Todo para el auto",
+        "MetaTagDescription": "Todo para el auto"
+      }
+    ],
+    "Title": "Automotor",
+    "MetaTagDescription": "Automotor"
+  },
+  {
+    "id": 665,
+    "name": "Aire Libre y Ocio",
+    "hasChildren": true,
+    "url": "https://www.carrefour.com.ar/aire-libre-y-ocio",
+    "children": [
+      {
+        "id": 666,
+        "name": "Aire Libre",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/aire-libre-y-ocio/aire-libre",
+        "children": [],
+        "Title": "Aire Libre",
+        "MetaTagDescription": "Aire Libre"
+      },
+      {
+        "id": 667,
+        "name": "Parrillas y accesorios",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/aire-libre-y-ocio/parrillas-y-accesorios",
+        "children": [],
+        "Title": "Parrillas y accesorios",
+        "MetaTagDescription": "Parrillas y accesorios"
+      },
+      {
+        "id": 668,
+        "name": "Piletas y accesorios",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/aire-libre-y-ocio/piletas-y-accesorios",
+        "children": [],
+        "Title": "Piletas y accesorios",
+        "MetaTagDescription": "Piletas y accesorios"
+      },
+      {
+        "id": 669,
+        "name": "Viajes",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/aire-libre-y-ocio/viajes",
+        "children": [],
+        "Title": "Viajes",
+        "MetaTagDescription": "Viajes"
+      },
+      {
+        "id": 686,
+        "name": "Deportes y tiempo libre",
+        "hasChildren": true,
+        "url": "https://www.carrefour.com.ar/aire-libre-y-ocio/deportes-y-tiempo-libre",
+        "children": [],
+        "Title": "Deportes y tiempo libre",
+        "MetaTagDescription": ""
+      }
+    ],
+    "Title": "Aire Libre y Ocio",
+    "MetaTagDescription": "Aire Libre y Ocio"
+  }
+]
