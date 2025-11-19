@@ -113,10 +113,11 @@ def buscar_productos_similares(query: str, productos: List[Dict]) -> List[Dict]:
         # Contar cuántas palabras de la búsqueda están en el producto (palabras completas)
         palabras_encontradas = 0
         for palabra in palabras_query:
-            # Usar regex con límites de palabra (\b) para buscar palabras completas
-            # Ejemplo: "pan" no coincide con "panasonic", pero sí con "pan rallado"
-            patron = r'\b' + re.escape(palabra) + r'\b'
-            if re.search(patron, nombre_original):
+            # Buscar palabra completa: debe estar rodeada de espacios, puntuación o inicio/fin de string
+            # Esto evita que "pan" coincida con "Panacom", "Carpano" o "Campana"
+            # Dividir el nombre en palabras y buscar coincidencia exacta
+            palabras_producto = re.findall(r'\b\w+\b', nombre_original)
+            if palabra in palabras_producto:
                 palabras_encontradas += 1
         
         # Solo incluir si tiene AL MENOS UNA palabra de la búsqueda
