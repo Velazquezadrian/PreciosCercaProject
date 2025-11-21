@@ -44,9 +44,17 @@ class ScraperDia(BaseScraper):
         productos_dict = {}  # Usar dict para evitar duplicados por nombre
         
         try:
-            # Si la búsqueda tiene múltiples palabras, usar solo la primera
+            # Preparar queries: buscar con palabras en orden inverso para multi-palabra
             palabras = query.strip().split()
-            query_api = palabras[0] if palabras else query
+            queries_a_buscar = []
+            
+            if len(palabras) > 1:
+                # Búsqueda multi-palabra: palabras en orden inverso
+                # Priorizar palabras menos comunes primero
+                queries_a_buscar.extend(reversed(palabras))
+            else:
+                # Búsqueda simple: solo una query
+                queries_a_buscar.append(query.strip())
             
             print(f"[Día %] Buscando '{query}' en {len(self.categorias)} categorías")
             
@@ -56,85 +64,91 @@ class ScraperDia(BaseScraper):
                 'Referer': self.base_url
             }
             
-            # Buscar en cada categoría
-            for categoria_id in self.categorias:
-                try:
-                    # Parámetros de búsqueda con filtro de categoría
-                    params = {
-                        'fq': f'C:/{categoria_id}/',  # Filtro de categoría VTEX
-                        'ft': query_api,
-                        '_from': 0,
-                        '_to': 9  # Solo 10 productos por categoría
-                    }
-                    
-                    response = requests.get(
-                        self.api_url,
-                        params=params,
-                        headers=headers,
-                        timeout=10
-                    )
-                    
-                    # Aceptar 200 y 206 (partial content)
-                    if response.status_code not in [200, 206]:
-                        continue
-                    
-                    data = response.json()
-                    
-                    if not data:
-                        continue
-                    
-                    # Procesar productos encontrados
-                    for item in data:
-                        try:
-                            nombre = item.get('productName', '')
-                            if not nombre:
-                                continue
-                            
-                            # Evitar duplicados por nombre
-                            if nombre in productos_dict:
-                                continue
-                            
-                            # Obtener precio del primer SKU disponible
-                            items = item.get('items', [])
-                            if not items:
-                                continue
-                            
-                            sellers = items[0].get('sellers', [])
-                            if not sellers:
-                                continue
-                            
-                            precio = sellers[0].get('commertialOffer', {}).get('Price', 0)
-                            precio = float(precio)
-                            
-                            # Obtener imagen del producto
-                            imagen_url = None
-                            images = items[0].get('images', [])
-                            if images:
-                                imagen_url = images[0].get('imageUrl', '')
-                            
-                            if precio > 0:
-                                productos_dict[nombre] = {
-                                    'nombre': nombre,
-                                    'precio': precio,
-                                    'supermercado': self.supermercado_nombre,
-                                    'url': item.get('link', self.base_url),
-                                    'imagen': imagen_url
-                                }
-                                
-                                # Terminar si ya tenemos 50 productos
-                                if len(productos_dict) >= 50:
-                                    print(f"[Día %] Límite de 50 productos alcanzado")
-                                    return list(productos_dict.values())
+            # Buscar con cada query
+            for query_api in queries_a_buscar:
+                # Buscar en cada categoría
+                for categoria_id in self.categorias:
+                    try:
+                        # Parámetros de búsqueda con filtro de categoría
+                        params = {
+                            'fq': f'C:/{categoria_id}/',  # Filtro de categoría VTEX
+                            'ft': query_api,
+                            '_from': 0,
+                            '_to': 9  # Solo 10 productos por categoría
+                        }
                         
-                        except (KeyError, IndexError, ValueError):
+                        response = requests.get(
+                            self.api_url,
+                            params=params,
+                            headers=headers,
+                            timeout=10
+                        )
+                        
+                        # Aceptar 200 y 206 (partial content)
+                        if response.status_code not in [200, 206]:
                             continue
+                        
+                        data = response.json()
+                        
+                        if not data:
+                            continue
+                        
+                        # Procesar productos encontrados
+                        for item in data:
+                            try:
+                                nombre = item.get('productName', '')
+                                if not nombre:
+                                    continue
+                                
+                                # Evitar duplicados por nombre
+                                if nombre in productos_dict:
+                                    continue
+                                
+                                # Obtener precio del primer SKU disponible
+                                items = item.get('items', [])
+                                if not items:
+                                    continue
+                                
+                                sellers = items[0].get('sellers', [])
+                                if not sellers:
+                                    continue
+                                
+                                precio = sellers[0].get('commertialOffer', {}).get('Price', 0)
+                                precio = float(precio)
+                                
+                                # Obtener imagen del producto
+                                imagen_url = None
+                                images = items[0].get('images', [])
+                                if images:
+                                    imagen_url = images[0].get('imageUrl', '')
+                                
+                                if precio > 0:
+                                    productos_dict[nombre] = {
+                                        'nombre': nombre,
+                                        'precio': precio,
+                                        'supermercado': self.supermercado_nombre,
+                                        'url': item.get('link', self.base_url),
+                                        'imagen': imagen_url
+                                    }
+                                    
+                                    # Terminar si ya tenemos 50 productos
+                                    if len(productos_dict) >= 50:
+                                        print(f"[Día %] Límite de 50 productos alcanzado")
+                                        return list(productos_dict.values())
+                            
+                            except (KeyError, IndexError, ValueError):
+                                continue
+                    
+                    except Exception as e:
+                        continue
                 
-                except Exception as e:
-                    continue
+                # Terminar búsqueda si ya tenemos suficientes productos
+                if len(productos_dict) >= 50:
+                    break
             
         except Exception as e:
             print(f"[Día %] Error en búsqueda: {e}")
         
-        productos_lista = list(productos_dict.values())
+        return list(productos_dict.values())
         print(f"[Día %] Total productos encontrados: {len(productos_lista)}")
         return productos_lista

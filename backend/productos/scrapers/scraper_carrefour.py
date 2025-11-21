@@ -40,86 +40,98 @@ class ScraperCarrefour(BaseScraper):
         productos_dict = {}  # Usar dict para evitar duplicados por nombre
         
         try:
-            # Si la búsqueda tiene múltiples palabras, usar solo la primera
+            # Preparar queries: buscar con primera palabra Y con frase completa
             palabras = query.strip().split()
-            query_api = palabras[0] if palabras else query
+            queries_a_buscar = []
+            
+            if len(palabras) > 1:
+                # Búsqueda multi-palabra: buscar con palabras en ORDEN INVERSO
+                # La API VTEX no acepta espacios en ft= (da error 400)
+                # Priorizar palabras menos comunes primero (ej: "rallado" antes que "pan")
+                # para encontrar productos más específicos
+                queries_a_buscar.extend(reversed(palabras))  # Palabras en orden inverso
+            else:
+                # Búsqueda simple: solo una query
+                queries_a_buscar.append(query.strip())
             
             print(f"[Carrefour] Buscando '{query}' en {len(self.categorias)} categorías")
             
-            # Buscar en cada categoría
-            for categoria_id in self.categorias:
-                try:
-                    # Buscar usando VTEX API con filtro de categoría
-                    params = {
-                        'fq': f'C:/{categoria_id}/',  # Filtro de categoría VTEX
-                        'ft': query_api,
-                        '_from': 0,
-                        '_to': 9  # Solo 10 productos por categoría para no saturar
-                    }
-                    
-                    response = self.session.get(
-                        self.api_search_url, 
-                        params=params, 
-                        timeout=10
-                    )
-                    
-                    # Status 200 y 206 (partial content) son válidos
-                    if response.status_code not in [200, 206]:
-                        continue
-                    
-                    productos_json = response.json()
-                    
-                    if not productos_json:
-                        continue
-                    
-                    # Procesar productos encontrados
-                    for producto_vtex in productos_json:
-                        try:
-                            nombre = producto_vtex.get('productName', '')
-                            if not nombre:
-                                continue
-                            
-                            # Evitar duplicados por nombre
-                            if nombre in productos_dict:
-                                continue
-                            
-                            # Obtener precio
-                            items = producto_vtex.get('items', [])
-                            if not items:
-                                continue
-                            
-                            sellers = items[0].get('sellers', [])
-                            if not sellers:
-                                continue
-                            
-                            precio_info = sellers[0].get('commertialOffer', {})
-                            precio = precio_info.get('Price', 0)
-                            
-                            # Obtener imagen
-                            imagen_url = None
-                            images = items[0].get('images', [])
-                            if images:
-                                imagen_url = images[0].get('imageUrl', '')
-                            
-                            if precio > 0:
-                                productos_dict[nombre] = {
-                                    'nombre': nombre.strip(),
-                                    'precio': float(precio),
-                                    'supermercado': self.supermercado_nombre,
-                                    'url': f"{self.base_url}/{producto_vtex.get('linkText', '')}/p",
-                                    'imagen': imagen_url
-                                }
-                                
-                                # Terminar si ya tenemos 50 productos
-                                if len(productos_dict) >= 50:
-                                    print(f"[Carrefour] Límite de 50 productos alcanzado")
-                                    return list(productos_dict.values())
-                            
-                        except Exception as e:
+            # Buscar con cada query
+            for query_api in queries_a_buscar:
+                # Buscar en cada categoría
+                for categoria_id in self.categorias:
+                    try:
+                        # Buscar usando VTEX API con filtro de categoría
+                        params = {
+                            'fq': f'C:/{categoria_id}/',  # Filtro de categoría VTEX
+                            'ft': query_api,
+                            '_from': 0,
+                            '_to': 9  # Solo 10 productos por categoría para no saturar
+                        }
+                        
+                        response = self.session.get(
+                            self.api_search_url, 
+                            params=params, 
+                            timeout=10
+                        )
+                        
+                        # Status 200 y 206 (partial content) son válidos
+                        if response.status_code not in [200, 206]:
                             continue
+                        
+                        productos_json = response.json()
+                        
+                        if not productos_json:
+                            continue
+                        
+                        # Procesar productos encontrados
+                        for producto_vtex in productos_json:
+                            try:
+                                nombre = producto_vtex.get('productName', '')
+                                if not nombre:
+                                    continue
+                                
+                                # Evitar duplicados por nombre
+                                if nombre in productos_dict:
+                                    continue
+                                
+                                # Obtener precio
+                                items = producto_vtex.get('items', [])
+                                if not items:
+                                    continue
+                                
+                                sellers = items[0].get('sellers', [])
+                                if not sellers:
+                                    continue
+                                
+                                precio_info = sellers[0].get('commertialOffer', {})
+                                precio = precio_info.get('Price', 0)
+                                
+                                # Obtener imagen
+                                imagen_url = None
+                                images = items[0].get('images', [])
+                                if images:
+                                    imagen_url = images[0].get('imageUrl', '')
+                                
+                                if precio > 0:
+                                    productos_dict[nombre] = {
+                                        'nombre': nombre.strip(),
+                                        'precio': float(precio),
+                                        'supermercado': self.supermercado_nombre,
+                                        'url': f"{self.base_url}/{producto_vtex.get('linkText', '')}/p",
+                                        'imagen': imagen_url
+                                    }
+                                    
+                                    # Terminar si ya tenemos 50 productos
+                                    if len(productos_dict) >= 50:
+                                        print(f"[Carrefour] Límite de 50 productos alcanzado")
+                                        return list(productos_dict.values())
+                                
+                            except Exception as e:
+                                continue
                     
-                except Exception as e:
-                    continue
+                    except Exception as e:
+                        continue
             
         except Exception as e:
             print(f"[Carrefour] Error en búsqueda: {e}")
