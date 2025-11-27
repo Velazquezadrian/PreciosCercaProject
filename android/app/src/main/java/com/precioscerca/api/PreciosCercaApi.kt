@@ -79,6 +79,17 @@ interface PreciosCercaApi {
     @GET("lista-compras/comparar")
     fun compararLista(): Call<ComparacionResponse>
     
+    /**
+     * Obtener sugerencias de búsqueda (autocomplete)
+     * GET /sugerencias?query=pa&supermercado=lagallega&limit=10
+     */
+    @GET("sugerencias")
+    fun getSugerencias(
+        @Query("query") query: String,
+        @Query("supermercado") supermercado: String? = null,
+        @Query("limit") limit: Int = 10
+    ): Call<SugerenciasResponse>
+    
 }
 
 /**
@@ -229,4 +240,13 @@ data class ComparacionResponse(
     val mas_barato: SupermercadoComparacion?,
     val error: String? = null,
     val items: List<Any>? = null
+)
+
+/**
+ * Respuesta de sugerencias de búsqueda
+ */
+data class SugerenciasResponse(
+    val query: String,
+    val sugerencias: List<String>,
+    val total: Int
 )

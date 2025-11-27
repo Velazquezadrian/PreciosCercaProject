@@ -2,6 +2,10 @@ package com.precioscerca
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,8 +20,10 @@ import com.google.android.material.textfield.TextInputEditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.precioscerca.adapters.ProductAdapter
+import com.precioscerca.adapters.SugerenciasAdapter
 import com.precioscerca.api.ApiClient
 import com.precioscerca.api.BusquedaApiResponse
+import com.precioscerca.api.SugerenciasResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,13 +42,19 @@ class BusquedaActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var tvEstado: TextView
     private lateinit var recyclerProductos: RecyclerView
+    private lateinit var recyclerSugerencias: RecyclerView
     private lateinit var tvTotal: TextView
     private lateinit var productAdapter: ProductAdapter
+    private lateinit var sugerenciasAdapter: SugerenciasAdapter
     
     private var supermercadoId: String = ""
     private var supermercadoNombre: String = ""
     private var totalAcumulado: Double = 0.0
     private var modo: String = "CONSULTA" // LISTA o CONSULTA
+    
+    // Handler para debouncing del autocomplete
+    private val searchHandler = Handler(Looper.getMainLooper())
+    private var searchRunnable: Runnable? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +85,10 @@ class BusquedaActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         tvEstado = findViewById(R.id.tvEstado)
         recyclerProductos = findViewById(R.id.recyclerProductos)
+        recyclerSugerencias = findViewById(R.id.recyclerSugerencias)
         tvTotal = findViewById(R.id.tvTotal)
         
-        // Configurar RecyclerView en cuadrícula (3 columnas)
+        // Configurar RecyclerView de productos en cuadrícula (2 columnas)
         // Pasar modoLista = true si es modo LISTA, false si es CONSULTA
         val modoLista = (modo == "LISTA")
         productAdapter = ProductAdapter(
@@ -85,8 +98,19 @@ class BusquedaActivity : AppCompatActivity() {
                 actualizarTotal(precio)
             }
         )
-        recyclerProductos.layoutManager = GridLayoutManager(this, 3)
+        recyclerProductos.layoutManager = GridLayoutManager(this, 2)
         recyclerProductos.adapter = productAdapter
+        
+        // Configurar RecyclerView de sugerencias (lista vertical)
+        sugerenciasAdapter = SugerenciasAdapter(emptyList()) { sugerenciaSeleccionada ->
+            // Cuando el usuario toca una sugerencia
+            etBusqueda.setText(sugerenciaSeleccionada)
+            etBusqueda.setSelection(sugerenciaSeleccionada.length) // Cursor al final
+            recyclerSugerencias.visibility = View.GONE
+            realizarBusqueda()
+        }
+        recyclerSugerencias.layoutManager = LinearLayoutManager(this)
+        recyclerSugerencias.adapter = sugerenciasAdapter
         
         // Mostrar/ocultar total según el modo
         if (modo == "CONSULTA") {
@@ -103,18 +127,73 @@ class BusquedaActivity : AppCompatActivity() {
     private fun setupListeners() {
         // Botón de búsqueda
         btnBuscar.setOnClickListener {
+            recyclerSugerencias.visibility = View.GONE
             realizarBusqueda()
         }
         
         // Enter en el campo de texto
         etBusqueda.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                recyclerSugerencias.visibility = View.GONE
                 realizarBusqueda()
                 true
             } else {
                 false
             }
         }
+        
+        // TextWatcher con debouncing para autocomplete
+        etBusqueda.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            
+            override fun afterTextChanged(s: Editable?) {
+                // Cancelar búsqueda anterior si existe
+                searchRunnable?.let { searchHandler.removeCallbacks(it) }
+                
+                val query = s?.toString()?.trim() ?: ""
+                
+                // Si el texto es muy corto, ocultar sugerencias
+                if (query.length < 2) {
+                    recyclerSugerencias.visibility = View.GONE
+                    return
+                }
+                
+                // Crear nueva búsqueda con delay de 1 segundo
+                searchRunnable = Runnable {
+                    cargarSugerencias(query)
+                }
+                searchHandler.postDelayed(searchRunnable!!, 1000)
+            }
+        })
+    }
+    
+    private fun cargarSugerencias(query: String) {
+        // Llamar al endpoint de sugerencias
+        ApiClient.api.getSugerencias(query, supermercadoId, 10).enqueue(object : Callback<SugerenciasResponse> {
+            override fun onResponse(
+                call: Call<SugerenciasResponse>,
+                response: Response<SugerenciasResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val sugerencias = response.body()
+                    if (sugerencias != null && sugerencias.sugerencias.isNotEmpty()) {
+                        sugerenciasAdapter.actualizarSugerencias(sugerencias.sugerencias)
+                        recyclerSugerencias.visibility = View.VISIBLE
+                    } else {
+                        recyclerSugerencias.visibility = View.GONE
+                    }
+                } else {
+                    recyclerSugerencias.visibility = View.GONE
+                }
+            }
+            
+            override fun onFailure(call: Call<SugerenciasResponse>, t: Throwable) {
+                // En caso de error, simplemente no mostrar sugerencias
+                recyclerSugerencias.visibility = View.GONE
+            }
+        })
     }
     
     private fun realizarBusqueda() {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Item de sugerencia de búsqueda -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@android:drawable/ic_menu_search"
+        android:tint="#9E9E9E"
+        android:layout_marginEnd="12dp" />
+
+    <TextView
+        android:id="@+id/tvSugerencia"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Pan lactal"
+        android:textSize="16sp"
+        android:textColor="#424242"
+        android:singleLine="true"
+        android:ellipsize="end" />
+
+</LinearLayout>

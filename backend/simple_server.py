@@ -24,6 +24,10 @@ Fecha: Noviembre 2025
 from flask import Flask, jsonify, request
 import sys
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
+from functools import lru_cache
+from datetime import datetime, timedelta
 
 # Agregar el directorio backend al path de Python
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -45,15 +49,20 @@ except Exception as e:
 
 app = Flask(__name__)
 
-# Inicializar scrapers disponibles
+# Inicializar scrapers disponibles (TODOS OPTIMIZADOS)
 scrapers = {
     'carrefour': ScraperCarrefour(),
     'dia': ScraperDia(),
-    'lareina': ScraperLaReina(),
-    'lagallega': ScraperLaGallega()
+    'lareina': ScraperLaReina(),      # ✅ OPTIMIZADO: Solo 9 categorías principales
+    'lagallega': ScraperLaGallega()   # ✅ OPTIMIZADO: Solo 20 categorías principales
 }
 
-print(f"✅ {len(scrapers)} scrapers activos con búsqueda multi-palabra")
+# CACHÉ DE PRODUCTOS EN MEMORIA (se refresca automáticamente)
+# Formato: {supermercado: {timestamp: datetime, productos: []}}
+productos_cache = {}
+CACHE_DURACION_MINUTOS = 30  # Caché válido por 30 minutos
+
+print(f"✅ {len(scrapers)} scrapers activos con caché inteligente")
 
 # ========== ENDPOINT PRINCIPAL: BUSCAR PRODUCTOS ==========
 @app.route('/products', methods=['GET'])
@@ -88,6 +97,7 @@ def buscar_productos():
         print(f"🔍 Búsqueda: '{query}' en todos los supermercados")
     
     try:
+        inicio = time.time()
         todos_los_productos = []
         supermercados_consultados = []
         productos_por_supermercado = {}
@@ -107,49 +117,43 @@ def buscar_productos():
             # Buscar en todos
             scrapers_a_usar = scrapers
         
-        # Buscar en Carrefour
-        if 'carrefour' in scrapers_a_usar:
-            print("  🔍 Buscando en Carrefour...")
-            carrefour_productos = scrapers_a_usar['carrefour'].buscar_productos(query)
-            # Aplicar filtro para búsquedas de múltiples palabras
-            carrefour_productos = buscar_productos_similares(query, carrefour_productos)
-            todos_los_productos.extend(carrefour_productos)
-            supermercados_consultados.append('Carrefour')
-            productos_por_supermercado['Carrefour'] = len(carrefour_productos)
-            print(f"  ✅ Carrefour: {len(carrefour_productos)} productos")
+        # BÚSQUEDA EN PARALELO (SIN LÍMITES)
+        def buscar_en_supermercado(nombre_super, scraper_obj):
+            """Función auxiliar para buscar en un supermercado (ejecutar en thread)"""
+            try:
+                print(f"  🔍 Buscando en {nombre_super}...")
+                productos = scraper_obj.buscar_productos(query)
+                # Aplicar filtro para búsquedas de múltiples palabras
+                productos = buscar_productos_similares(query, productos)
+                print(f"  ✅ {nombre_super}: {len(productos)} productos")
+                return nombre_super, productos
+            except Exception as e:
+                print(f"  ❌ {nombre_super}: Error - {e}")
+                return nombre_super, []
         
-        # Buscar en Día
-        if 'dia' in scrapers_a_usar:
-            print("  🔍 Buscando en Día %...")
-            dia_productos = scrapers_a_usar['dia'].buscar_productos(query)
-            # Aplicar filtro para búsquedas de múltiples palabras
-            dia_productos = buscar_productos_similares(query, dia_productos)
-            todos_los_productos.extend(dia_productos)
-            supermercados_consultados.append('Día %')
-            productos_por_supermercado['Día %'] = len(dia_productos)
-            print(f"  ✅ Día %: {len(dia_productos)} productos")
+        # Mapeo de nombres display
+        NOMBRES_DISPLAY = {
+            'carrefour': 'Carrefour',
+            'dia': 'Día %',
+            'lareina': 'La Reina',
+            'lagallega': 'La Gallega'
+        }
         
-        # Buscar en La Reina
-        if 'lareina' in scrapers_a_usar:
-            print("  🔍 Buscando en La Reina...")
-            lareina_productos = scrapers_a_usar['lareina'].buscar_productos(query)
-            # Aplicar filtro para búsquedas de múltiples palabras
-            lareina_productos = buscar_productos_similares(query, lareina_productos)
-            todos_los_productos.extend(lareina_productos)
-            supermercados_consultados.append('La Reina')
-            productos_por_supermercado['La Reina'] = len(lareina_productos)
-            print(f"  ✅ La Reina: {len(lareina_productos)} productos")
-        
-        # Buscar en La Gallega
-        if 'lagallega' in scrapers_a_usar:
-            print("  🔍 Buscando en La Gallega...")
-            lagallega_productos = scrapers_a_usar['lagallega'].buscar_productos(query)
-            # Aplicar filtro para búsquedas de múltiples palabras
-            lagallega_productos = buscar_productos_similares(query, lagallega_productos)
-            todos_los_productos.extend(lagallega_productos)
-            supermercados_consultados.append('La Gallega')
-            productos_por_supermercado['La Gallega'] = len(lagallega_productos)
-            print(f"  ✅ La Gallega: {len(lagallega_productos)} productos")
+        # Ejecutar búsquedas en paralelo (máx 4 threads)
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            # Crear futures para cada scraper
+            futures = {
+                executor.submit(buscar_en_supermercado, NOMBRES_DISPLAY[key], scraper): key 
+                for key, scraper in scrapers_a_usar.items()
+            }
+            
+            # Recolectar resultados a medida que terminan
+            for future in as_completed(futures):
+                nombre_super, productos = future.result()
+                if productos:
+                    todos_los_productos.extend(productos)
+                    supermercados_consultados.append(nombre_super)
+                    productos_por_supermercado[nombre_super] = len(productos)
         
         # NO ordenar por precio aquí - services.py ya ordenó por relevancia+precio
         # Esto mantiene la priorización de productos con todas las palabras de búsqueda
@@ -167,7 +171,8 @@ def buscar_productos():
                 'imagen': producto.get('imagen', '')  # Agregar imagen
             })
         
-        print(f"✅ {len(resultados)} productos encontrados")
+        tiempo_total = time.time() - inicio
+        print(f"✅ {len(resultados)} productos encontrados en {tiempo_total:.2f}s")
         
         # Respuesta en formato Android
         response = {
@@ -482,6 +487,80 @@ def comparar_lista():
     }), 501
 
 
+# ========== ENDPOINT: SUGERENCIAS DE BÚSQUEDA ==========
+@app.route('/sugerencias', methods=['GET'])
+def obtener_sugerencias():
+    """
+    Retorna sugerencias de búsqueda basadas en el caché
+    Endpoint ultra rápido para autocompletado
+    
+    Parámetros:
+    - query: texto parcial (ej: "pa" → "pan", "pan lactal", "pan rallado")
+    - supermercado: opcional, filtrar por supermercado
+    - limit: máximo de sugerencias (default 10)
+    
+    Ejemplo: /sugerencias?query=pa&supermercado=lagallega&limit=10
+    """
+    try:
+        query = request.args.get('query', '').lower().strip()
+        supermercado = request.args.get('supermercado', '').lower()
+        limit = int(request.args.get('limit', 10))
+        
+        if not query or len(query) < 2:
+            return jsonify({'sugerencias': []})
+        
+        from cache_manager import cache_manager
+        sugerencias = set()
+        
+        # Buscar en caché con palabra completa (word boundary)
+        supermercados_buscar = [supermercado] if supermercado else ['carrefour', 'dia', 'lareina', 'lagallega']
+        
+        for super_key in supermercados_buscar:
+            if super_key not in cache_manager.cache['productos']:
+                continue
+            
+            for nombre_producto in cache_manager.cache['productos'][super_key].keys():
+                nombre_lower = ' ' + nombre_producto.lower() + ' '
+                
+                # Para autocomplete: buscar si el query está al inicio de cualquier palabra
+                # "pa" → "pan", "pan lactal", "bizcochos de pan"
+                # "du" → "dulce de leche", "dulce"
+                if ' ' + query in nombre_lower:
+                    # Agregar el nombre completo como sugerencia
+                    sugerencias.add(nombre_producto)
+                    if len(sugerencias) >= limit * 2:  # Buscar el doble y luego limitar
+                        break
+        
+        # Convertir a lista y ordenar por relevancia
+        sugerencias_lista = sorted(list(sugerencias), key=lambda x: (
+            0 if x.lower().startswith(query) else 1,  # Primero los que empiezan con query
+            len(x),  # Luego los más cortos
+            x.lower()  # Finalmente alfabético
+        ))[:limit]
+        
+        return jsonify({
+            'query': query,
+            'sugerencias': sugerencias_lista,
+            'total': len(sugerencias_lista)
+        })
+        
+    except Exception as e:
+        print(f"❌ Error en sugerencias: {e}")
+        return jsonify({'sugerencias': []}), 500
+
+
+# ========== ENDPOINT: ESTADÍSTICAS DE CACHÉ ==========
+@app.route('/cache/stats', methods=['GET'])
+def cache_stats():
+    """Retorna estadísticas del caché de productos"""
+    from cache_manager import cache_manager
+    stats = cache_manager.obtener_estadisticas()
+    return jsonify({
+        'status': 'success',
+        'cache': stats,
+        'last_update': cache_manager.cache.get('last_update')
+    })
+
 if __name__ == '__main__':
     print("\n" + "="*60)
     print("💰 MI LISTA DE PRECIOS - API SERVER")
@@ -491,6 +570,8 @@ if __name__ == '__main__':
     print("📱 Compatible con app Android Mi Lista de Precios")
     print("🔍 Buscar: /products?query=PRODUCTO&supermercado=SUPER")
     print("🛒 Lista: /lista-compras (GET/POST/DELETE)")
+    print("📊 Caché: /cache/stats")
+    print("⚡ Sistema de caché activado para búsquedas instantáneas")
     print("="*60)
     
     app.run(host='0.0.0.0', port=8000, debug=False)

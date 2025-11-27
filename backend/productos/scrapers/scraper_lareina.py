@@ -2,6 +2,12 @@
 from .base_scraper import BaseScraper
 from typing import List, Dict
 import re
+import sys
+import os
+
+# Importar cache_manager desde backend/
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+from cache_manager import cache_manager
 
 class ScraperLaReina(BaseScraper):
     def __init__(self):
@@ -60,25 +66,150 @@ class ScraperLaReina(BaseScraper):
         ]
         # Total: 212 categorías (9 nivel 1 + 53 nivel 2 + 150 nivel 3)
         
+    def _auto_precargar(self):
+        """Precarga automática del catálogo completo de La Reina"""
+        print("")
+        print("="*80)
+        print("🚀 AUTOPRECARGA: Catálogo de La Reina vacío, iniciando carga completa...")
+        print("="*80)
+        print("⚠️  Este proceso puede tardar 8-12 minutos")
+        print("⚠️  Solo se ejecutará una vez, luego las búsquedas serán instantáneas")
+        print("")
+        
+        # Usar TODAS las 212 categorías para precarga completa
+        todas_categorias = self.categorias
+        
+        print(f"📊 Procesando {len(todas_categorias)} categorías (niveles 1, 2 y 3)...")
+        print("")
+        
+        total_productos = 0
+        productos_vistos = set()
+        from time import sleep
+        
+        for i, cat in enumerate(todas_categorias, 1):
+            try:
+                print(f"[{i}/{len(todas_categorias)}] '{cat}'...", end=" ", flush=True)
+                
+                url_categoria = f"{self.base_url}/productosnl.asp?nl={cat}&TM=cx"
+                soup = self.hacer_request(url_categoria)
+                
+                if not soup:
+                    print("❌ Sin respuesta")
+                    continue
+                
+                productos_html = soup.find_all('li', {'class': 'cuadProd'})
+                productos_guardados = 0
+                
+                for prod_li in productos_html:
+                    try:
+                        texto_completo = prod_li.get_text()
+                        
+                        # Buscar precio
+                        precio_match = re.search(r'\$[\d.,]+', texto_completo)
+                        if not precio_match:
+                            continue
+                        
+                        precio_texto = precio_match.group()
+                        precio = self.limpiar_precio(precio_texto)
+                        
+                        # Extraer nombre (todo el texto antes del precio)
+                        nombre = texto_completo.split(precio_texto)[0].strip()
+                        nombre = re.sub(r'\s+', ' ', nombre)  # Limpiar espacios múltiples
+                        
+                        if not nombre:
+                            continue
+                        
+                        # Evitar duplicados por nombre
+                        producto_key = f"{nombre}_{precio}"
+                        if producto_key in productos_vistos:
+                            continue
+                        productos_vistos.add(producto_key)
+                        
+                        # Buscar imagen
+                        img = prod_li.find('img', {'src': re.compile(r'.*Articulos.*', re.I)})
+                        imagen_url = None
+                        if img:
+                            img_src = img.get('src', '')
+                            if img_src:
+                                if img_src.startswith('http'):
+                                    imagen_url = img_src
+                                elif img_src.startswith('/'):
+                                    imagen_url = f"{self.base_url}{img_src}"
+                                else:
+                                    imagen_url = f"{self.base_url}/{img_src}"
+                        
+                        cache_manager.agregar_producto(
+                            supermercado='lareina',
+                            nombre=nombre.title(),
+                            categoria=cat,
+                            precio=precio,
+                            url=url_categoria,
+                            imagen_url=imagen_url
+                        )
+                        
+                        productos_guardados += 1
+                        total_productos += 1
+                    except:
+                        continue
+                
+                print(f"✅ {productos_guardados} productos")
+                
+                # Guardar cada 20 categorías en lugar de cada 3
+                if i % 20 == 0:
+                    cache_manager.guardar_cache()
+                    print(f"   💾 Caché guardado ({total_productos} productos totales)")
+                
+                sleep(0.3)
+                
+            except Exception as e:
+                print(f"❌ Error: {e}")
+                continue
+        
+        cache_manager.guardar_cache()
+        print("")
+        print("="*80)
+        print(f"✅ AUTOPRECARGA COMPLETADA: {total_productos} productos guardados")
+        print("="*80)
+        print("")
+    
     def buscar_productos(self, query: str) -> List[Dict]:
+        # PASO 1: Buscar en caché
+        print(f"[La Reina] Buscando '{query}'...")
+        productos_cache = cache_manager.buscar_producto('lareina', query)
+        print(f"💾 {len(productos_cache)} productos en caché")
+        
+        # Si tenemos el catálogo completo precargado, usar solo caché
+        total_en_cache = len(cache_manager.cache['productos'].get('lareina', {}))
+        
+        # Si el caché está vacío o muy pequeño, hacer autoprecarga
+        if total_en_cache < 100:
+            print(f"⚠️  Caché insuficiente ({total_en_cache} productos), iniciando autoprecarga...")
+            self._auto_precargar()
+            # Volver a buscar después de precargar
+            productos_cache = cache_manager.buscar_producto('lareina', query)
+            total_en_cache = len(cache_manager.cache['productos'].get('lareina', {}))
+        
+        if total_en_cache > 500:
+            print(f"⚡ Usando caché completo precargado ({total_en_cache} productos totales) - búsqueda instantánea")
+            return self._formatear_productos_cache(productos_cache)
+        
+        if len(productos_cache) >= 20:
+            print(f"⚡ Suficientes en caché, retornando")
+            return self._formatear_productos_cache(productos_cache)
+        
+        # PASO 2: Buscar en web
+        print(f"🌐 Buscando más en web...")
         productos = []
         productos_vistos = set()
         
-        # Palabras importantes del query (filtrar stopwords)
-        palabras = query.lower().split()
-        palabras_importantes = [p for p in palabras if p not in ['de', 'del', 'la', 'el', 'los', 'las', 'un', 'una', 'en']]
-        if not palabras_importantes:
-            palabras_importantes = palabras
+        # OPTIMIZACIÓN: Buscar solo en las 9 categorías principales (nivel 1)
+        categorias_principales = [
+            '01000000', '02000000', '03000000', '04000000', '05000000',
+            '06000000', '07000000', '08000000', '09000000'
+        ]
         
-        # Buscar en todas las categorías con detención temprana
-        # (212 categorías totales, detención al encontrar 50 productos)
-        categorias_a_buscar = self.categorias
-        
-        # Buscar en múltiples categorías
-        for i, categoria in enumerate(categorias_a_buscar):
-            # Stop early si ya tenemos suficientes productos
-            if len(productos) >= 50:
-                break
+        # Buscar en categorías principales solamente
+        for i, categoria in enumerate(categorias_principales):
                 
             url_categoria = f"{self.base_url}/productosnl.asp?nl={categoria}&TM=cx"
             
@@ -136,9 +267,15 @@ class ScraperLaReina(BaseScraper):
                                     'imagen': imagen_url
                                 })
                                 
-                                # Limitar a 50 productos
-                                if len(productos) >= 50:
-                                    return productos
+                                # Guardar en caché
+                                cache_manager.agregar_producto(
+                                    supermercado='lareina',
+                                    nombre=nombre.title(),
+                                    categoria=categoria,
+                                    precio=precio,
+                                    url=url_categoria,
+                                    imagen_url=imagen_url
+                                )
                     
                     except Exception as e:
                         continue
@@ -148,7 +285,38 @@ class ScraperLaReina(BaseScraper):
                 print(f"Error en categoría {categoria}: {e}")
                 continue
         
+        # Guardar caché
+        cache_manager.guardar_cache()
+        
+        print(f"✅ Scraping: {len(productos)} productos nuevos")
+        
+        # COMBINAR con caché
+        if productos_cache:
+            print(f"   Combinando con {len(productos_cache)} del caché...")
+            nombres_scraping = {p['nombre'].lower() for p in productos}
+            
+            for prod_cache in productos_cache:
+                if prod_cache['nombre'].lower() not in nombres_scraping:
+                    productos.append({
+                        'nombre': prod_cache['nombre'],
+                        'precio': prod_cache['precio'],
+                        'supermercado': self.supermercado_nombre,
+                        'imagen': prod_cache.get('imagen_url'),
+                        'url': prod_cache['url']
+                    })
+        
+        print(f"✅ Total retornados: {len(productos)}")
         return productos
+    
+    def _formatear_productos_cache(self, productos_cache):
+        """Convierte productos del caché al formato esperado"""
+        return [{
+            'nombre': p['nombre'],
+            'precio': p['precio'],
+            'supermercado': self.supermercado_nombre,
+            'imagen': p.get('imagen_url'),
+            'url': p['url']
+        } for p in productos_cache]
     
     def limpiar_precio(self, precio_texto: str) -> float:
         # Convertir "$2.779,00" a 2779.00

@@ -2,6 +2,12 @@ from .base_scraper import BaseScraper
 from typing import List, Dict
 import re
 from bs4 import BeautifulSoup
+import sys
+import os
+
+# Importar cache_manager desde backend/
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+from cache_manager import cache_manager
 
 class ScraperLaGallega(BaseScraper):
     """
@@ -120,16 +126,139 @@ class ScraperLaGallega(BaseScraper):
         
         return []
     
+    def _auto_precargar(self):
+        """Precarga automática del catálogo completo de La Gallega"""
+        print("")
+        print("="*80)
+        print("🚀 AUTOPRECARGA: Catálogo de La Gallega vacío, iniciando carga completa...")
+        print("="*80)
+        print("⚠️  Este proceso puede tardar 15-20 minutos (136 categorías)")
+        print("⚠️  Solo se ejecutará una vez, luego las búsquedas serán instantáneas")
+        print("")
+        
+        todas_las_categorias = self.categorias
+        print(f"📊 Procesando {len(todas_las_categorias)} categorías completas...")
+        print("")
+        
+        total_productos = 0
+        from time import sleep
+        
+        for i, categoria in enumerate(todas_las_categorias, 1):
+            try:
+                print(f"[{i}/{len(todas_las_categorias)}] '{categoria}'...", end=" ", flush=True)
+                
+                url_categoria = f"{self.base_url}/productosnl.asp?nl={categoria}&TM=cx"
+                soup = self.hacer_request(url_categoria)
+                
+                if not soup:
+                    print("❌ Sin respuesta")
+                    continue
+                
+                productos_html = soup.find_all('li', {'class': 'cuadProd'})
+                productos_guardados = 0
+                
+                for prod_li in productos_html:
+                    try:
+                        nombre_elem = prod_li.find('span', {'class': 'prodNombre'})
+                        if not nombre_elem or not nombre_elem.get_text(strip=True):
+                            img_fallback = prod_li.find('img')
+                            if img_fallback and img_fallback.get('alt'):
+                                alt = img_fallback.get('alt', '')
+                                nombre = alt.split(' - ', 1)[1] if ' - ' in alt else alt
+                            else:
+                                continue
+                        else:
+                            nombre = nombre_elem.get_text(strip=True)
+                        
+                        if not nombre or nombre in cache_manager.cache['productos']['lagallega']:
+                            continue
+                        
+                        precio_match = re.search(r'\$\s*([\d.,]+)', prod_li.get_text())
+                        if not precio_match:
+                            continue
+                        precio = self.limpiar_precio(precio_match.group(0))
+                        
+                        img_elem = prod_li.find('img')
+                        imagen_url = None
+                        if img_elem and img_elem.get('src'):
+                            img_src = img_elem.get('src')
+                            imagen_url = img_src if img_src.startswith('http') else f"{self.base_url}{img_src if img_src.startswith('/') else '/' + img_src}"
+                        
+                        link = prod_li.find('a', href=True)
+                        producto_url = self.base_url
+                        if link and link.get('href'):
+                            href = link.get('href')
+                            producto_url = href if href.startswith('http') else f"{self.base_url}{href if href.startswith('/') else '/' + href}"
+                        
+                        cache_manager.agregar_producto(
+                            supermercado='lagallega',
+                            nombre=nombre,
+                            categoria=categoria,
+                            precio=precio,
+                            url=producto_url,
+                            imagen_url=imagen_url
+                        )
+                        
+                        productos_guardados += 1
+                        total_productos += 1
+                    except:
+                        continue
+                
+                print(f"✅ {productos_guardados} productos")
+                
+                if i % 10 == 0:
+                    cache_manager.guardar_cache()
+                
+                sleep(0.5)
+                
+            except:
+                print(f"❌ Error")
+                continue
+        
+        cache_manager.guardar_cache()
+        print("")
+        print("="*80)
+        print(f"✅ AUTOPRECARGA COMPLETADA: {total_productos} productos guardados")
+        print("="*80)
+        print("")
+    
     def buscar_productos(self, query: str) -> List[Dict]:
         """
-        Buscar productos en La Gallega.
+        Buscar productos en La Gallega usando caché inteligente.
         
         Estrategia:
-        1. Busca en todas las categorías conocidas
-        2. Filtra productos que contengan las palabras de búsqueda
-        3. Extrae nombre, precio, imagen de cada producto
-        4. Retorna lista de hasta 50 productos
+        1. PRIMERO busca en caché local (instantáneo)
+        2. Si no hay suficientes resultados, busca en web y actualiza caché
+        3. Las imágenes se descargan y optimizan localmente
         """
+        # PASO 1: Buscar en caché
+        print(f"🔍 Buscando '{query}' en La Gallega...")
+        productos_cache = cache_manager.buscar_producto('lagallega', query)
+        
+        print(f"💾 Encontrados {len(productos_cache)} productos en caché")
+        
+        # Si el caché tiene un catálogo completo (>500 productos totales), confiar en él
+        total_en_cache = len(cache_manager.cache['productos'].get('lagallega', {}))
+        print(f"💾 Total productos en caché de La Gallega: {total_en_cache}")
+        
+        # Si el caché está vacío o muy pequeño, hacer autoprecarga
+        if total_en_cache < 100:
+            print(f"⚠️  Caché insuficiente ({total_en_cache} productos), iniciando autoprecarga...")
+            self._auto_precargar()
+            # Volver a buscar después de precargar
+            productos_cache = cache_manager.buscar_producto('lagallega', query)
+            total_en_cache = len(cache_manager.cache['productos'].get('lagallega', {}))
+        
+        if total_en_cache > 500:
+            # Caché completo precargado, usar SOLO caché (búsqueda instantánea)
+            print(f"⚡ Usando caché completo precargado (búsqueda instantánea)")
+            return self._formatear_productos_cache(productos_cache)
+        
+        # Si no hay caché completo, buscar en web (modo antiguo)
+        print(f"🌐 Caché incompleto, buscando en web...")
+        
+        # PASO 2: Buscar en web para complementar
+        print(f"🌐 Buscando más productos en web...")
         productos = []
         productos_vistos = set()
         
@@ -143,18 +272,20 @@ class ScraperLaGallega(BaseScraper):
         if not palabras_query:
             palabras_query = set(query.lower().split())
         
-        print(f"🔍 Buscando '{query}' en La Gallega (palabras clave: {palabras_query})")
+        print(f"   Palabras clave: {palabras_query}")
         print(f"   Total categorías disponibles: {len(self.categorias)}")
         
-        # Buscar en TODAS las categorías disponibles (136 total)
-        # Pero detener cuando tengamos suficientes productos relevantes
-        categorias_a_buscar = self.categorias
-        print(f"   Buscando en hasta {len(categorias_a_buscar)} categorías (detención temprana al encontrar 50 productos)")
+        # Usar solo categorías principales (20) para velocidad
+        categorias_principales = [
+            "02000000", "03000000", "04000000", "05000000", "06000000", 
+            "07000000", "08000000", "09000000", "10000000", "11000000",
+            "12000000", "13000000", "14000000", "15000000", "16000000", 
+            "17000000", "18000000", "19000000", "20000000", "21000000"
+        ]
         
-        for i, nl_code in enumerate(categorias_a_buscar, 1):
-            if len(productos) >= 50:
-                print(f"⚠️ Límite de 50 productos alcanzado, deteniendo búsqueda")
-                break
+        print(f"   Buscando en {len(categorias_principales)} categorías principales")
+        
+        for i, nl_code in enumerate(categorias_principales, 1):
             
             try:
                 url = f"{self.base_url}/productosnl.asp?nl={nl_code}"
@@ -168,20 +299,7 @@ class ScraperLaGallega(BaseScraper):
                 
                 for prod_li in productos_li:
                     try:
-                        # Obtener texto completo del producto
-                        texto_producto = prod_li.get_text().lower()
-                        
-                        # Verificar si contiene todas las palabras de búsqueda
-                        palabras_encontradas = set()
-                        for palabra in palabras_query:
-                            if palabra in texto_producto:
-                                palabras_encontradas.add(palabra)
-                        
-                        # Debe contener todas las palabras importantes
-                        if not palabras_encontradas.issuperset(palabras_query):
-                            continue
-                        
-                        # Extraer nombre
+                        # Extraer nombre PRIMERO
                         # La Gallega usa <div class="desc"> para el nombre
                         nombre_elem = prod_li.find('div', class_='desc')
                         
@@ -203,6 +321,23 @@ class ScraperLaGallega(BaseScraper):
                             nombre = nombre_elem.get_text(strip=True)
                         
                         if not nombre:
+                            continue
+                        
+                        # Verificar si el NOMBRE contiene TODAS las palabras de búsqueda
+                        # Patrón: *palabra1*palabra2*palabra3* (palabras pueden estar separadas)
+                        # "pan" → acepta "pan lactal", "bizcochos de pan", "pan x kg"
+                        # "dulce de leche" → acepta "dulce de leche", "dulce leche condensada"
+                        nombre_lower = ' ' + nombre.lower() + ' '
+                        
+                        # Verificar que TODAS las palabras estén presentes (en cualquier orden)
+                        tiene_todas = True
+                        for palabra in palabras_query:
+                            # Buscar palabra con espacios antes (evita "emPANada")
+                            if ' ' + palabra not in nombre_lower:
+                                tiene_todas = False
+                                break
+                        
+                        if not tiene_todas:
                             continue
                         
                         # Extraer precio
@@ -248,30 +383,80 @@ class ScraperLaGallega(BaseScraper):
                         
                         productos_vistos.add(producto_key)
                         
-                        productos.append({
+                        producto_dict = {
                             'nombre': nombre,
                             'precio': precio,
                             'supermercado': self.supermercado_nombre,
                             'imagen': imagen_url,
-                            'url': producto_url
-                        })
+                            'url': producto_url,
+                            'categoria': nl_code
+                        }
                         
-                        if len(productos) >= 50:
-                            break
+                        productos.append(producto_dict)
+                        
+                        # Guardar en caché (con descarga optimizada de imagen)
+                        cache_manager.agregar_producto(
+                            supermercado='lagallega',
+                            nombre=nombre,
+                            categoria=nl_code,
+                            precio=precio,
+                            url=producto_url,
+                            imagen_url=imagen_url
+                        )
                     
                     except Exception as e:
                         # Error procesando producto individual, continuar con el siguiente
                         continue
                 
-                print(f"  📂 Categoría {i}/{len(categorias_a_buscar)}: {len(productos_li)} productos, {len(productos)} relevantes acumulados")
+                print(f"  📂 Categoría {i}/{len(categorias_principales)}: {len(productos_li)} productos, {len(productos)} relevantes acumulados")
             
             except Exception as e:
                 print(f"  ⚠️ Error en categoría {nl_code}: {str(e)[:100]}")
                 continue
         
-        print(f"✅ Búsqueda completada: {len(productos)} productos encontrados\n")
+        # Guardar caché después de scraping
+        cache_manager.guardar_cache()
+        
+        print(f"✅ Scraping completado: {len(productos)} productos nuevos")
+        
+        # COMBINAR productos del caché con los nuevos del scraping
+        # para evitar duplicados
+        if productos_cache:
+            print(f"   Combinando con {len(productos_cache)} del caché...")
+            nombres_scraping = {p['nombre'].lower() for p in productos}
+            
+            for prod_cache in productos_cache:
+                # Solo agregar si no está ya en los resultados del scraping
+                if prod_cache['nombre'].lower() not in nombres_scraping:
+                    productos.append({
+                        'nombre': prod_cache['nombre'],
+                        'precio': prod_cache['precio'],
+                        'supermercado': self.supermercado_nombre,
+                        'imagen': prod_cache.get('imagen_url'),
+                        'url': prod_cache['url']
+                    })
+        
+        print(f"✅ Total productos retornados: {len(productos)}\n")
         
         return productos
+    
+    def _formatear_productos_cache(self, productos_cache):
+        """Convierte productos del caché al formato esperado por la API"""
+        productos_formateados = []
+        
+        for prod in productos_cache:
+            # Usar directamente la URL original de la imagen
+            # Android + Glide se encargan de descargar y cachear
+            
+            productos_formateados.append({
+                'nombre': prod['nombre'],
+                'precio': prod['precio'],
+                'supermercado': self.supermercado_nombre,
+                'imagen': prod.get('imagen_url'),  # URL directa
+                'url': prod['url']
+            })
+        
+        return productos_formateados
     
     def limpiar_precio(self, precio_texto: str) -> float:
         """

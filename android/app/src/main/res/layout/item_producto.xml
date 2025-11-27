@@ -61,7 +61,7 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:lineSpacingExtra="2dp"
-            android:maxLines="2"
+            android:maxLines="3"
             android:ellipsize="end"
             app:layout_constraintEnd_toStartOf="@id/containerPrecio"
             app:layout_constraintStart_toEndOf="@id/ivProducto"

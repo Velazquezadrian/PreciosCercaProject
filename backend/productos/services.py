@@ -110,14 +110,17 @@ def buscar_productos_similares(query: str, productos: List[Dict]) -> List[Dict]:
     for producto in productos:
         nombre_original = producto['nombre'].lower()
         
-        # Contar cuántas palabras de la búsqueda están en el producto (palabras completas)
+        # Contar cuántas palabras de la búsqueda están en el producto
+        # Busca con límites de palabra más flexibles
+        # "pan" encuentra: "PAN lactal", "bizcochos de PAN", "PAN-rallado", "PAN."
+        # pero NO "emPANada" ni "camPANa"
         palabras_encontradas = 0
         for palabra in palabras_query:
-            # Buscar palabra completa: debe estar rodeada de espacios, puntuación o inicio/fin de string
-            # Esto evita que "pan" coincida con "Panacom", "Carpano" o "Campana"
-            # Dividir el nombre en palabras y buscar coincidencia exacta
-            palabras_producto = re.findall(r'\b\w+\b', nombre_original)
-            if palabra in palabras_producto:
+            # Buscar palabra con límites: inicio, espacio, guion, punto, coma, "x"
+            # (?:^|\\s|-|x) = inicio de string O espacio O guion O "x"  
+            # (?:\\s|-|$|,|\\.|x|\\(|\\)) = espacio O guion O fin O coma O punto O "x" O paréntesis
+            pattern = r'(?:^|\s|-|x)' + re.escape(palabra) + r'(?:\s|-|$|,|\.|x|\(|\))'
+            if re.search(pattern, nombre_original):
                 palabras_encontradas += 1
         
         # Solo incluir si tiene AL MENOS UNA palabra de la búsqueda
