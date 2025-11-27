@@ -11,10 +11,9 @@ import java.util.concurrent.TimeUnit
  */
 object ApiClient {
     
-    // URL base del backend Flask (ajustar según tu configuración)
-    // Emulador: 10.0.2.2
-    // Dispositivo físico: 192.168.100.3 (IP de tu PC en la red local)
-    private const val BASE_URL = "http://192.168.100.3:8000/"
+    // URL base del backend Flask en Railway (producción)
+    // Backend deployado en Railway con autoprecarga y 5,280 productos
+    private const val BASE_URL = "https://web-production-a6410.up.railway.app/"
     
     // Cliente HTTP con logging para debugging
     private val okHttpClient = OkHttpClient.Builder()
