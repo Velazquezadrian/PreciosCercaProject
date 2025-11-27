@@ -18,7 +18,7 @@
 - **Backend**: Flask 3.0 + Python 3.8+ (port 8000)
 - **Android**: Kotlin + Material3 + Gradle 8.12 (minSdk 24, targetSdk 34)
 - **Build**: Android Studio JBR, no Gradle daemon issues
-
+hora si 
 ## Architecture
 
 ### Backend (Flask API)
@@ -134,7 +134,7 @@ Descuento: #F44336 (Red)
    - Title: "Mi Lista de Compra" (24sp bold white)
    - Subtitle: "Creá tu lista y guardala" (14sp, #CCFFFFFF)
 
-2. **btnConsultaPrecios** (Bottom):
+2. **btnConsultaPrecios** (Bottom):h
    - Background: @color/accent (#FF9800)
    - Icon: 🔍 (48sp)
    - Title: "Buscar Producto" (24sp bold white)
