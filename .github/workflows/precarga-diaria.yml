@@ -1,0 +1,39 @@
+name: Precarga Diaria de Productos
+
+on:
+  schedule:
+    # Ejecutar todos los días a las 8:00 AM (UTC-3 = 11:00 UTC)
+    - cron: '0 11 * * *'
+  workflow_dispatch:  # Permite ejecutar manualmente desde GitHub
+
+jobs:
+  precarga:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Instalar dependencias
+      run: |
+        pip install -r requirements.txt
+        
+    - name: Ejecutar precarga completa
+      run: |
+        cd backend
+        python cron_precarga.py
+        
+    - name: Commit y push del caché actualizado
+      run: |
+        git config --global user.name 'GitHub Actions Bot'
+        git config --global user.email 'actions@github.com'
+        git add backend/productos_cache.json
+        git diff --staged --quiet || git commit -m "🤖 Actualización automática del caché de productos - $(date +'%Y-%m-%d %H:%M')"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
