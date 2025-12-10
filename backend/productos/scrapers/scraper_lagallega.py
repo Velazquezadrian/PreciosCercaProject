@@ -279,11 +279,11 @@ class ScraperLaGallega(BaseScraper):
         print(f"   Palabras clave: {palabras_query}")
         print(f"   Total categorías disponibles: {len(self.categorias)}")
         
-        # Usar solo primeras 30 categorías para evitar timeout en Railway
-        # (Railway tiene timeout de proxy ~60s, no podemos buscar en 136)
-        categorias_a_buscar = self.categorias[:30]
+        # Usar TODAS las categorías para búsqueda completa
+        # La paginación en la API evita timeout al cliente
+        categorias_a_buscar = self.categorias
         
-        print(f"   Buscando en {len(categorias_a_buscar)} categorías (limite por timeout)")
+        print(f"   Buscando en {len(categorias_a_buscar)} categorías")
         
         for i, nl_code in enumerate(categorias_a_buscar, 1):
             

@@ -73,23 +73,37 @@ def buscar_productos():
     Parámetros GET:
     - query (obligatorio): término de búsqueda (ej: "leche", "pan", "dulce de leche")
     - supermercado (opcional): filtrar por "carrefour", "dia" o "lareina"
+    - page (opcional): número de página (default: 1)
+    - limit (opcional): productos por página (default: 30, max: 100)
     
     Ejemplos:
-    - /products?query=leche&supermercado=carrefour  (solo Carrefour)
-    - /products?query=pan&supermercado=dia          (solo Día)
-    - /products?query=aceite                        (todos los supers)
+    - /products?query=leche&supermercado=carrefour  (solo Carrefour, página 1, 30 productos)
+    - /products?query=pan&page=2&limit=30           (todos, página 2, 30 productos)
+    - /products?query=aceite&limit=50                (todos, página 1, 50 productos)
     
     Retorna JSON con productos ordenados por precio:
     {
         "query": "leche",
-        "total_encontrados": 50,
+        "total_encontrados": 150,
+        "page": 1,
+        "limit": 30,
+        "total_pages": 5,
+        "has_more": true,
         "supermercados_consultados": ["Carrefour"],
-        "productos_por_supermercado": {"Carrefour": 50},
+        "productos_por_supermercado": {"Carrefour": 150},
         "resultados": [...]
     }
     """
     query = request.args.get('query', request.args.get('q', 'leche'))
     filtro_super = request.args.get('supermercado', '').lower()
+    
+    # Parámetros de paginación
+    try:
+        page = int(request.args.get('page', 1))
+        limit = min(int(request.args.get('limit', 30)), 100)  # Max 100 por página
+    except ValueError:
+        page = 1
+        limit = 30
     
     if filtro_super:
         print(f"🔍 Búsqueda: '{query}' en {filtro_super.upper()}")
@@ -174,13 +188,25 @@ def buscar_productos():
         tiempo_total = time.time() - inicio
         print(f"✅ {len(resultados)} productos encontrados en {tiempo_total:.2f}s")
         
-        # Respuesta en formato Android
+        # PAGINACIÓN: calcular offset y slice
+        total_productos = len(resultados)
+        total_pages = (total_productos + limit - 1) // limit  # Redondeo hacia arriba
+        offset = (page - 1) * limit
+        resultados_paginados = resultados[offset:offset + limit]
+        
+        print(f"📄 Página {page}/{total_pages} - Mostrando {len(resultados_paginados)} productos")
+        
+        # Respuesta en formato Android con paginación
         response = {
             'query': query,
-            'total_encontrados': len(resultados),
+            'total_encontrados': total_productos,
+            'page': page,
+            'limit': limit,
+            'total_pages': total_pages,
+            'has_more': page < total_pages,
             'supermercados_consultados': supermercados_consultados,
             'productos_por_supermercado': productos_por_supermercado,
-            'resultados': resultados
+            'resultados': resultados_paginados
         }
         
         return jsonify(response)
