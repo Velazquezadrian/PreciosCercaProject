@@ -249,10 +249,14 @@ class ScraperLaGallega(BaseScraper):
             productos_cache = cache_manager.buscar_producto('lagallega', query)
             total_en_cache = len(cache_manager.cache['productos'].get('lagallega', {}))
         
-        if total_en_cache > 500:
-            # Caché completo precargado, usar SOLO caché (búsqueda instantánea)
+        # ESTRATEGIA: Si hay pocos resultados en caché, buscar también en web
+        # Umbral: menos de 30 productos → complementar con scraping web
+        if total_en_cache > 500 and len(productos_cache) >= 30:
+            # Caché completo precargado con suficientes resultados, usar SOLO caché (búsqueda instantánea)
             print(f"⚡ Usando caché completo precargado (búsqueda instantánea)")
             return self._formatear_productos_cache(productos_cache)
+        elif total_en_cache > 500:
+            print(f"⚠️  Solo {len(productos_cache)} resultados en caché, complementando con búsqueda web...")
         
         # Si no hay caché completo, buscar en web (modo antiguo)
         print(f"🌐 Caché incompleto, buscando en web...")
@@ -275,17 +279,12 @@ class ScraperLaGallega(BaseScraper):
         print(f"   Palabras clave: {palabras_query}")
         print(f"   Total categorías disponibles: {len(self.categorias)}")
         
-        # Usar solo categorías principales (20) para velocidad
-        categorias_principales = [
-            "02000000", "03000000", "04000000", "05000000", "06000000", 
-            "07000000", "08000000", "09000000", "10000000", "11000000",
-            "12000000", "13000000", "14000000", "15000000", "16000000", 
-            "17000000", "18000000", "19000000", "20000000", "21000000"
-        ]
+        # Usar TODAS las categorías para búsqueda completa
+        categorias_a_buscar = self.categorias
         
-        print(f"   Buscando en {len(categorias_principales)} categorías principales")
+        print(f"   Buscando en {len(categorias_a_buscar)} categorías")
         
-        for i, nl_code in enumerate(categorias_principales, 1):
+        for i, nl_code in enumerate(categorias_a_buscar, 1):
             
             try:
                 url = f"{self.base_url}/productosnl.asp?nl={nl_code}"
@@ -408,7 +407,7 @@ class ScraperLaGallega(BaseScraper):
                         # Error procesando producto individual, continuar con el siguiente
                         continue
                 
-                print(f"  📂 Categoría {i}/{len(categorias_principales)}: {len(productos_li)} productos, {len(productos)} relevantes acumulados")
+                print(f"  📂 Categoría {i}/{len(categorias_a_buscar)}: {len(productos_li)} productos, {len(productos)} relevantes acumulados")
             
             except Exception as e:
                 print(f"  ⚠️ Error en categoría {nl_code}: {str(e)[:100]}")
