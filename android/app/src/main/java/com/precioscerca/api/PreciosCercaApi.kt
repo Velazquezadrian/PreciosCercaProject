@@ -20,6 +20,18 @@ interface PreciosCercaApi {
     ): Call<BusquedaApiResponse>
     
     /**
+     * Buscar productos con paginación
+     * GET /products?query=leche&supermercado=carrefour&page=1&limit=30
+     */
+    @GET("products")
+    fun buscarProductosPaginado(
+        @Query("query") query: String,
+        @Query("supermercado") supermercado: String? = null,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 30
+    ): Call<BusquedaApiResponse>
+    
+    /**
      * Buscar productos cercanos según ubicación del usuario
      * GET /products-cercanos?query=leche&lat=-34.603&lng=-58.381&radio=10
      */
@@ -101,6 +113,12 @@ data class BusquedaApiResponse(
     val supermercados_consultados: List<String>,
     val productos_por_supermercado: Map<String, Int>,
     val resultados: List<ProductoResultado>,
+    // Paginación
+    val page: Int? = null,
+    val limit: Int? = null,
+    val total_pages: Int? = null,
+    val has_more: Boolean? = null,
+    // Búsqueda cercana
     val ciudad_detectada: String? = null,  // Solo en búsqueda cercana
     val distancia_ciudad_km: Double? = null,  // Solo en búsqueda cercana
     val radio_km: Double? = null,  // Solo en búsqueda cercana

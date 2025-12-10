@@ -128,6 +128,17 @@ class ProductAdapter(
         productos = nuevosProductos
         notifyDataSetChanged()
     }
+    
+    fun agregarProductos(nuevosProductos: List<ProductoResultado>) {
+        val oldSize = productos.size
+        productos = productos + nuevosProductos
+        notifyItemRangeInserted(oldSize, nuevosProductos.size)
+    }
+    
+    fun limpiarProductos() {
+        productos = emptyList()
+        notifyDataSetChanged()
+    }
 
     private fun formatearPrecio(precio: Double): String {
         return String.format("$%.2f", precio)

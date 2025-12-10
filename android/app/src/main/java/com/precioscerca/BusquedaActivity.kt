@@ -52,6 +52,12 @@ class BusquedaActivity : AppCompatActivity() {
     private var totalAcumulado: Double = 0.0
     private var modo: String = "CONSULTA" // LISTA o CONSULTA
     
+    // Paginación
+    private var currentPage = 1
+    private var isLoading = false
+    private var hasMorePages = false
+    private var currentQuery = ""
+    
     // Handler para debouncing del autocomplete
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
@@ -98,8 +104,29 @@ class BusquedaActivity : AppCompatActivity() {
                 actualizarTotal(precio)
             }
         )
-        recyclerProductos.layoutManager = GridLayoutManager(this, 2)
+        recyclerProductos.layoutManager = LinearLayoutManager(this)
         recyclerProductos.adapter = productAdapter
+        
+        // Agregar scroll listener para paginación infinita
+        recyclerProductos.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                
+                // Si llegó al final y hay más páginas
+                if (!isLoading && hasMorePages) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount 
+                        && firstVisibleItemPosition >= 0) {
+                        // Cargar siguiente página
+                        cargarSiguientePagina()
+                    }
+                }
+            }
+        })
         
         // Configurar RecyclerView de sugerencias (lista vertical)
         sugerenciasAdapter = SugerenciasAdapter(emptyList()) { sugerenciaSeleccionada ->
@@ -127,6 +154,8 @@ class BusquedaActivity : AppCompatActivity() {
     private fun setupListeners() {
         // Botón de búsqueda
         btnBuscar.setOnClickListener {
+            // Ocultar sugerencias y cancelar búsquedas pendientes
+            searchRunnable?.let { searchHandler.removeCallbacks(it) }
             recyclerSugerencias.visibility = View.GONE
             realizarBusqueda()
         }
@@ -134,6 +163,8 @@ class BusquedaActivity : AppCompatActivity() {
         // Enter en el campo de texto
         etBusqueda.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                // Ocultar sugerencias y cancelar búsquedas pendientes
+                searchRunnable?.let { searchHandler.removeCallbacks(it) }
                 recyclerSugerencias.visibility = View.GONE
                 realizarBusqueda()
                 true
@@ -209,58 +240,109 @@ class BusquedaActivity : AppCompatActivity() {
             return
         }
         
-        buscarProductos(query)
+        // Resetear paginación para nueva búsqueda
+        currentPage = 1
+        currentQuery = query
+        productAdapter.limpiarProductos()
+        
+        buscarProductos(query, currentPage)
     }
     
-    private fun buscarProductos(query: String) {
-        mostrarCarga(true)
+    private fun cargarSiguientePagina() {
+        if (currentQuery.isNotEmpty() && !isLoading && hasMorePages) {
+            currentPage++
+            buscarProductos(currentQuery, currentPage)
+        }
+    }
+    
+    private fun buscarProductos(query: String, page: Int = 1) {
+        isLoading = true
+        mostrarCarga(true, page > 1)
         
-        // Buscar productos con filtro de supermercado
-        ApiClient.api.buscarProductos(query, supermercadoId).enqueue(object : Callback<BusquedaApiResponse> {
+        // Buscar productos con filtro de supermercado y paginación
+        ApiClient.api.buscarProductosPaginado(query, supermercadoId, page, 30).enqueue(object : Callback<BusquedaApiResponse> {
             override fun onResponse(
                 call: Call<BusquedaApiResponse>,
                 response: Response<BusquedaApiResponse>
             ) {
-                mostrarCarga(false)
+                isLoading = false
+                mostrarCarga(false, false)
                 
                 if (response.isSuccessful) {
                     val busqueda = response.body()
                     if (busqueda != null && busqueda.resultados.isNotEmpty()) {
-                        productAdapter.actualizarProductos(busqueda.resultados)
+                        // Actualizar flag de más páginas
+                        hasMorePages = busqueda.has_more ?: false
+                        
+                        if (page == 1) {
+                            // Primera página: reemplazar productos
+                            productAdapter.actualizarProductos(busqueda.resultados)
+                        } else {
+                            // Páginas siguientes: agregar productos
+                            productAdapter.agregarProductos(busqueda.resultados)
+                        }
+                        
                         recyclerProductos.visibility = View.VISIBLE
                         tvEstado.visibility = View.GONE
+                        
+                        // Mostrar toast con info de paginación
+                        if (page > 1) {
+                            Toast.makeText(
+                                this@BusquedaActivity,
+                                "Mostrando ${busqueda.resultados.size} productos más",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
-                        recyclerProductos.visibility = View.GONE
-                        tvEstado.text = "No se encontraron productos"
-                        tvEstado.visibility = View.VISIBLE
+                        if (page == 1) {
+                            recyclerProductos.visibility = View.GONE
+                            tvEstado.text = "No se encontraron productos"
+                            tvEstado.visibility = View.VISIBLE
+                        }
+                        hasMorePages = false
                     }
                 } else {
-                    Toast.makeText(
-                        this@BusquedaActivity,
-                        "Error en la búsqueda",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    hasMorePages = false
+                    if (page == 1) {
+                        Toast.makeText(
+                            this@BusquedaActivity,
+                            "Error en la búsqueda",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
             
             override fun onFailure(call: Call<BusquedaApiResponse>, t: Throwable) {
-                mostrarCarga(false)
-                Toast.makeText(
-                    this@BusquedaActivity,
-                    "Error de conexión",
-                    Toast.LENGTH_SHORT
-                ).show()
+                isLoading = false
+                mostrarCarga(false, false)
+                hasMorePages = false
+                
+                if (page == 1) {
+                    Toast.makeText(
+                        this@BusquedaActivity,
+                        "Error de conexión: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         })
     }
     
-    private fun mostrarCarga(mostrar: Boolean) {
+    private fun mostrarCarga(mostrar: Boolean, esPaginacion: Boolean = false) {
         if (mostrar) {
-            progressBar.visibility = View.VISIBLE
-            tvEstado.text = "Buscando productos..."
-            tvEstado.visibility = View.VISIBLE
-            btnBuscar.isEnabled = false
-            recyclerProductos.visibility = View.GONE
+            if (esPaginacion) {
+                // Mostrar loading discreto para paginación
+                tvEstado.text = "Cargando más productos..."
+                tvEstado.visibility = View.VISIBLE
+            } else {
+                // Loading normal para primera búsqueda
+                progressBar.visibility = View.VISIBLE
+                tvEstado.text = "Buscando productos..."
+                tvEstado.visibility = View.VISIBLE
+                btnBuscar.isEnabled = false
+                recyclerProductos.visibility = View.GONE
+            }
         } else {
             progressBar.visibility = View.GONE
             tvEstado.visibility = View.GONE
