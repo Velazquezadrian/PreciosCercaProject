@@ -27,7 +27,8 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 from functools import lru_cache
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time as datetime_time
+import pytz
 
 # Agregar el directorio backend al path de Python
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -64,6 +65,27 @@ CACHE_DURACION_MINUTOS = 30  # Caché válido por 30 minutos
 
 print(f"✅ {len(scrapers)} scrapers activos con caché inteligente")
 
+# ========== FUNCIÓN HELPER: HORARIO DE MANTENIMIENTO ==========
+def es_horario_mantenimiento():
+    """
+    Verifica si el servidor está en horario de mantenimiento (precarga diaria).
+    Horario: 7:30 AM - 8:30 AM (hora Argentina UTC-3)
+    """
+    try:
+        # Zona horaria de Argentina
+        tz_argentina = pytz.timezone('America/Argentina/Buenos_Aires')
+        ahora = datetime.now(tz_argentina)
+        hora_actual = ahora.time()
+        
+        # Ventana de mantenimiento: 7:30 - 8:30 AM
+        mantenimiento_inicio = datetime_time(7, 30)
+        mantenimiento_fin = datetime_time(8, 30)
+        
+        return mantenimiento_inicio <= hora_actual <= mantenimiento_fin
+    except Exception as e:
+        print(f"⚠️ Error verificando horario de mantenimiento: {e}")
+        return False  # En caso de error, permitir acceso normal
+
 # ========== ENDPOINT PRINCIPAL: BUSCAR PRODUCTOS ==========
 @app.route('/products', methods=['GET'])
 def buscar_productos():
@@ -94,6 +116,15 @@ def buscar_productos():
         "resultados": [...]
     }
     """
+    # ✅ VERIFICAR HORARIO DE MANTENIMIENTO (7:30-8:30 AM)
+    if es_horario_mantenimiento():
+        return jsonify({
+            'maintenance': True,
+            'message': 'El servidor está actualizando el catálogo de productos (8:00 AM). Por favor intenta de nuevo en unos minutos.',
+            'retry_after': '8:30 AM',
+            'status': 'maintenance'
+        }), 503
+    
     query = request.args.get('query', request.args.get('q', 'leche'))
     filtro_super = request.args.get('supermercado', '').lower()
     

@@ -270,6 +270,18 @@ class BusquedaActivity : AppCompatActivity() {
                 
                 if (response.isSuccessful) {
                     val busqueda = response.body()
+                    
+                    // ✅ VERIFICAR SI ESTÁ EN MANTENIMIENTO
+                    if (busqueda?.maintenance == true) {
+                        hasMorePages = false
+                        if (page == 1) {
+                            recyclerProductos.visibility = View.GONE
+                            tvEstado.text = "🔧 Servidor en mantenimiento (8:00 AM)\n\nActualizando catálogo de productos.\nIntenta de nuevo en unos minutos."
+                            tvEstado.visibility = View.VISIBLE
+                        }
+                        return
+                    }
+                    
                     if (busqueda != null && busqueda.resultados.isNotEmpty()) {
                         // Actualizar flag de más páginas
                         hasMorePages = busqueda.has_more ?: false
@@ -300,6 +312,14 @@ class BusquedaActivity : AppCompatActivity() {
                             tvEstado.visibility = View.VISIBLE
                         }
                         hasMorePages = false
+                    }
+                } else if (response.code() == 503) {
+                    // Servidor en mantenimiento
+                    hasMorePages = false
+                    if (page == 1) {
+                        recyclerProductos.visibility = View.GONE
+                        tvEstado.text = "🔧 Servidor en mantenimiento (8:00 AM)\n\nActualizando catálogo de productos.\nIntenta de nuevo en unos minutos."
+                        tvEstado.visibility = View.VISIBLE
                     }
                 } else {
                     hasMorePages = false

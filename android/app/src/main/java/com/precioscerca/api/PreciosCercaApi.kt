@@ -118,6 +118,10 @@ data class BusquedaApiResponse(
     val limit: Int? = null,
     val total_pages: Int? = null,
     val has_more: Boolean? = null,
+    // Mantenimiento
+    val maintenance: Boolean? = null,
+    val status: String? = null,
+    val retry_after: String? = null,
     // Búsqueda cercana
     val ciudad_detectada: String? = null,  // Solo en búsqueda cercana
     val distancia_ciudad_km: Double? = null,  // Solo en búsqueda cercana
