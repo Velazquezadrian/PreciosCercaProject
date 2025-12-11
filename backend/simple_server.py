@@ -40,9 +40,10 @@ try:
     from productos.scrapers.scraper_dia import ScraperDia
     from productos.scrapers.scraper_lareina import ScraperLaReina
     from productos.scrapers.scraper_lagallega import ScraperLaGallega
+    from productos.scrapers.scraper_coto import ScraperCoto
     from lista_compras import lista_compras_global
     from productos.services import buscar_productos_similares
-    print("✅ Scrapers cargados: Carrefour, Día %, La Reina, La Gallega")
+    print("✅ Scrapers cargados: Carrefour, Día %, La Reina, La Gallega, Coto")
     print("✅ Sistema de lista de compras inicializado")
 except Exception as e:
     print(f"❌ Error cargando scrapers: {e}")
@@ -55,7 +56,8 @@ scrapers = {
     'carrefour': ScraperCarrefour(),
     'dia': ScraperDia(),
     'lareina': ScraperLaReina(),      # ✅ OPTIMIZADO: Solo 9 categorías principales
-    'lagallega': ScraperLaGallega()   # ✅ OPTIMIZADO: Solo 20 categorías principales
+    'lagallega': ScraperLaGallega(),  # ✅ OPTIMIZADO: Solo 20 categorías principales
+    'coto': ScraperCoto()             # ✅ HTML Scraping
 }
 
 # CACHÉ DE PRODUCTOS EN MEMORIA (se refresca automáticamente)
