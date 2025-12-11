@@ -39,6 +39,7 @@ class SeleccionSuperActivity : AppCompatActivity() {
         val cardDia = findViewById<CardView>(R.id.cardDia)
         val cardLaReina = findViewById<CardView>(R.id.cardLaReina)
         val cardLaGallega = findViewById<CardView>(R.id.cardLaGallega)
+        val cardCoto = findViewById<CardView>(R.id.cardCoto)
         
         cardCarrefour.setOnClickListener {
             abrirBusqueda("carrefour", "Carrefour")
@@ -54,6 +55,10 @@ class SeleccionSuperActivity : AppCompatActivity() {
         
         cardLaGallega.setOnClickListener {
             abrirBusqueda("lagallega", "La Gallega")
+        }
+        
+        cardCoto.setOnClickListener {
+            abrirBusqueda("coto", "Coto")
         }
     }
     

@@ -18,7 +18,7 @@
         android:layout_marginBottom="24dp"
         android:layout_gravity="center_horizontal" />
 
-    <!-- Grid de 2 columnas -->
+    <!-- Grid de 2 columnas (ahora con 3 filas) -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <!-- Fila 1: Carrefour y Día -->
+        <!-- Columna 1: Carrefour, La Reina, Coto -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -111,9 +111,48 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Card Coto -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardCoto"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="#E30613"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/logo_coto"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="Logo Coto" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Coto"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:layout_marginTop="12dp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
 
-        <!-- Fila 2: Día y La Gallega -->
+        <!-- Columna 2: Día, La Gallega -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
