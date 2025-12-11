@@ -51,13 +51,13 @@ except Exception as e:
 
 app = Flask(__name__)
 
-# Inicializar scrapers disponibles (TODOS OPTIMIZADOS)
+# Inicializar scrapers disponibles (TODOS OPTIMIZADOS + Coto)
 scrapers = {
     'carrefour': ScraperCarrefour(),
     'dia': ScraperDia(),
     'lareina': ScraperLaReina(),      # ✅ OPTIMIZADO: Solo 9 categorías principales
     'lagallega': ScraperLaGallega(),  # ✅ OPTIMIZADO: Solo 20 categorías principales
-    'coto': ScraperCoto()             # ✅ HTML Scraping
+    'coto': ScraperCoto()             # ✅ HTML Scraping - Coto Digital
 }
 
 # CACHÉ DE PRODUCTOS EN MEMORIA (se refresca automáticamente)
