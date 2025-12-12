@@ -1,6 +1,16 @@
 # Servicio para normalizar y consolidar resultados de múltiples scrapers
 from typing import List, Dict
 import re
+import unicodedata
+
+def remover_acentos(texto: str) -> str:
+    """
+    Elimina acentos y diacríticos de un texto.
+    'azúcar' -> 'azucar', 'café' -> 'cafe'
+    """
+    texto_nfd = unicodedata.normalize('NFD', texto)
+    texto_sin_acentos = ''.join(char for char in texto_nfd if unicodedata.category(char) != 'Mn')
+    return texto_sin_acentos
 
 class NormalizadorProductos:
     def __init__(self):
@@ -101,14 +111,18 @@ def buscar_productos_similares(query: str, productos: List[Dict]) -> List[Dict]:
         Lista filtrada y ordenada: primero por coincidencia completa, luego alfabético
     """
     query_lower = query.lower().strip()
-    palabras_query = query_lower.split()
+    # ✅ REMOVER ACENTOS de la búsqueda: "azúcar" -> "azucar"
+    query_sin_acentos = remover_acentos(query_lower)
+    palabras_query = query_sin_acentos.split()
     productos_con_coincidencia = []
     
-    print(f"[Filtro] Query: '{query}' | Palabras a buscar: {palabras_query}")
+    print(f"[Filtro] Query: '{query}' | Sin acentos: '{query_sin_acentos}' | Palabras: {palabras_query}")
     print(f"[Filtro] Total productos a filtrar: {len(productos)}")
     
     for producto in productos:
         nombre_original = producto['nombre'].lower()
+        # ✅ REMOVER ACENTOS del nombre: "Azúcar Ledesma" -> "azucar ledesma"
+        nombre_sin_acentos = remover_acentos(nombre_original)
         
         # Contar cuántas palabras de la búsqueda están en el producto
         # Busca con límites de palabra más flexibles
@@ -120,7 +134,8 @@ def buscar_productos_similares(query: str, productos: List[Dict]) -> List[Dict]:
             # (?:^|\\s|-|x) = inicio de string O espacio O guion O "x"  
             # (?:\\s|-|$|,|\\.|x|\\(|\\)) = espacio O guion O fin O coma O punto O "x" O paréntesis
             pattern = r'(?:^|\s|-|x)' + re.escape(palabra) + r'(?:\s|-|$|,|\.|x|\(|\))'
-            if re.search(pattern, nombre_original):
+            # ✅ BUSCAR en nombre SIN ACENTOS
+            if re.search(pattern, nombre_sin_acentos):
                 palabras_encontradas += 1
         
         # Solo incluir si tiene AL MENOS UNA palabra de la búsqueda
