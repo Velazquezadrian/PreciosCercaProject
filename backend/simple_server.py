@@ -183,7 +183,8 @@ def buscar_productos():
             'carrefour': 'Carrefour',
             'dia': 'Día %',
             'lareina': 'La Reina',
-            'lagallega': 'La Gallega'
+            'lagallega': 'La Gallega',
+            'coto': 'Coto'
         }
         
         # Ejecutar búsquedas en paralelo (máx 4 threads)
