@@ -40,7 +40,7 @@ try:
     from productos.scrapers.scraper_dia import ScraperDia
     from productos.scrapers.scraper_lareina import ScraperLaReina
     from productos.scrapers.scraper_lagallega import ScraperLaGallega
-    from productos.scrapers.scraper_coto import ScraperCoto
+    from productos.scrapers.scraper_coto import ScraperCoto  # ✅ API JSON (Oracle Endeca)
     from lista_compras import lista_compras_global
     from productos.services import buscar_productos_similares
     print("✅ Scrapers cargados: Carrefour, Día %, La Reina, La Gallega, Coto")
@@ -51,13 +51,13 @@ except Exception as e:
 
 app = Flask(__name__)
 
-# Inicializar scrapers disponibles (TODOS OPTIMIZADOS + Coto)
+# Inicializar scrapers disponibles (TODOS OPTIMIZADOS + API JSON)
 scrapers = {
     'carrefour': ScraperCarrefour(),
     'dia': ScraperDia(),
     'lareina': ScraperLaReina(),      # ✅ OPTIMIZADO: Solo 9 categorías principales
     'lagallega': ScraperLaGallega(),  # ✅ OPTIMIZADO: Solo 20 categorías principales
-    'coto': ScraperCoto()             # ✅ HTML Scraping - Coto Digital
+    'coto': ScraperCoto()              # ✅ API JSON: Oracle Endeca con ?format=json
 }
 
 # CACHÉ DE PRODUCTOS EN MEMORIA (se refresca automáticamente)

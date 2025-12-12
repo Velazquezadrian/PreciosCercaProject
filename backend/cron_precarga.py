@@ -24,7 +24,7 @@ from productos.scrapers.scraper_carrefour import ScraperCarrefour
 from productos.scrapers.scraper_dia import ScraperDia
 from productos.scrapers.scraper_lareina import ScraperLaReina
 from productos.scrapers.scraper_lagallega import ScraperLaGallega
-from productos.scrapers.scraper_coto import ScraperCoto
+from productos.scrapers.scraper_coto import ScraperCoto  # ✅ API JSON funcional
 from cache_manager import cache_manager
 
 def ejecutar_precarga_completa():
@@ -45,7 +45,7 @@ def ejecutar_precarga_completa():
         'Día %': ScraperDia(),
         'La Reina': ScraperLaReina(),
         'La Gallega': ScraperLaGallega(),
-        'Coto': ScraperCoto()
+        'Coto': ScraperCoto()  # ✅ API JSON
     }
     
     resultados = {}

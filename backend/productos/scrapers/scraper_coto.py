@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Scraper para Coto Digital
-Utiliza HTML scraping con BeautifulSoup
+Utiliza API JSON (Oracle Endeca) - FUNCIONAL
 """
 
 from .base_scraper import BaseScraper
 from typing import List, Dict
-from bs4 import BeautifulSoup
 import json
 import sys
 import os
@@ -21,8 +21,38 @@ class ScraperCoto(BaseScraper):
             base_url="https://www.cotodigital.com.ar",
             supermercado_nombre="Coto"
         )
+        # API JSON de Coto (Oracle Endeca)
         self.search_url = "https://www.cotodigital.com.ar/sitios/cdigi/browse"
         self._precargando = False
+        
+        # Headers completos para bypasser Fortigate
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'es-AR,es;q=0.9,en;q=0.8',
+            'Accept-Encoding': 'identity',
+            'Cache-Control': 'max-age=0',
+            'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'DNT': '1',
+            'Connection': 'keep-alive'
+        })
+        
+        # Cargar página principal para obtener cookies y bypass
+        try:
+            from time import sleep
+            print("[Coto] Inicializando sesión...")
+            response = self.session.get(self.base_url, timeout=15)
+            sleep(2)  # Esperar 2 segundos como navegador real
+            print(f"[Coto] Sesión lista (cookies: {len(self.session.cookies)})")
+        except Exception as e:
+            print(f"[Coto] Advertencia al inicializar: {e}")
         
     def _auto_precargar(self):
         """Precarga automática con búsquedas de términos comunes"""
@@ -67,9 +97,149 @@ class ScraperCoto(BaseScraper):
         print("="*80)
         print("")
     
-    def buscar_productos(self, query: str) -> List[Dict]:
+    def _obtener_pagina(self, query: str = None, offset: int = 0, limit: int = 72) -> List[Dict]:
         """
-        Búsqueda en Coto Digital
+        Obtiene una página de productos de Coto
+        
+        Args:
+            query: Término de búsqueda (None para catálogo completo)
+            offset: Número de registro inicial (para paginación)
+            limit: Cantidad de productos a retornar
+        
+        Returns:
+            Lista de productos en formato dict
+        """
+        try:
+            # ✅ IMPORTANTE: Cargar página principal primero para obtener cookies
+            if not self.session.cookies:
+                self.session.get(self.base_url, timeout=10)
+            
+            # Parámetros para Oracle Endeca
+            params = {
+                '_Nrpp': limit,      # Registros por página
+                'No': offset,        # Offset para paginación
+                'format': 'json'     # Retornar JSON
+            }
+            
+            # Agregar búsqueda si se especifica
+            if query:
+                params['_Ntt'] = query
+            
+            response = self.session.get(
+                self.search_url,
+                params=params,
+                timeout=15
+            )
+            
+            if response.status_code != 200:
+                print(f"❌ Error HTTP: {response.status_code}")
+                return []
+            
+            # Parsear JSON
+            data = response.json()
+            
+            # Navegar estructura compleja de Oracle Endeca
+            if 'contents' not in data or len(data['contents']) == 0:
+                return []
+            
+            main_content_list = data['contents'][0].get('MainContent', [])
+            if len(main_content_list) < 2:
+                return []
+            
+            content_slot = main_content_list[1]
+            if '@type' not in content_slot or content_slot['@type'] != 'ContentSlot-Main':
+                return []
+            
+            inner_contents = content_slot.get('contents', [])
+            if len(inner_contents) == 0:
+                return []
+            
+            results_list = inner_contents[0]
+            if 'records' not in results_list:
+                return []
+            
+            records = results_list['records']
+            if not records or len(records) == 0:
+                return []
+            
+            # Procesar productos
+            productos = []
+            for record in records:
+                try:
+                    sub_records = record.get('records', [])
+                    if not sub_records or len(sub_records) == 0:
+                        continue
+                    
+                    sku_record = sub_records[0]
+                    attrs = sku_record.get('attributes', {})
+                    
+                    # Extraer nombre
+                    nombre_lista = attrs.get('product.displayName') or attrs.get('sku.displayName')
+                    if not nombre_lista or len(nombre_lista) == 0:
+                        continue
+                    nombre = nombre_lista[0]
+                    
+                    # Extraer precio
+                    precio = 0
+                    dto_price_lista = attrs.get('sku.dtoPrice', [])
+                    if dto_price_lista and len(dto_price_lista) > 0:
+                        try:
+                            dto_json = json.loads(dto_price_lista[0])
+                            precio = float(dto_json.get('precio') or dto_json.get('precioLista', 0))
+                        except:
+                            pass
+                    
+                    if precio <= 0:
+                        active_price_lista = attrs.get('sku.activePrice', [])
+                        if active_price_lista:
+                            try:
+                                precio = float(active_price_lista[0])
+                            except:
+                                pass
+                    
+                    if precio <= 0:
+                        continue
+                    
+                    # Extraer imagen
+                    imagen_url = None
+                    imagen_lista = attrs.get('product.mediumImage.url') or attrs.get('product.smallImage.url')
+                    if imagen_lista and len(imagen_lista) > 0:
+                        imagen_url = imagen_lista[0]
+                        if not imagen_url.startswith('http'):
+                            imagen_url = self.base_url + imagen_url
+                    
+                    # Extraer URL del producto
+                    detail_action = sku_record.get('detailsAction', {})
+                    record_state = detail_action.get('recordState', '')
+                    producto_url = self.base_url + '/sitios/cdigi' + record_state if record_state else self.base_url
+                    
+                    productos.append({
+                        'nombre': nombre,
+                        'precio': float(precio),
+                        'supermercado': self.supermercado_nombre,
+                        'url': producto_url,
+                        'imagen': imagen_url
+                    })
+                    
+                except Exception as e:
+                    continue
+            
+            return productos
+            
+        except Exception as e:
+            print(f"❌ Error obteniendo página: {e}")
+            return []
+    
+    def buscar_productos(self, query: str, max_paginas: int = 1) -> List[Dict]:
+        """
+        Búsqueda en Coto Digital usando API JSON (Oracle Endeca)
+        
+        Args:
+            query: Término de búsqueda
+            max_paginas: Número máximo de páginas a obtener (1-5)
+        
+        Returns:
+            Lista de productos encontrados
         """
         productos_cache = []
         
@@ -97,129 +267,51 @@ class ScraperCoto(BaseScraper):
                 print(f"⚡ Suficientes en caché, retornando")
                 return self._formatear_productos_cache(productos_cache)
         
-        # Buscar en web
-        print(f"🌐 Buscando más en web...")
+        # Buscar en API JSON con paginación
+        print(f"🌐 Buscando en API JSON de Coto (hasta {max_paginas} páginas)...")
         productos_dict = {}
         
-        try:
-            # Preparar queries
-            palabras = query.strip().split()
-            queries_a_buscar = []
+        # Preparar query (usar primera palabra)
+        palabras = query.strip().split()
+        query_api = palabras[0] if len(palabras) > 0 else query
+        print(f"[Coto] Query API: '{query_api}'")
+        
+        # Obtener múltiples páginas
+        for pagina in range(max_paginas):
+            offset = pagina * 72
+            print(f"   Página {pagina + 1}/{max_paginas} (offset {offset})...")
             
-            if len(palabras) > 1:
-                queries_a_buscar.extend(reversed(palabras))
-            else:
-                queries_a_buscar.append(query.strip())
+            productos_pagina = self._obtener_pagina(query=query_api, offset=offset, limit=72)
             
-            print(f"[Coto] Búsqueda: '{query}'")
+            if not productos_pagina:
+                print(f"   ⚠️  Sin más productos")
+                break
             
-            for query_api in queries_a_buscar[:1]:  # Solo primera query
-                try:
-                    params = {
-                        '_Ntt': query_api,
-                        '_Nrpp': 20  # Máximo 20 productos
-                    }
+            print(f"   ✅ {len(productos_pagina)} productos")
+            
+            # Agregar al dict (evita duplicados)
+            for prod in productos_pagina:
+                if prod['nombre'] not in productos_dict:
+                    productos_dict[prod['nombre']] = prod
                     
-                    response = self.session.get(
-                        self.search_url,
-                        params=params,
-                        timeout=10
+                    # Guardar en caché
+                    cache_manager.agregar_producto(
+                        supermercado='coto',
+                        nombre=prod['nombre'],
+                        categoria='',
+                        precio=prod['precio'],
+                        url=prod['url'],
+                        imagen_url=prod['imagen']
                     )
-                    
-                    if response.status_code != 200:
-                        continue
-                    
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    
-                    # Buscar productos en el HTML
-                    # Coto usa diferentes estructuras, intentar varios selectores
-                    productos_html = soup.find_all('div', class_='product_info_container')
-                    
-                    if not productos_html:
-                        productos_html = soup.find_all('article', class_='product')
-                    
-                    if not productos_html:
-                        productos_html = soup.find_all('div', class_='item')
-                    
-                    for producto_html in productos_html[:20]:
-                        try:
-                            # Extraer nombre
-                            nombre_elem = producto_html.find(['h3', 'h4', 'span'], class_=lambda x: x and ('name' in x.lower() or 'title' in x.lower() or 'description' in x.lower()))
-                            if not nombre_elem:
-                                nombre_elem = producto_html.find('a', class_=lambda x: x and 'product' in x.lower())
-                            
-                            if not nombre_elem:
-                                continue
-                            
-                            nombre = nombre_elem.get_text(strip=True)
-                            if not nombre or nombre in productos_dict:
-                                continue
-                            
-                            # Extraer precio
-                            precio = 0
-                            precio_elem = producto_html.find(['span', 'div'], class_=lambda x: x and ('price' in x.lower() or 'precio' in x.lower()))
-                            
-                            if precio_elem:
-                                precio_text = precio_elem.get_text(strip=True)
-                                # Limpiar formato: "$1.234,56" -> 1234.56
-                                precio_text = precio_text.replace('$', '').replace('.', '').replace(',', '.').strip()
-                                try:
-                                    precio = float(precio_text)
-                                except:
-                                    continue
-                            
-                            if precio <= 0:
-                                continue
-                            
-                            # Extraer imagen
-                            imagen_url = None
-                            img_elem = producto_html.find('img')
-                            if img_elem:
-                                imagen_url = img_elem.get('src') or img_elem.get('data-src')
-                                if imagen_url and not imagen_url.startswith('http'):
-                                    imagen_url = self.base_url + imagen_url
-                            
-                            # Extraer URL
-                            url_elem = producto_html.find('a', href=True)
-                            producto_url = self.base_url
-                            if url_elem:
-                                href = url_elem['href']
-                                if not href.startswith('http'):
-                                    producto_url = self.base_url + href
-                                else:
-                                    producto_url = href
-                            
-                            productos_dict[nombre] = {
-                                'nombre': nombre,
-                                'precio': float(precio),
-                                'supermercado': self.supermercado_nombre,
-                                'url': producto_url,
-                                'imagen': imagen_url
-                            }
-                            
-                            # Guardar en caché
-                            cache_manager.agregar_producto(
-                                supermercado='coto',
-                                nombre=nombre,
-                                categoria='',
-                                precio=float(precio),
-                                url=producto_url,
-                                imagen_url=imagen_url
-                            )
-                        
-                        except Exception:
-                            continue
-                
-                except Exception:
-                    continue
             
-        except Exception as e:
-            print(f"[Coto] Error en búsqueda: {e}")
+            # Si obtuvimos menos de 72, no hay más páginas
+            if len(productos_pagina) < 72:
+                break
         
         cache_manager.guardar_cache()
         
         productos_lista = list(productos_dict.values())
-        print(f"✅ Scraping completado: {len(productos_lista)} productos nuevos")
+        print(f"✅ API JSON completado: {len(productos_lista)} productos nuevos")
         
         # Combinar con caché
         if productos_cache:

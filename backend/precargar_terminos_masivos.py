@@ -14,7 +14,7 @@ from productos.scrapers.scraper_carrefour import ScraperCarrefour
 from productos.scrapers.scraper_dia import ScraperDia
 from productos.scrapers.scraper_lareina import ScraperLaReina
 from productos.scrapers.scraper_lagallega import ScraperLaGallega
-from productos.scrapers.scraper_coto import ScraperCoto
+from productos.scrapers.scraper_coto import ScraperCoto  # ✅ API JSON funcional
 from cache_manager import cache_manager
 
 # 500+ términos de búsqueda más populares en supermercados
@@ -149,11 +149,11 @@ def main():
         'Carrefour': ScraperCarrefour(),
         'Día %': ScraperDia(),
         'La Reina': ScraperLaReina(),
-        'La Gallega': ScraperLaGallega(),
-        'Coto': ScraperCoto()
+        'La Gallega': ScraperLaGallega()
+        # 'Coto': ScraperCoto()  # DESHABILITADO: Coto es SPA
     }
     
-    total_agregados = {'Carrefour': 0, 'Día %': 0, 'La Reina': 0, 'La Gallega': 0, 'Coto': 0}
+    total_agregados = {'Carrefour': 0, 'Día %': 0, 'La Reina': 0, 'La Gallega': 0}
     
     try:
         for idx, termino in enumerate(TERMINOS_BUSQUEDA, 1):
