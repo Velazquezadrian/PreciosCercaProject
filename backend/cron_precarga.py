@@ -3,7 +3,7 @@
 Tarea programada: Precarga diaria de productos
 ==============================================
 
-Ejecuta precarga completa de todos los supermercados a las 8:00 AM
+Ejecuta precarga completa de todos los supermercados a las 3:00 AM
 Solo descarga: nombres, precios, URLs de productos (NO imágenes)
 
 Uso:

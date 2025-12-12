@@ -2,8 +2,8 @@ name: Precarga Diaria de Productos
 
 on:
   schedule:
-    # Ejecutar todos los días a las 8:00 AM (UTC-3 = 11:00 UTC)
-    - cron: '0 11 * * *'
+    # Ejecutar todos los días a las 3:00 AM (UTC-3 = 6:00 UTC)
+    - cron: '0 6 * * *'
   workflow_dispatch:  # Permite ejecutar manualmente desde GitHub
 
 jobs:
