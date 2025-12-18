@@ -1,33 +1,25 @@
 import requests
 import json
 
-# Probar paginación local
-print("=== PÁGINA 1 (primeros 10) ===")
-response = requests.get('http://localhost:8000/products', params={
+# Probar Railway con paginación
+print("=== PROBANDO RAILWAY ===")
+response = requests.get('https://web-production-a6410.up.railway.app/products', params={
     'query': 'pan',
     'supermercado': 'lagallega',
     'page': 1,
-    'limit': 10
+    'limit': 30
 })
 
-data = response.json()
-print(f'Total encontrados: {data["total_encontrados"]}')
-print(f'Página: {data["page"]}/{data["total_pages"]}')
-print(f'Hay más páginas: {data["has_more"]}')
-print(f'\nPrimeros 10 productos:')
-for p in data["resultados"]:
-    print(f' - {p["nombre"]} (${p["precio"]})')
+print(f'Status code: {response.status_code}')
 
-print("\n=== PÁGINA 2 (siguientes 10) ===")
-response2 = requests.get('http://localhost:8000/products', params={
-    'query': 'pan',
-    'supermercado': 'lagallega',
-    'page': 2,
-    'limit': 10
-})
-
-data2 = response2.json()
-print(f'Página: {data2["page"]}/{data2["total_pages"]}')
-print(f'\nProductos 11-20:')
-for p in data2["resultados"]:
-    print(f' - {p["nombre"]} (${p["precio"]})')
+if response.status_code == 200:
+    data = response.json()
+    print(f'Total encontrados: {data.get("total_encontrados", "N/A")}')
+    print(f'Página: {data.get("page", "N/A")}/{data.get("total_pages", "N/A")}')
+    print(f'Has more: {data.get("has_more", "N/A")}')
+    print(f'Resultados en esta página: {len(data.get("resultados", []))}')
+    print(f'\nPrimeros 5 productos:')
+    for p in data.get("resultados", [])[:5]:
+        print(f' - {p["nombre"]} (${p["precio"]})')
+else:
+    print(f'Error: {response.text[:500]}')

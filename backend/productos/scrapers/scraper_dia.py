@@ -44,61 +44,134 @@ class ScraperDia(BaseScraper):
         ]
         
     def _auto_precargar(self):
-        """Precarga automática usando el método buscar_productos() que YA FUNCIONA"""
+        """Precarga COMPLETA de todos los productos de Día % usando paginación"""
         print("")
         print("="*80)
-        print("🚀 AUTOPRECARGA: Llenando caché de Día % con búsquedas reales...")
+        print("🚀 AUTOPRECARGA COMPLETA: Descargando TODO el catálogo de Día %...")
         print("="*80)
-        print("⚠️  Este proceso tarda 3-5 minutos (usa búsquedas normales que funcionan)")
-        print("⚠️  El caché se llena progresivamente, no necesita todo desde el inicio")
-        print("")
-        
-        print(f"📊 Buscando productos comunes para llenar caché inicial...")
+        print("⚠️  Día % tiene ~60,000 productos, esto tardará 10-15 minutos")
         print("")
         
         total_agregados = 0
+        productos_unicos = set()
         from time import sleep
         
-        # Palabras clave que la gente realmente busca
-        queries = [
-            'leche', 'pan', 'yogur', 'queso', 'manteca', 'dulce de leche',
-            'aceite', 'arroz', 'fideos', 'harina', 'azucar', 'sal',
-            'cafe', 'te', 'mate', 'yerba', 'galletas', 'cerveza',
-            'agua', 'gaseosa', 'jugo', 'vino', 'carne', 'pollo'
-        ]
+        # Configuración de paginación
+        PAGE_SIZE = 50  # Productos por request
+        MAX_PRODUCTOS = 70000  # Límite seguro
         
-        for idx, palabra in enumerate(queries, 1):
-            try:
-                print(f"[{idx}/{len(queries)}] Buscando '{palabra}'...", end=" ", flush=True)
-                
-                # Usar el método buscar_productos() que YA FUNCIONA
-                # Este método maneja la API correctamente y ya cachea automáticamente
-                productos = self.buscar_productos(palabra)
-                
-                if productos:
-                    # Los productos ya están cacheados por buscar_productos()
-                    print(f"✅ {len(productos)} productos")
-                    total_agregados += len(productos)
-                else:
-                    print(f"⚠️ Sin resultados")
-                
-                # Guardar cada 5 búsquedas
-                if idx % 5 == 0:
-                    cache_manager.guardar_cache()
-                    print(f"   💾 Caché guardado")
-                
-                sleep(0.3)  # Pausa para no saturar la API
-                
-            except Exception as e:
-                print(f"❌ Error: {e}")
-                continue
+        try:
+            print(f"📊 Descargando productos de Día % por páginas de {PAGE_SIZE}...")
+            print("")
+            
+            current_from = 0
+            
+            while current_from < MAX_PRODUCTOS:
+                try:
+                    current_to = current_from + PAGE_SIZE - 1
+                    
+                    # Request a la API VTEX sin filtros
+                    params = {
+                        '_from': current_from,
+                        '_to': current_to,
+                        'O': 'OrderByTopSaleDESC'
+                    }
+                    
+                    response = self.session.get(
+                        self.api_url,
+                        params=params,
+                        timeout=30
+                    )
+                    
+                    if response.status_code not in [200, 206]:
+                        print(f"❌ Error HTTP {response.status_code} en offset {current_from}")
+                        break
+                    
+                    productos_json = response.json()
+                    
+                    if not productos_json or len(productos_json) == 0:
+                        print(f"✅ Fin del catálogo en offset {current_from}")
+                        break
+                    
+                    # Procesar productos de esta página
+                    productos_pagina = 0
+                    for producto_vtex in productos_json:
+                        try:
+                            nombre = producto_vtex.get('productName', '').strip()
+                            if not nombre or nombre in productos_unicos:
+                                continue
+                            
+                            items = producto_vtex.get('items', [])
+                            if not items:
+                                continue
+                            
+                            sellers = items[0].get('sellers', [])
+                            if not sellers:
+                                continue
+                            
+                            precio = sellers[0].get('commertialOffer', {}).get('Price', 0)
+                            if precio <= 0:
+                                continue
+                            
+                            # Imagen
+                            imagen_url = None
+                            images = items[0].get('images', [])
+                            if images:
+                                imagen_url = images[0].get('imageUrl', '')
+                            
+                            # URL del producto
+                            producto_url = f"{self.base_url}/{producto_vtex.get('linkText', '')}/p"
+                            
+                            # Agregar al caché
+                            cache_manager.agregar_producto(
+                                supermercado='dia',
+                                nombre=nombre,
+                                categoria='',
+                                precio=float(precio),
+                                url=producto_url,
+                                imagen_url=imagen_url
+                            )
+                            
+                            productos_unicos.add(nombre)
+                            productos_pagina += 1
+                            total_agregados += 1
+                            
+                        except Exception:
+                            continue
+                    
+                    # Progress update
+                    print(f"[Offset {current_from:6d}-{current_to:6d}] ✅ {productos_pagina:2d} productos | Total: {total_agregados:5d}", flush=True)
+                    
+                    # Guardar caché cada 500 productos
+                    if total_agregados % 500 == 0:
+                        cache_manager.guardar_cache()
+                        print(f"   💾 Caché guardado ({total_agregados} productos)")
+                    
+                    # Avanzar a la siguiente página
+                    current_from += PAGE_SIZE
+                    
+                    # Pausa para no saturar la API
+                    sleep(0.2)
+                    
+                except Exception as e:
+                    print(f"❌ Error en offset {current_from}: {e}")
+                    current_from += PAGE_SIZE
+                    continue
         
-        cache_manager.guardar_cache()
-        print("")
-        print("="*80)
-        print(f"✅ AUTOPRECARGA COMPLETADA: ~{total_agregados} productos guardados")
-        print("="*80)
-        print("")
+        except KeyboardInterrupt:
+            print("\n⚠️ Precarga interrumpida por el usuario")
+        
+        except Exception as e:
+            print(f"\n❌ Error fatal: {e}")
+        
+        finally:
+            # Guardar caché final
+            cache_manager.guardar_cache()
+            print("")
+            print("="*80)
+            print(f"✅ AUTOPRECARGA COMPLETADA: {total_agregados} productos guardados")
+            print("="*80)
+            print("")
     
     def buscar_productos(self, query: str) -> List[Dict]:
         """
